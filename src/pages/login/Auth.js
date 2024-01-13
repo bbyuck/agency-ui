@@ -18,9 +18,7 @@ function Auth() {
 					code: authorizationCode,
 				})
 				.then((response) => {
-					console.log("login success");
 					dispatch(authenticate(response.data.data));
-					saveAuthInfoOnClient(response.data.data);
 				})
 				.catch(() => {
 					console.log("auth failed");

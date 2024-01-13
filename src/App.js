@@ -23,11 +23,7 @@ function App() {
 			<Loading />
 			<ToastAlert />
 			{/* TODO => 로그인 유지 기능 추가 필요 / 일단 무제한 로그인 */}
-			{localStorage.getItem("userId") ? (
-				<AuthenticatedRoutes />
-			) : (
-				<UnAuthenticatedRoutes />
-			)}
+			{auth.kakaoId ? <AuthenticatedRoutes /> : <UnAuthenticatedRoutes />}
 		</div>
 	);
 }

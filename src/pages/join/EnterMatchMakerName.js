@@ -1,0 +1,174 @@
+import {
+	Box,
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+} from "@mui/material";
+import { MATCH_MAKER, USER } from "constants/memberType";
+import { useDispatch, useSelector } from "react-redux";
+import TextField from "@mui/material/TextField";
+import { setMatchMakerName } from "store/slice/joinInfo";
+import { Fragment, useState } from "react";
+import http from "api";
+
+function EnterMatchMakerName() {
+	const joinInfo = useSelector((state) => state.joinInfo);
+	const dispatch = useDispatch();
+
+	const [confirmOpen, setConfirmOpen] = useState(false);
+
+	const closeConfirmDialog = () => {
+		setConfirmOpen(false);
+	};
+
+	const headerPhrase =
+		joinInfo.memberType === MATCH_MAKER
+			? "닉네임을 알려주세요."
+			: joinInfo.memberType === USER
+			? "어느 분께 소개를 받으세요?"
+			: null;
+	const subPhrase =
+		joinInfo.memberType === MATCH_MAKER
+			? null
+			: joinInfo.memberType === USER
+			? "주선자의 닉네임을 입력해주세요."
+			: null;
+
+	const buttonDisabled =
+		joinInfo.memberType === MATCH_MAKER
+			? joinInfo.matchMakerName === null
+			: joinInfo.memberType === USER
+			? false
+			: false;
+
+	const start = () => {
+		if (joinInfo.memberType === MATCH_MAKER) {
+			console.log(joinInfo.matchMakerName + " 뚜 회원 가입 및 로그인 완료");
+			return;
+		}
+		if (joinInfo.memberType === USER) {
+			if (!joinInfo.matchMakerName) {
+				if (confirmOpen) {
+					console.log("주선자 없이 유저 회원가입 및 로그인 완료");
+				} else {
+					setConfirmOpen(true);
+				}
+			} else {
+				console.log(
+					"유저 회원가입 및 로그인 완료 ====== 주선자 : " + joinInfo.matchMakerName,
+				);
+			}
+		}
+	};
+
+	const matchMakerJoin = () => {
+		// http
+		// 	.post("/v1/kakao/login", {
+		// 		code: authorizationCode,
+		// 	})
+		// 	.then((response) => {
+		// 		dispatch(authenticate(response.data.data));
+		// 	})
+		// 	.catch(() => {
+		// 		console.log("auth failed");
+		// 	});
+	};
+	const userJoin = () => {};
+
+	return (
+		<>
+			<div>
+				<div style={{ position: "relative", textAlign: "left", marginLeft: "5%" }}>
+					<div
+						style={{
+							position: "relative",
+							marginTop: "20%",
+							fontWeight: 900,
+							fontSize: "30px",
+						}}>
+						{headerPhrase}
+					</div>
+					<div style={{ position: "relative", fontSize: "15px", height: "15px" }}>
+						{subPhrase}
+					</div>
+					<div
+						className='container-input-area'
+						style={{
+							position: "relative",
+							marginTop: "20%",
+							fontSize: "20px",
+							width: "95%",
+						}}>
+						<Box
+							sx={{
+								display: "grid",
+								gridTemplateColumns: { sm: "1fr 1fr 1fr" },
+								gap: 2,
+							}}>
+							<TextField
+								label='닉네임'
+								variant='standard'
+								onChange={(e) => {
+									dispatch(setMatchMakerName({ matchMakerName: e.target.value }));
+								}}
+								onKeyDown={(e) => {
+									if (e.key === "Enter") {
+										console.log("enter");
+									}
+								}}
+							/>
+						</Box>
+					</div>
+				</div>
+				<div
+					className='button-area'
+					style={{ position: "fixed", bottom: "7.5%", width: "100%" }}>
+					<Button
+						onClick={start}
+						variant='contained'
+						disabled={buttonDisabled}
+						size='medium'
+						style={{ width: "80%" }}>
+						확인
+					</Button>
+				</div>
+			</div>
+
+			<Fragment>
+				<Dialog
+					open={confirmOpen}
+					// onClose={closeConfirmDialog}
+					aria-labelledby='responsive-dialog-title'
+					fullWidth>
+					<DialogTitle
+						id='responsive-dialog-title'
+						style={{ fontWeight: "700", width: "100%" }}>
+						{"혼자서 오셨어요?"}
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText style={{ fontSize: "15px" }}>
+							주선자를 입력하지 않았습니다.
+							<br />
+							주선자가 없을 경우 매칭이 어려워질 수 있습니다.
+							<br />
+							이대로 진행할까요?
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button autoFocus onClick={closeConfirmDialog} style={{ color: "red" }}>
+							취소
+						</Button>
+						<Button onClick={start} autoFocus>
+							확인
+						</Button>
+					</DialogActions>
+				</Dialog>
+			</Fragment>
+		</>
+	);
+}
+
+export default EnterMatchMakerName;

@@ -10,6 +10,7 @@ export const saveAuthInfoOnClient = (authInfo) => {
 	sessionStorage.setItem("accessToken", authInfo.accessToken);
 	sessionStorage.setItem("refreshToken", authInfo.refreshToken);
 	localStorage.setItem("userId", authInfo.kakaoId);
+	localStorage.setItem("memberType", authInfo.memberType);
 };
 
 export const muiTextFieldFocus = (ref) => {

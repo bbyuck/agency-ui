@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { saveAuthInfoOnClient } from "util";
 
 const initialState = {
-	kakaoId: null,
+	kakaoId: localStorage.getItem("userId"),
+	memberType: localStorage.getItem("memberType"),
 };
 
 const authSlice = createSlice({
@@ -10,6 +12,8 @@ const authSlice = createSlice({
 	reducers: {
 		authenticate(state = initialState, action) {
 			state.kakaoId = action.payload.kakaoId;
+			state.memberType = action.payload.memberType;
+			saveAuthInfoOnClient(action.payload);
 		},
 	},
 });

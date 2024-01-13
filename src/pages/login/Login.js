@@ -36,7 +36,7 @@ function Login() {
 		window.Kakao.Auth.authorize();
 	};
 
-	const appNameOrLogo = "Nice ddu meet you";
+	const appNameOrLogo = "Nice ddu meet you!";
 
 	return (
 		<>
@@ -48,9 +48,7 @@ function Login() {
 						</div>
 					</div>
 
-					<div
-						className='button-kakao-login'
-						onClick={isMobile() ? mobileKakaoLogin : pcKakaoLogin}>
+					<div className='button-kakao-login' onClick={pcKakaoLogin}>
 						<span>
 							<img
 								src={`${process.env.PUBLIC_URL}/assets/icons/kakao_login_medium_wide.png`}
