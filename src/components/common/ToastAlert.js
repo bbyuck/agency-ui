@@ -29,7 +29,8 @@ function ToastAlert() {
 				<Alert
 					onClose={handleClose}
 					severity={alertState.type}
-					sx={{ width: "100%" }}>
+					sx={{ width: "100%" }}
+					style={{ whiteSpace: "pre-wrap", textAlign: "left" }}>
 					{alertState.message}
 				</Alert>
 			</Snackbar>

@@ -13,9 +13,13 @@ import TextField from "@mui/material/TextField";
 import { setMatchMakerName } from "store/slice/joinInfo";
 import { Fragment, useState } from "react";
 import http from "api";
+import { setAlert } from "store/slice/status";
+import messages from "messages";
 
 function EnterMatchMakerName() {
 	const joinInfo = useSelector((state) => state.joinInfo);
+	const auth = useSelector((state) => state.auth);
+
 	const dispatch = useDispatch();
 
 	const [confirmOpen, setConfirmOpen] = useState(false);
@@ -37,46 +41,75 @@ function EnterMatchMakerName() {
 			? "주선자의 닉네임을 입력해주세요."
 			: null;
 
-	const buttonDisabled =
-		joinInfo.memberType === MATCH_MAKER
-			? joinInfo.matchMakerName === null
-			: joinInfo.memberType === USER
-			? false
-			: false;
+	const buttonDisabled = joinInfo.matchMakerName === null;
+	// joinInfo.memberType === MATCH_MAKER
+	// 	? joinInfo.matchMakerName === null
+	// 	: joinInfo.memberType === USER
+	// 	? false
+	// 	: false;
 
 	const start = () => {
 		if (joinInfo.memberType === MATCH_MAKER) {
-			console.log(joinInfo.matchMakerName + " 뚜 회원 가입 및 로그인 완료");
-			return;
-		}
-		if (joinInfo.memberType === USER) {
+			matchMakerJoin();
+		} else if (joinInfo.memberType === USER) {
 			if (!joinInfo.matchMakerName) {
 				if (confirmOpen) {
-					console.log("주선자 없이 유저 회원가입 및 로그인 완료");
+					userJoin();
 				} else {
 					setConfirmOpen(true);
 				}
 			} else {
-				console.log(
-					"유저 회원가입 및 로그인 완료 ====== 주선자 : " + joinInfo.matchMakerName,
-				);
+				userJoin();
 			}
 		}
 	};
 
 	const matchMakerJoin = () => {
-		// http
-		// 	.post("/v1/kakao/login", {
-		// 		code: authorizationCode,
-		// 	})
-		// 	.then((response) => {
-		// 		dispatch(authenticate(response.data.data));
-		// 	})
-		// 	.catch(() => {
-		// 		console.log("auth failed");
-		// 	});
+		http
+			.post("/v1/matchmaker/join", {
+				kakaoId: auth.kakaoId,
+				matchMakerName: joinInfo.matchMakerName,
+			})
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((error) => {
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response
+								? error.response.data.message
+								: messages.error.connect_to_server,
+						},
+					}),
+				);
+			});
 	};
-	const userJoin = () => {};
+	const userJoin = () => {
+		http
+			.post("/v1/user/join", {
+				kakaoId: auth.kakaoId,
+				matchMakerName: joinInfo.matchMakerName,
+			})
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((error) => {
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response
+								? error.response.data.message
+								: messages.error.connect_to_server,
+						},
+					}),
+				);
+			});
+	};
 
 	return (
 		<>
@@ -116,7 +149,7 @@ function EnterMatchMakerName() {
 								}}
 								onKeyDown={(e) => {
 									if (e.key === "Enter") {
-										console.log("enter");
+										start();
 									}
 								}}
 							/>
@@ -146,13 +179,14 @@ function EnterMatchMakerName() {
 					<DialogTitle
 						id='responsive-dialog-title'
 						style={{ fontWeight: "700", width: "100%" }}>
-						{"혼자서 오셨어요?"}
+						{"주선자를 알려주세요!"}
 					</DialogTitle>
 					<DialogContent>
 						<DialogContentText style={{ fontSize: "15px" }}>
 							주선자를 입력하지 않았습니다.
 							<br />
 							주선자가 없을 경우 매칭이 어려워질 수 있습니다.
+							<br />
 							<br />
 							이대로 진행할까요?
 						</DialogContentText>
