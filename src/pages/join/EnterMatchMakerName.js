@@ -7,18 +7,27 @@ import {
 	DialogContentText,
 	DialogTitle,
 } from "@mui/material";
+import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
 import { MATCH_MAKER, USER } from "constants/memberType";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import { setMatchMakerName } from "store/slice/joinInfo";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import http from "api";
 import { setAlert } from "store/slice/status";
 import messages from "messages";
+import { useNavigate } from "react-router-dom";
 
 function EnterMatchMakerName() {
 	const joinInfo = useSelector((state) => state.joinInfo);
 	const auth = useSelector((state) => state.auth);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (!joinInfo.memberType) {
+			navigate("/");
+		}
+	});
 
 	const dispatch = useDispatch();
 
@@ -111,10 +120,22 @@ function EnterMatchMakerName() {
 			});
 	};
 
+	const goBack = () => {
+		navigate("/join/membertype", { replace: true, state: { animation: "prev" } });
+	};
+
 	return (
-		<>
+		<div className='page'>
 			<div>
 				<div style={{ position: "relative", textAlign: "left", marginLeft: "5%" }}>
+					<div style={{ position: "relative", textAlign: "left" }}>
+						<span
+							className='header-back-button'
+							style={{ position: "relative", top: "4vh" }}
+							onClick={goBack}>
+							<ArrowBackIosOutlinedIcon />
+						</span>
+					</div>
 					<div
 						style={{
 							position: "relative",
@@ -201,7 +222,7 @@ function EnterMatchMakerName() {
 					</DialogActions>
 				</Dialog>
 			</Fragment>
-		</>
+		</div>
 	);
 }
 

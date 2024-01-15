@@ -19,9 +19,10 @@ function Auth() {
 				})
 				.then((response) => {
 					dispatch(authenticate(response.data.data));
+					navigate("/", { replace: true, state: { animation: "next" } });
 				})
 				.catch(() => {
-					console.log("auth failed");
+					navigate("/");
 				});
 
 			/**

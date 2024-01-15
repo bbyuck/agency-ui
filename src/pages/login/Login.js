@@ -36,7 +36,7 @@ function Login() {
 		window.Kakao.Auth.authorize();
 	};
 
-	const appNameOrLogo = "Nice ddu meet you!";
+	const appNameOrLogo = "연애조작단";
 
 	return (
 		<>

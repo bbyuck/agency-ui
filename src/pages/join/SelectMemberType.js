@@ -1,14 +1,23 @@
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { selectMemberType } from "store/slice/joinInfo";
-import { MATCH_MAKER, USER } from "constants/memberType";
+import { useDispatch, useSelector } from "react-redux";
+import { resetMemberType, selectMemberType } from "store/slice/joinInfo";
+import { MATCH_MAKER, NEW, USER } from "constants/memberType";
+import { useNavigate } from "react-router-dom";
 
 function SelectMatchType() {
+	const auth = useSelector((state) => state.auth);
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if (auth.memberType !== NEW) {
+			navigate("/");
+		}
+	});
 
 	const buttons = [
 		{
@@ -25,10 +34,14 @@ function SelectMatchType() {
 
 	const buttonHandler = () => {
 		dispatch(selectMemberType({ memberType: buttons[selected].value }));
+		navigate("/join/matchmakername", {
+			replace: true,
+			state: { animation: "next" },
+		});
 	};
 
 	return (
-		<div>
+		<div className='page'>
 			<div style={{ position: "relative", textAlign: "left", marginLeft: "5%" }}>
 				<div
 					style={{
@@ -37,13 +50,13 @@ function SelectMatchType() {
 						fontWeight: 900,
 						fontSize: "30px",
 					}}>
-					Nice ddu meet you!
+					만나서 반가워요!
 				</div>
 				<div style={{ position: "relative", fontSize: "15px", height: "15px" }}>
 					어떻게 오셨어요?
 				</div>
 				<div
-					className='container-join-button'
+					className='container-input-area'
 					style={{ position: "relative", marginTop: "20%", fontSize: "20px" }}>
 					{buttons.map((button, index) => {
 						return (

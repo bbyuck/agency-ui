@@ -1,63 +1,114 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import {
+	Navigate,
+	Route,
+	Routes,
+	useLocation,
+	useNavigate,
+} from "react-router-dom";
 import SelectMemberType from "pages/join/SelectMemberType";
 import MatchMakerHome from "pages/matchmaker/MatchMakerHome";
 import UserHome from "pages/user/UserHome";
 import Error from "pages/error/Error";
 import EnterMatchMakerName from "pages/join/EnterMatchMakerName";
 
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { MATCH_MAKER, USER } from "constants/memberType";
+import { cloneElement, createRef, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { MATCH_MAKER, NEW, USER } from "constants/memberType";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
+
+import "style/transition.css";
 
 const TempLogout = () => {
 	useEffect(() => {
 		localStorage.removeItem("userId");
-	}, []);
+		localStorage.removeItem("memberType");
+		window.location.reload();
+	});
 
 	return <></>;
 };
 
-function AuthenticatedRoutes() {
-	const auth = useSelector((state) => state.auth);
-	const joinInfo = useSelector((state) => state.joinInfo);
+const Main = () => {
+	const memberType = useSelector((state) => state.auth.memberType);
+	const navigate = useNavigate();
 
-	useEffect(() => {}, [auth, joinInfo]);
+	useEffect(() => {
+		if (memberType === NEW) {
+			navigate("/join/membertype", {
+				replace: true,
+				state: { animation: "next" },
+			});
+
+			return;
+		}
+		if (memberType === MATCH_MAKER) {
+			navigate("/home/matchmaker", { replace: true });
+			return;
+		}
+		if (memberType === USER) {
+			navigate("/home/user", { replace: true });
+		}
+	});
+
+	return <></>;
+};
+
+// ===============================================
+
+function AuthenticatedRoutes() {
+	const location = useLocation();
+	const routes = [
+		{
+			name: "main",
+			path: "/",
+			element: <Main />,
+			animation: false,
+			nodeRef: createRef(),
+		},
+		{
+			name: "logout",
+			path: "/logout",
+			element: <TempLogout />,
+			animation: false,
+			nodeRef: createRef(),
+		},
+		{
+			name: "member-type",
+			path: "/join/membertype",
+			element: <SelectMemberType />,
+			animation: true,
+			nodeRef: createRef(),
+		},
+		{
+			name: "match-maker-name",
+			path: "/join/matchmakername",
+			element: <EnterMatchMakerName />,
+			animation: true,
+			nodeRef: createRef(),
+		},
+	];
 
 	return (
-		<Routes>
-			<Route
-				path='/*'
-				element={
-					auth.memberType === "NEW" ? (
-						<Navigate to='/join' />
-					) : auth.memberType === MATCH_MAKER ? (
-						<Navigate to='/matchmaker/home' />
-					) : auth.memberType === USER ? (
-						<Navigate to='/user/home' />
-					) : (
-						<Navigate to='/error' />
-					)
-				}
-			/>
-			<Route path='/logout' element={<TempLogout />} />
-
-			{/* join */}
-			<Route
-				path='/join'
-				element={
-					joinInfo.memberType ? <EnterMatchMakerName /> : <SelectMemberType />
-				}
-			/>
-
-			{/* match maker routing */}
-			<Route path='/matchmaker/home' element={<MatchMakerHome />} />
-
-			{/* user routing */}
-			<Route path='/user/home' element={<UserHome />} />
-
-			{/* 공통 라우팅 */}
-			<Route path='/error' element={<Error />} />
-		</Routes>
+		<TransitionGroup
+			className={"transition-wrapper"}
+			childFactory={(child) => {
+				return cloneElement(child, {
+					classNames: "item",
+				});
+			}}>
+			<CSSTransition key={location.key} classNames={"item"} timeout={1000}>
+				<Routes location={location}>
+					{routes.map((route) => (
+						<Route
+							key={route.animation ? location.key : `no-animation-route-${route.name}`}
+							path={route.path}
+							name={route.name}
+							element={route.element}
+						/>
+					))}
+				</Routes>
+			</CSSTransition>
+		</TransitionGroup>
 	);
 }
 

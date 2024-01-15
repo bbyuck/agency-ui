@@ -6,8 +6,8 @@
 	width: 100vw;
 }
 .login-header {
-	position: absolute;
-	top: -400%;
+	position: relative;
+	bottom: 15vh;
 }
 
 .selected {
@@ -15,7 +15,7 @@
 }
 
 .login-header-contents {
-	text-align: left;
+	text-align: center;
 	bottom: 10%;
 }
 

@@ -8,6 +8,7 @@ import ToastAlert from "components/common/ToastAlert";
 
 function App() {
 	const auth = useSelector((state) => state.auth);
+
 	/**
 	 * 로그인 시 rerender
 	 */
