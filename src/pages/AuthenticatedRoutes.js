@@ -1,20 +1,12 @@
-import {
-	Navigate,
-	Route,
-	Routes,
-	useLocation,
-	useNavigate,
-} from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import SelectMemberType from "pages/join/SelectMemberType";
 import Error from "pages/error/Error";
 import EnterMatchMakerName from "pages/join/EnterMatchMakerName";
 
-import { cloneElement, createRef, useEffect } from "react";
+import { createRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { MATCH_MAKER, NEW, USER } from "constants/memberType";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
 
-import "style/transition.css";
 import MakeProfile from "pages/user/makeprofile/MakeProfile";
 
 const TempLogout = () => {
@@ -102,26 +94,16 @@ function AuthenticatedRoutes() {
 	];
 
 	return (
-		<TransitionGroup
-			className={"transition-wrapper"}
-			childFactory={(child) => {
-				return cloneElement(child, {
-					classNames: "item",
-				});
-			}}>
-			<CSSTransition key={location.key} classNames={"item"} timeout={1000}>
-				<Routes location={location}>
-					{routes.map((route) => (
-						<Route
-							key={route.animation ? location.key : `no-animation-route-${route.name}`}
-							path={route.path}
-							name={route.name}
-							element={route.element}
-						/>
-					))}
-				</Routes>
-			</CSSTransition>
-		</TransitionGroup>
+		<Routes location={location}>
+			{routes.map((route) => (
+				<Route
+					key={route.animation ? location.key : `no-animation-route-${route.name}`}
+					path={route.path}
+					name={route.name}
+					element={route.element}
+				/>
+			))}
+		</Routes>
 	);
 }
 
