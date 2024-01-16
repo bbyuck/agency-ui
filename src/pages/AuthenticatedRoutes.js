@@ -6,17 +6,16 @@ import {
 	useNavigate,
 } from "react-router-dom";
 import SelectMemberType from "pages/join/SelectMemberType";
-import MatchMakerHome from "pages/matchmaker/MatchMakerHome";
-import UserHome from "pages/user/UserHome";
 import Error from "pages/error/Error";
 import EnterMatchMakerName from "pages/join/EnterMatchMakerName";
 
-import { cloneElement, createRef, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { cloneElement, createRef, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { MATCH_MAKER, NEW, USER } from "constants/memberType";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import "style/transition.css";
+import MakeProfile from "pages/user/makeprofile/MakeProfile";
 
 const TempLogout = () => {
 	useEffect(() => {
@@ -48,7 +47,7 @@ const Main = () => {
 		if (memberType === USER) {
 			navigate("/home/user", { replace: true });
 		}
-	});
+	}, []);
 
 	return <></>;
 };
@@ -58,6 +57,13 @@ const Main = () => {
 function AuthenticatedRoutes() {
 	const location = useLocation();
 	const routes = [
+		{
+			name: "any",
+			path: "/*",
+			element: <Main />,
+			animation: false,
+			nodeRef: createRef(),
+		},
 		{
 			name: "main",
 			path: "/",
@@ -83,6 +89,13 @@ function AuthenticatedRoutes() {
 			name: "match-maker-name",
 			path: "/join/matchmakername",
 			element: <EnterMatchMakerName />,
+			animation: true,
+			nodeRef: createRef(),
+		},
+		{
+			name: "make-profile",
+			path: "/user/profile/make",
+			element: <MakeProfile />,
 			animation: true,
 			nodeRef: createRef(),
 		},

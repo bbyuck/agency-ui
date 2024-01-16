@@ -4,12 +4,17 @@ import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutli
 import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { resetMemberType, selectMemberType } from "store/slice/joinInfo";
+import joinInfo, {
+	resetMemberType,
+	selectMemberType,
+} from "store/slice/joinInfo";
 import { MATCH_MAKER, NEW, USER } from "constants/memberType";
 import { useNavigate } from "react-router-dom";
+import { resetHeaderComponent, setHeaderComponent } from "store/slice/header";
 
 function SelectMatchType() {
 	const auth = useSelector((state) => state.auth);
+	const joinInfo = useSelector((state) => state.joinInfo);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
@@ -18,6 +23,18 @@ function SelectMatchType() {
 			navigate("/");
 		}
 	});
+
+	/**
+	 * ========== header 설정 =========
+	 */
+	useEffect(() => {
+		dispatch(
+			setHeaderComponent({
+				leftComponent: "none",
+				rightComponent: "none",
+			}),
+		);
+	}, []);
 
 	const buttons = [
 		{

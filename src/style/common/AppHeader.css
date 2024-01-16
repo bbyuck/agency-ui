@@ -1,0 +1,25 @@
+.container-header {
+	height: 10vh;
+	width: 100vw;
+	position: absolute;
+	z-index: 99;
+}
+
+.header {
+	position: relative;
+	width: 100vw;
+	height: 5vh;
+	top: 0;
+}
+
+.header span {
+	position: absolute;
+	top: 1.5vh;
+}
+
+.header-left {
+	left: 5vw;
+}
+.header-right {
+	right: 5vw;
+}
