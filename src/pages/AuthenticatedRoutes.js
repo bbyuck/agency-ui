@@ -1,13 +1,15 @@
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import SelectMemberType from "pages/join/SelectMemberType";
-import Error from "pages/error/Error";
-import EnterMatchMakerName from "pages/join/EnterMatchMakerName";
+import "style/transition.css";
 
-import { createRef, useEffect } from "react";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import Error from "pages/error/Error";
+
+import { cloneElement, createRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { MATCH_MAKER, NEW, USER } from "constants/memberType";
 
 import MakeProfile from "pages/user/makeprofile/MakeProfile";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import Join from "pages/join/Join";
 
 const TempLogout = () => {
 	useEffect(() => {
@@ -25,7 +27,7 @@ const Main = () => {
 
 	useEffect(() => {
 		if (memberType === NEW) {
-			navigate("/join/membertype", {
+			navigate("/join", {
 				replace: true,
 				state: { animation: "next" },
 			});
@@ -39,7 +41,7 @@ const Main = () => {
 		if (memberType === USER) {
 			navigate("/home/user", { replace: true });
 		}
-	}, []);
+	});
 
 	return <></>;
 };
@@ -71,16 +73,9 @@ function AuthenticatedRoutes() {
 			nodeRef: createRef(),
 		},
 		{
-			name: "member-type",
-			path: "/join/membertype",
-			element: <SelectMemberType />,
-			animation: true,
-			nodeRef: createRef(),
-		},
-		{
-			name: "match-maker-name",
-			path: "/join/matchmakername",
-			element: <EnterMatchMakerName />,
+			name: "join",
+			path: "/join",
+			element: <Join />,
 			animation: true,
 			nodeRef: createRef(),
 		},
@@ -94,16 +89,28 @@ function AuthenticatedRoutes() {
 	];
 
 	return (
-		<Routes location={location}>
-			{routes.map((route) => (
-				<Route
-					key={route.animation ? location.key : `no-animation-route-${route.name}`}
-					path={route.path}
-					name={route.name}
-					element={route.element}
-				/>
-			))}
-		</Routes>
+		<>
+			<TransitionGroup
+				className={"transition-wrapper"}
+				childFactory={(child) => {
+					return cloneElement(child, {
+						classNames: "item",
+					});
+				}}>
+				<CSSTransition key={location.key} classNames={"item"} timeout={1000}>
+					<Routes location={location}>
+						{routes.map((route) => (
+							<Route
+								key={location.key}
+								path={route.path}
+								name={route.name}
+								element={route.element}
+							/>
+						))}
+					</Routes>
+				</CSSTransition>
+			</TransitionGroup>
+		</>
 	);
 }
 

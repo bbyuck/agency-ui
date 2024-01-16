@@ -1,8 +1,6 @@
 import SelectOneLayout from "components/layout/SelectOneLayout";
 
 function SmokingSelect(props) {
-	const { next, select, data } = props;
-
 	const title = "마지막 질문이에요!";
 	const subtitle = "담배 피우세요?";
 	const selectList = [
@@ -21,9 +19,7 @@ function SmokingSelect(props) {
 				title={title}
 				subtitle={subtitle}
 				list={selectList}
-				next={next}
-				select={select}
-				data={data}
+				{...props}
 			/>
 		</div>
 	);

@@ -23,10 +23,8 @@ function GenderSelect(props) {
 				<SelectOneLayout
 					title={title}
 					list={selectList}
-					next={next}
-					select={select}
-					data={data}
 					buttonType={NEXT}
+					{...props}
 				/>
 			}
 		</div>

@@ -3,10 +3,22 @@ import { cloneElement, useState } from "react";
 import GenderSelect from "./GenderSelect";
 import PhotoExchangeSelect from "./PhotoExchangeSelect";
 import SmokingSelect from "./SmokingSelect";
-import MakeProfileHeader from "components/user/makeprofile/MakeProfileHeader";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import LinearHeader from "components/common/header/LinearHeader";
 
 function MakeProfile() {
+	const [gender, setGender] = useState(null);
+	const [age, setAge] = useState(0);
+	const [height, setHeight] = useState(0);
+	const [job, setJob] = useState(null);
+	const [address, setAddress] = useState(null);
+	const [hobby, setHobby] = useState(null);
+	const [idealType, setIdealType] = useState(null);
+	const [mbti, setMbti] = useState(null);
+	const [selfDescription, setSelfDescription] = useState(null);
+	const [allowPhotoExchange, setAllowPhotoExchange] = useState(null);
+	const [smoking, setSmoking] = useState(null);
+
 	const newProfileData = {
 		gender: null,
 		age: 0,
@@ -33,15 +45,15 @@ function MakeProfile() {
 	 * gender select
 	 */
 	const selectGender = (gender) => {
-		newProfileData.gender = gender;
+		setGender(gender);
 	};
 
 	const selectPhotoExchangeYn = (photoExchange) => {
-		newProfileData.allowPhotoExchange = photoExchange;
+		setAllowPhotoExchange(photoExchange);
 	};
 
 	const selectSmokingYn = (smoking) => {
-		newProfileData.smoking = smoking;
+		setSmoking(smoking);
 	};
 
 	const Pages = [
@@ -50,25 +62,25 @@ function MakeProfile() {
 			key={"gender-select"}
 			next={next}
 			select={selectGender}
-			data={newProfileData.gender}
+			data={gender}
 		/>,
 		<PhotoExchangeSelect
 			key={"photo-exchange-select"}
 			next={next}
 			select={selectPhotoExchangeYn}
-			data={newProfileData.allowPhotoExchange}
+			data={allowPhotoExchange}
 		/>,
 		<SmokingSelect
 			key={"smoking-select"}
 			next={next}
 			select={selectSmokingYn}
-			data={newProfileData.smoking}
+			data={smoking}
 		/>,
 	];
 
 	return (
 		<>
-			<MakeProfileHeader prev={prev} process={process} />
+			<LinearHeader prev={prev} process={process} />
 			<TransitionGroup
 				className={"transition-wrapper"}
 				childFactory={(child) => {

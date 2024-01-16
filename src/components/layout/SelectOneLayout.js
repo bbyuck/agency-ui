@@ -7,11 +7,8 @@ import NextButton from "components/user/makeprofile/NextButton";
 import { NEXT } from "constants/buttonType";
 
 function SelectOneLayout(props) {
-	const { title, subtitle, list, next, prev, select, data, buttonType } = props;
+	const { title, subtitle, list, next, select, data, buttonType } = props;
 
-	const buttonHandler = () => {
-		console.log("button");
-	};
 	const [selected, setSelected] = useState(null);
 
 	useEffect(() => {
