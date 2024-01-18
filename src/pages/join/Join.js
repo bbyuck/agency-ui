@@ -120,7 +120,10 @@ function Join() {
 		/>,
 		<EnterMatchMakerName
 			key='join-matchmakername'
-			confirm={start}
+			buttonInfo={{
+				name: "가입하기",
+				handler: start,
+			}}
 			input={inputMatchMakerName}
 			memberType={memberType}
 			data={matchMakerName}

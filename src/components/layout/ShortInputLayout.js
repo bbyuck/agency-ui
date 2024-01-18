@@ -1,37 +1,30 @@
 import { Box, Button, TextField } from "@mui/material";
+import "style/common/Common.css";
 
 function ShortInputLayout(props) {
-	const { confirm, input, data, title, subtitle } = props;
+	const { buttonInfo, input, data, title, subtitle } = props;
 
 	return (
 		<>
-			<div>
-				<div style={{ position: "relative", textAlign: "left", marginLeft: "5%" }}>
-					<div
-						style={{
-							position: "relative",
-							marginTop: "20%",
-							fontWeight: 900,
-							fontSize: "30px",
-						}}>
+			<div className='layout-container'>
+				<div className='layout-contents'>
+					<div className='layout-title' style={{ fontSize: "30px" }}>
 						{title}
 					</div>
-					<div style={{ position: "relative", fontSize: "15px", height: "15px" }}>
+					<div
+						className='layout-subtitle'
+						style={{ height: "15px", fontSize: "15px" }}>
 						{subtitle}
 					</div>
 					<div
-						className='container-input-area'
-						style={{
-							position: "relative",
-							marginTop: "20%",
-							fontSize: "20px",
-							width: "95%",
-						}}>
+						className='layout-input-area'
+						style={{ position: "relative", top: "10vh", fontSize: "20px" }}>
 						<Box
 							sx={{
 								display: "grid",
 								gridTemplateColumns: { sm: "1fr 1fr 1fr" },
 								gap: 2,
+								width: "90vw",
 							}}>
 							<TextField
 								label='닉네임'
@@ -41,22 +34,22 @@ function ShortInputLayout(props) {
 								}}
 								onKeyDown={(e) => {
 									if (e.key === "Enter") {
-										confirm();
+										buttonInfo.handler();
 									}
 								}}
 							/>
 						</Box>
 					</div>
 				</div>
-				<div className='button-area'>
-					{/* <Button
-						onClick={confirm}
+				<div className='layout-button-area'>
+					<Button
+						onClick={buttonInfo.handler}
 						variant='contained'
-						disabled={true}
+						disabled={!data}
 						size='medium'
-						style={{ width: "80%" }}>
-						확인
-					</Button> */}
+						style={{ width: "90vw", position: "absolute" }}>
+						{buttonInfo.name}
+					</Button>
 				</div>
 			</div>
 		</>

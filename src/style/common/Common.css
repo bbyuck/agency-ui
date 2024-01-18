@@ -4,14 +4,14 @@
 	text-align: left;
 }
 
-.layout-contents {
-	position: relative;
-	top: 12.5%;
+.layout-container > div {
+	margin-left: 5vw;
 }
 
-.layout-contents > div {
+.layout-contents {
 	position: relative;
-	margin-left: 5vw;
+	height: 60vh;
+	top: 12.5%;
 }
 
 .layout-title {
@@ -35,4 +35,9 @@
 .layout-select-radio {
 	display: inline-block;
 	height: 100%;
+}
+
+.layout-button-area {
+	position: absolute;
+	bottom: 12vh;
 }
