@@ -11,5 +11,5 @@ code {
 }
 
 body > #root > div {
-	height: 100vh;
+	height: calc(var(--vh, 1vh) * 100);
 }

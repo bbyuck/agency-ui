@@ -20,16 +20,26 @@ function App() {
 		e.preventDefault();
 		e.returnValue = ""; //Chrome에서 동작하도록; deprecated
 	};
-	useEffect(() => {
-		window.addEventListener("beforeunload", preventClose);
 
+	// page no scroll
+	const setScreenSize = () => {
+		let vh = window.innerHeight * 0.01;
+		document.documentElement.style.setProperty("--vh", `${vh}px`); //"--vh"라는 속성으로 정의해준다.
+	};
+
+	useEffect(() => {
 		if (!window.Kakao.isInitialized()) {
 			// JavaScript key를 인자로 주고 SDK 초기화
 			window.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY);
 		}
+		window.addEventListener("resize", setScreenSize);
+
+		// 페이지 변경 alert
+		window.addEventListener("beforeunload", preventClose);
 
 		return () => {
 			window.removeEventListener("beforeunload", preventClose);
+			window.removeEventListener("resize", setScreenSize);
 		};
 	}, []);
 

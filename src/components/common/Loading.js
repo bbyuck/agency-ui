@@ -47,7 +47,7 @@ function Loading() {
 						display: "flex",
 						alignItems: "center",
 						justifyContent: "center",
-						height: "100vh",
+						height: "calc(var(--vh, 1vh) * 100);",
 					}}>
 					<CircularProgress />
 				</Box>

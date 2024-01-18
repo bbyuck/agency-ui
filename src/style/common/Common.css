@@ -1,0 +1,38 @@
+.layout-container {
+	width: 100vw;
+	height: calc(var(--vh, 1vh) * 100);
+	text-align: left;
+}
+
+.layout-contents {
+	position: relative;
+	top: 12.5%;
+}
+
+.layout-contents > div {
+	position: relative;
+	margin-left: 5vw;
+}
+
+.layout-title {
+	position: "relative";
+	font-weight: 900;
+	font-size: "30px";
+}
+
+.layout-subtitle {
+	position: "relative";
+}
+
+.layout-select-label {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: "absolute";
+	height: 100%;
+}
+
+.layout-select-radio {
+	display: inline-block;
+	height: 100%;
+}
