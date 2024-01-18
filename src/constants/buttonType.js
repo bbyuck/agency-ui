@@ -1,3 +1,4 @@
 const NEXT = "NEXT";
+const GENERAL = "GENERAL";
 
-export { NEXT };
+export { NEXT, GENERAL };

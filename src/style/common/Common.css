@@ -39,5 +39,8 @@
 
 .layout-button-area {
 	position: absolute;
-	bottom: 12vh;
+	z-index: 99;
+	height: 10vh;
+	width: 95vw;
+	bottom: 5vh;
 }

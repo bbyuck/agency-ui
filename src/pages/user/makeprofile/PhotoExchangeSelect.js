@@ -1,5 +1,4 @@
 import SelectOneLayout from "components/layout/SelectOneLayout";
-import { NEXT } from "constants/buttonType";
 import { no, yes } from "constants/photoExchange";
 
 function PhotoExchangeSelect(props) {
@@ -21,7 +20,6 @@ function PhotoExchangeSelect(props) {
 				title={title}
 				subtitle={subtitle}
 				list={selectList}
-				buttonType={NEXT}
 				{...props}
 			/>
 		</div>

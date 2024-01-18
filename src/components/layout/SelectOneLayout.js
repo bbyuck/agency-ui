@@ -3,12 +3,13 @@ import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutli
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import { useEffect, useState } from "react";
 import { Button, Fab, Radio, Zoom } from "@mui/material";
-import NextButton from "components/user/makeprofile/NextButton";
-import { NEXT } from "constants/buttonType";
+import NextButton from "components/layout/NextButton";
+import { GENERAL, NEXT } from "constants/buttonType";
 import "style/common/Common.css";
+import LayoutButton from "./LayoutButton";
 
 function SelectOneLayout(props) {
-	const { title, subtitle, list, next, select, data, buttonType } = props;
+	const { title, subtitle, list, next, select, data, buttonInfo } = props;
 
 	const [selected, setSelected] = useState(null);
 
@@ -70,18 +71,8 @@ function SelectOneLayout(props) {
 						})}
 					</div>
 				</div>
-				<div className='button-area'>
-					{/* <Button
-					onClick={next}
-					variant='contained'
-					size='medium'
-					disabled={selected === null}
-					style={{ width: "80%" }}>
-					확인
-				</Button> */}
-					{buttonType === NEXT ? (
-						<NextButton in={selected !== null} next={next} />
-					) : null}
+				<div className='layout-button-area'>
+					<LayoutButton buttonInfo={buttonInfo} data={data} next={next} />
 				</div>
 			</div>
 		</>

@@ -1,5 +1,4 @@
 import SelectOneLayout from "components/layout/SelectOneLayout";
-import { NEXT } from "constants/buttonType";
 import { man, woman } from "constants/gender";
 
 function GenderSelect(props) {
@@ -19,14 +18,7 @@ function GenderSelect(props) {
 
 	return (
 		<div className='page'>
-			{
-				<SelectOneLayout
-					title={title}
-					list={selectList}
-					buttonType={NEXT}
-					{...props}
-				/>
-			}
+			{<SelectOneLayout title={title} list={selectList} {...props} />}
 		</div>
 	);
 }

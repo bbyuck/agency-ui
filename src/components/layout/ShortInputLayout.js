@@ -1,8 +1,9 @@
 import { Box, Button, TextField } from "@mui/material";
 import "style/common/Common.css";
+import LayoutButton from "./LayoutButton";
 
 function ShortInputLayout(props) {
-	const { buttonInfo, input, data, title, subtitle } = props;
+	const { next, buttonInfo, input, data, title, subtitle, label } = props;
 
 	return (
 		<>
@@ -18,23 +19,28 @@ function ShortInputLayout(props) {
 					</div>
 					<div
 						className='layout-input-area'
-						style={{ position: "relative", top: "10vh", fontSize: "20px" }}>
+						style={{
+							position: "relative",
+							top: "10vh",
+							fontSize: "20px",
+							width: "90vw",
+						}}>
 						<Box
 							sx={{
 								display: "grid",
 								gridTemplateColumns: { sm: "1fr 1fr 1fr" },
 								gap: 2,
-								width: "90vw",
 							}}>
 							<TextField
-								label='닉네임'
+								label={label}
 								variant='standard'
+								value={data}
 								onChange={(e) => {
-									input(e.target.value);
+									input(e.target.value === "" ? null : e.target.value);
 								}}
 								onKeyDown={(e) => {
 									if (e.key === "Enter") {
-										buttonInfo.handler();
+										next();
 									}
 								}}
 							/>
@@ -42,14 +48,7 @@ function ShortInputLayout(props) {
 					</div>
 				</div>
 				<div className='layout-button-area'>
-					<Button
-						onClick={buttonInfo.handler}
-						variant='contained'
-						disabled={!data}
-						size='medium'
-						style={{ width: "90vw", position: "absolute" }}>
-						{buttonInfo.name}
-					</Button>
+					<LayoutButton buttonInfo={buttonInfo} next={next} data={data} />
 				</div>
 			</div>
 		</>

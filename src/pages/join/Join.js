@@ -9,6 +9,7 @@ import { MATCH_MAKER, NEW, USER } from "constants/memberType";
 import http from "api";
 import { setAlert } from "store/slice/status";
 import messages from "messages";
+import { GENERAL, NEXT } from "constants/buttonType";
 
 function Join() {
 	const auth = useSelector((state) => state.auth);
@@ -115,14 +116,16 @@ function Join() {
 		<SelectMemberType
 			key='join-membertype'
 			next={next}
+			buttonInfo={{ type: NEXT }}
 			select={selectMemberType}
 			data={memberType}
 		/>,
 		<EnterMatchMakerName
 			key='join-matchmakername'
 			buttonInfo={{
-				name: "가입하기",
+				label: "가입하기",
 				handler: start,
+				type: GENERAL,
 			}}
 			input={inputMatchMakerName}
 			memberType={memberType}

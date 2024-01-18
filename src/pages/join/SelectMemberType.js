@@ -23,7 +23,7 @@ function SelectMatchType(props) {
 				title={title}
 				subtitle={subtitle}
 				list={selectList}
-				buttonType={NEXT}
+				buttonInfo={{ type: NEXT }}
 				{...props}
 			/>
 		</div>
