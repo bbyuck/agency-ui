@@ -141,14 +141,12 @@ function MakeProfile() {
 
 	const Pages = [
 		<div>makeprofile start</div>,
-		<MBTISelect
-			key={"mbti-select"}
+		<GenderSelect
+			key={"gender-select"}
 			next={next}
-			select={selectMBTI}
-			label={"MBTI"}
+			select={selectGender}
 			buttonInfo={{ type: NEXT }}
-			list={mbtiList}
-			data={mbti}
+			data={gender}
 		/>,
 		<AgeSelect
 			key={"age-select"}
@@ -158,6 +156,51 @@ function MakeProfile() {
 			buttonInfo={{ type: NEXT }}
 			list={birthYears}
 			data={age}
+		/>,
+		<HeightSelect
+			key={"height-input"}
+			next={next}
+			select={selectHeight}
+			list={heights}
+			label={"키"}
+			buttonInfo={{ type: NEXT }}
+			data={height}
+		/>,
+		<JobInput
+			key={"job-input"}
+			next={next}
+			input={inputJob}
+			label={"하는 일"}
+			buttonInfo={{ type: NEXT }}
+			data={job}
+			limitByte={JOB}
+		/>,
+		<AddressInput
+			key={"address-input"}
+			next={next}
+			input={inputAddress}
+			label={"사는 곳"}
+			buttonInfo={{ type: NEXT }}
+			data={address}
+			limitByte={ADDRESS}
+		/>,
+		<HobbyInput
+			key={"hobby-input"}
+			next={next}
+			input={inputHobby}
+			label={"취미"}
+			buttonInfo={{ type: NEXT }}
+			data={hobby}
+			limitByte={HOBBY}
+		/>,
+		<MBTISelect
+			key={"mbti-select"}
+			next={next}
+			select={selectMBTI}
+			label={"MBTI"}
+			buttonInfo={{ type: NEXT }}
+			list={mbtiList}
+			data={mbti}
 		/>,
 		<IdealTypeInput
 			key={"ideal-type-input"}
@@ -176,49 +219,6 @@ function MakeProfile() {
 			buttonInfo={{ type: NEXT }}
 			data={selfDescription}
 			limitByte={SELF_DESCRIPTION}
-		/>,
-		<JobInput
-			key={"job-input"}
-			next={next}
-			input={inputJob}
-			label={"하는 일"}
-			buttonInfo={{ type: NEXT }}
-			data={job}
-			limitByte={JOB}
-		/>,
-		<HobbyInput
-			key={"hobby-input"}
-			next={next}
-			input={inputHobby}
-			label={"취미"}
-			buttonInfo={{ type: NEXT }}
-			data={hobby}
-			limitByte={HOBBY}
-		/>,
-		<AddressInput
-			key={"address-input"}
-			next={next}
-			input={inputAddress}
-			label={"사는 곳"}
-			buttonInfo={{ type: NEXT }}
-			data={address}
-			limitByte={ADDRESS}
-		/>,
-		<HeightSelect
-			key={"height-input"}
-			next={next}
-			select={selectHeight}
-			list={heights}
-			label={"키"}
-			buttonInfo={{ type: NEXT }}
-			data={height}
-		/>,
-		<GenderSelect
-			key={"gender-select"}
-			next={next}
-			select={selectGender}
-			buttonInfo={{ type: NEXT }}
-			data={gender}
 		/>,
 		<PhotoExchangeSelect
 			key={"photo-exchange-select"}
