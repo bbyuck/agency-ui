@@ -1,13 +1,6 @@
-import {
-	Box,
-	FormControl,
-	InputLabel,
-	NativeSelect,
-	TextField,
-} from "@mui/material";
+import { Box, FormControl, InputLabel, NativeSelect } from "@mui/material";
 import "style/common/Common.css";
 import LayoutButton from "./LayoutButton";
-import { getBytes } from "util";
 
 function SelectNativeLayout(props) {
 	const { next, buttonInfo, select, list, data, title, subtitle, label } = props;
@@ -43,16 +36,17 @@ function SelectNativeLayout(props) {
 									{label}
 								</InputLabel>
 								<NativeSelect
+									defaultValue={data}
 									inputProps={{
 										name: "age",
 										id: "uncontrolled-native",
 									}}
 									onChange={(e) => {
-										select(e.target.value);
+										select(e.target.value === "none" ? null : e.target.value);
 									}}>
 									{list.map((elem, index) => (
-										<option key={`select-option-${index}`} value={elem}>
-											{elem}
+										<option key={`select-option-${index}`} value={elem.value}>
+											{elem.label}
 										</option>
 									))}
 								</NativeSelect>

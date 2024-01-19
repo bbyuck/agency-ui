@@ -6,11 +6,11 @@ function SmokingSelect(props) {
 	const selectList = [
 		{
 			label: "흡연자에요.",
-			value: true,
+			value: "1",
 		},
 		{
 			label: "비흡연자에요.",
-			value: false,
+			value: "0",
 		},
 	];
 	return (

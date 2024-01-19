@@ -47,6 +47,7 @@ function TextInputLayout(props) {
 								variant={long ? "outlined" : "standard"}
 								multiline={long}
 								rows={4}
+								defaultValue={data}
 								onChange={(e) => {
 									if (limitByte && getBytes(e.target.value) > limitByte) {
 										e.target.value = data;

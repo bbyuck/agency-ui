@@ -7,7 +7,7 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import LinearHeader from "components/common/header/LinearHeader";
 import { GENERAL, NEXT } from "constants/buttonType";
 import AgeSelect from "./AgeSelect";
-import HeightInput from "./HeightInput";
+import HeightSelect from "./HeightSelect";
 import AddressInput from "./AddressInput";
 import {
 	ADDRESS,
@@ -21,10 +21,12 @@ import JobInput from "./JobInput";
 import SelfDescriptionInput from "./SelfDescriptionInput";
 import IdealTypeInput from "./IdealTypeInput";
 import { getBirthYears } from "util";
+import { getHeights } from "util";
+import MBTISelect from "./MBTISelect";
 
 function MakeProfile() {
 	const [gender, setGender] = useState(null);
-	const [age, setAge] = useState(0);
+	const [age, setAge] = useState(null);
 	const [height, setHeight] = useState(null);
 	const [job, setJob] = useState(null);
 	const [address, setAddress] = useState(null);
@@ -48,7 +50,35 @@ function MakeProfile() {
 		allowPhotoExchange: null,
 		smoking: null,
 	};
-	const birthYears = getBirthYears();
+	const selectInitData = [{ label: "선택", value: "none" }];
+	const [birthYears, setBirthYears] = useState(selectInitData);
+	const [heights, setHeights] = useState(selectInitData);
+	const mbtiList = [
+		"ISTJ",
+		"ISFJ",
+		"INFJ",
+		"INTJ",
+
+		"ISTP",
+		"ISFP",
+		"INFP",
+		"INTP",
+
+		"ESTP",
+		"ESFP",
+		"ENFP",
+		"ENTP",
+
+		"ESTJ",
+		"ESFJ",
+		"ENFJ",
+		"ENTJ",
+	];
+
+	useEffect(() => {
+		setBirthYears(getBirthYears());
+		setHeights(getHeights());
+	}, []);
 
 	const [process, setProcess] = useState(1);
 	const next = () => {
@@ -77,7 +107,7 @@ function MakeProfile() {
 		setAge(age);
 	};
 
-	const inputHeight = (height) => {
+	const selectHeight = (height) => {
 		setHeight(height);
 	};
 
@@ -101,14 +131,27 @@ function MakeProfile() {
 		setIdealType(idealType);
 	};
 
+	const selectMBTI = (mbti) => {
+		setMbti(mbti);
+	};
+
 	const makeProfile = () => {
 		console.log("프로필 만들기 api 호출");
 	};
 
 	const Pages = [
 		<div>makeprofile start</div>,
+		<MBTISelect
+			key={"mbti-select"}
+			next={next}
+			select={selectMBTI}
+			label={"MBTI"}
+			buttonInfo={{ type: NEXT }}
+			list={mbtiList}
+			data={mbti}
+		/>,
 		<AgeSelect
-			key={"age-input"}
+			key={"age-select"}
 			next={next}
 			select={selectAge}
 			label={"출생연도"}
@@ -161,10 +204,11 @@ function MakeProfile() {
 			data={address}
 			limitByte={ADDRESS}
 		/>,
-		<HeightInput
+		<HeightSelect
 			key={"height-input"}
 			next={next}
-			input={inputHeight}
+			select={selectHeight}
+			list={heights}
 			label={"키"}
 			buttonInfo={{ type: NEXT }}
 			data={height}

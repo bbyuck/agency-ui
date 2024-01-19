@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Radio } from "@mui/material";
 import "style/common/Common.css";
 import LayoutButton from "./LayoutButton";
@@ -7,6 +7,13 @@ function SelectOneLayout(props) {
 	const { title, subtitle, list, next, select, data, buttonInfo } = props;
 
 	const [selected, setSelected] = useState(null);
+	useEffect(() => {
+		list.map((elem, index) => {
+			if (elem.value === data) {
+				setSelected(index);
+			}
+		});
+	}, []);
 
 	return (
 		<>
