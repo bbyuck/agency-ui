@@ -1,0 +1,8 @@
+const DEFAULT = 40;
+const ADDRESS = 40;
+const HOBBY = 100;
+const JOB = 40;
+const IDEAL_TYPE = 400;
+const SELF_DESCRIPTION = 400;
+
+export { ADDRESS, HOBBY, JOB, IDEAL_TYPE, SELF_DESCRIPTION, DEFAULT };

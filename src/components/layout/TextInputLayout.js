@@ -1,9 +1,20 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import "style/common/Common.css";
 import LayoutButton from "./LayoutButton";
+import { getBytes } from "util";
 
-function ShortInputLayout(props) {
-	const { next, buttonInfo, input, data, title, subtitle, label } = props;
+function TextInputLayout(props) {
+	const {
+		next,
+		buttonInfo,
+		input,
+		data,
+		title,
+		subtitle,
+		label,
+		limitByte,
+		long = false,
+	} = props;
 
 	return (
 		<>
@@ -28,14 +39,20 @@ function ShortInputLayout(props) {
 						<Box
 							sx={{
 								display: "grid",
-								gridTemplateColumns: { sm: "1fr 1fr 1fr" },
+								gridTemplateColumns: { sm: "1fr" },
 								gap: 2,
 							}}>
 							<TextField
 								label={label}
-								variant='standard'
-								value={data}
+								variant={long ? "outlined" : "standard"}
+								multiline={long}
+								rows={4}
 								onChange={(e) => {
+									if (limitByte && getBytes(e.target.value) > limitByte) {
+										e.target.value = data;
+										return;
+									}
+
 									input(e.target.value === "" ? null : e.target.value);
 								}}
 								onKeyDown={(e) => {
@@ -55,4 +72,4 @@ function ShortInputLayout(props) {
 	);
 }
 
-export default ShortInputLayout;
+export default TextInputLayout;

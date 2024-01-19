@@ -1,5 +1,5 @@
 import { MATCH_MAKER, USER } from "constants/memberType";
-import ShortInputLayout from "components/layout/ShortInputLayout";
+import TextInputLayout from "components/layout/TextInputLayout";
 
 function EnterMatchMakerName(props) {
 	const { memberType } = props;
@@ -19,7 +19,7 @@ function EnterMatchMakerName(props) {
 
 	return (
 		<div className='page'>
-			<ShortInputLayout title={title} subtitle={subtitle} {...props} />
+			<TextInputLayout title={title} subtitle={subtitle} {...props} />
 		</div>
 	);
 }

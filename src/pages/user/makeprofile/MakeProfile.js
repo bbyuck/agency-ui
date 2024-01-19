@@ -1,13 +1,26 @@
 import "style/transition.css";
-import { cloneElement, useState } from "react";
+import { cloneElement, useEffect, useState } from "react";
 import GenderSelect from "./GenderSelect";
 import PhotoExchangeSelect from "./PhotoExchangeSelect";
 import SmokingSelect from "./SmokingSelect";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import LinearHeader from "components/common/header/LinearHeader";
-import AgeInput from "./AgeInput";
 import { GENERAL, NEXT } from "constants/buttonType";
+import AgeSelect from "./AgeSelect";
 import HeightInput from "./HeightInput";
+import AddressInput from "./AddressInput";
+import {
+	ADDRESS,
+	HOBBY,
+	IDEAL_TYPE,
+	JOB,
+	SELF_DESCRIPTION,
+} from "constants/inputByteLimit";
+import HobbyInput from "./HobbyInput";
+import JobInput from "./JobInput";
+import SelfDescriptionInput from "./SelfDescriptionInput";
+import IdealTypeInput from "./IdealTypeInput";
+import { getBirthYears } from "util";
 
 function MakeProfile() {
 	const [gender, setGender] = useState(null);
@@ -35,6 +48,7 @@ function MakeProfile() {
 		allowPhotoExchange: null,
 		smoking: null,
 	};
+	const birthYears = getBirthYears();
 
 	const [process, setProcess] = useState(1);
 	const next = () => {
@@ -59,12 +73,32 @@ function MakeProfile() {
 		setSmoking(smoking);
 	};
 
-	const inputAge = (age) => {
+	const selectAge = (age) => {
 		setAge(age);
 	};
 
 	const inputHeight = (height) => {
 		setHeight(height);
+	};
+
+	const inputAddress = (address) => {
+		setAddress(address);
+	};
+
+	const inputHobby = (hobby) => {
+		setHobby(hobby);
+	};
+
+	const inputJob = (job) => {
+		setJob(job);
+	};
+
+	const inputSelfDescription = (selfDescription) => {
+		setSelfDescription(selfDescription);
+	};
+
+	const inputIdealType = (idealType) => {
+		setIdealType(idealType);
 	};
 
 	const makeProfile = () => {
@@ -73,6 +107,60 @@ function MakeProfile() {
 
 	const Pages = [
 		<div>makeprofile start</div>,
+		<AgeSelect
+			key={"age-input"}
+			next={next}
+			select={selectAge}
+			label={"출생연도"}
+			buttonInfo={{ type: NEXT }}
+			list={birthYears}
+			data={age}
+		/>,
+		<IdealTypeInput
+			key={"ideal-type-input"}
+			next={next}
+			input={inputIdealType}
+			label={"원하는 이성상"}
+			buttonInfo={{ type: NEXT }}
+			data={idealType}
+			limitByte={IDEAL_TYPE}
+		/>,
+		<SelfDescriptionInput
+			key={"self-description-input"}
+			next={next}
+			input={inputSelfDescription}
+			label={"간단 소개"}
+			buttonInfo={{ type: NEXT }}
+			data={selfDescription}
+			limitByte={SELF_DESCRIPTION}
+		/>,
+		<JobInput
+			key={"job-input"}
+			next={next}
+			input={inputJob}
+			label={"하는 일"}
+			buttonInfo={{ type: NEXT }}
+			data={job}
+			limitByte={JOB}
+		/>,
+		<HobbyInput
+			key={"hobby-input"}
+			next={next}
+			input={inputHobby}
+			label={"취미"}
+			buttonInfo={{ type: NEXT }}
+			data={hobby}
+			limitByte={HOBBY}
+		/>,
+		<AddressInput
+			key={"address-input"}
+			next={next}
+			input={inputAddress}
+			label={"사는 곳"}
+			buttonInfo={{ type: NEXT }}
+			data={address}
+			limitByte={ADDRESS}
+		/>,
 		<HeightInput
 			key={"height-input"}
 			next={next}
@@ -80,14 +168,6 @@ function MakeProfile() {
 			label={"키"}
 			buttonInfo={{ type: NEXT }}
 			data={height}
-		/>,
-		<AgeInput
-			key={"age-input"}
-			next={next}
-			input={inputAge}
-			label={"출생연도"}
-			buttonInfo={{ type: NEXT }}
-			data={age}
 		/>,
 		<GenderSelect
 			key={"gender-select"}

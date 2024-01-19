@@ -1,10 +1,5 @@
-import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
-import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
-import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
-import { useEffect, useState } from "react";
-import { Button, Fab, Radio, Zoom } from "@mui/material";
-import NextButton from "components/layout/NextButton";
-import { GENERAL, NEXT } from "constants/buttonType";
+import { useState } from "react";
+import { Radio } from "@mui/material";
 import "style/common/Common.css";
 import LayoutButton from "./LayoutButton";
 
@@ -12,14 +7,6 @@ function SelectOneLayout(props) {
 	const { title, subtitle, list, next, select, data, buttonInfo } = props;
 
 	const [selected, setSelected] = useState(null);
-
-	useEffect(() => {
-		list.forEach((elem, index) => {
-			if (elem.value === data) {
-				setSelected(index);
-			}
-		});
-	}, []);
 
 	return (
 		<>

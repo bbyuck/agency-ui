@@ -25,3 +25,32 @@ export const isMobile = () => {
 	const user = navigator.userAgent;
 	return user.indexOf("iPhone") > -1 || user.indexOf("Android") > -1;
 };
+
+const LINE_FEED = 10; // '\n'
+
+const getByteLength = (decimal) => {
+	return decimal >> 7 || LINE_FEED === decimal ? 2 : 1;
+};
+
+export const getBytes = (str) => {
+	return str
+		.split("")
+		.map((s) => s.charCodeAt(0))
+		.reduce(
+			(prev, unicodeDecimalValue) => prev + getByteLength(unicodeDecimalValue),
+			0,
+		);
+};
+
+export const getBirthYears = () => {
+	const birthYears = [];
+	const oldest = 90;
+	const youngest = 100;
+
+	for (let year = oldest; year <= youngest; year++) {
+		birthYears.push("빠른 " + (year % 100 < 10 ? "0" : "") + (year % 100));
+		birthYears.push((year % 100 < 10 ? "0" : "") + (year % 100));
+	}
+
+	return birthYears;
+};
