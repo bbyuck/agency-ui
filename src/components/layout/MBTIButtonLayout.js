@@ -22,7 +22,7 @@ function MBTIButtonLayout(props) {
 						{subtitle}
 					</div>
 					<div
-						className='layout-select-area'
+						className='layout-mbti-select-area'
 						style={{
 							position: "relative",
 							top: "5vh",
