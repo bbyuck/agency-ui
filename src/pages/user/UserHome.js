@@ -3,6 +3,7 @@ import HomeHeader from "components/common/header/HomeHeader";
 import ProfileDetail from "pages/user/main/ProfileDetail";
 import { cloneElement, useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import ReceivedRequest from "components/common/ReceivedRequest";
 
 function UserHome() {
 	const [process, setProcess] = useState(0);
@@ -16,9 +17,19 @@ function UserHome() {
 		setProcess(process - 1);
 	};
 
+	const to = (processId) => {
+		setProcess(processId);
+	};
+
 	const select = (profile) => {
 		setSelectedProfileId(profile);
 		next();
+	};
+
+	const [receivedListOpen, setReceivedListOpen] = useState(false);
+
+	const openReceivedList = () => {
+		setReceivedListOpen(true);
 	};
 
 	const Pages = [
@@ -37,7 +48,11 @@ function UserHome() {
 
 	return (
 		<>
-			<HomeHeader process={process} prev={prev} />
+			<HomeHeader
+				process={process}
+				leftButton={prev}
+				rightButton={openReceivedList}
+			/>
 			<TransitionGroup
 				className={"transition-wrapper"}
 				childFactory={(child) => {
@@ -49,6 +64,12 @@ function UserHome() {
 					<div className='page-contents'>{Pages[process]}</div>
 				</CSSTransition>
 			</TransitionGroup>
+			<ReceivedRequest
+				open={receivedListOpen}
+				handleClose={() => {
+					setReceivedListOpen(false);
+				}}
+			/>
 		</>
 	);
 }

@@ -1,5 +1,7 @@
 .container-main-profile-card-list {
 	text-align: left;
+	position: relative;
+	bottom: 5vh;
 }
 
 .profile-list-card {

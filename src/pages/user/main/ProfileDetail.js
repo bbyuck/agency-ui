@@ -28,14 +28,11 @@ function ProfileDetail(props) {
 		 */
 
 		setProfile(testData);
+		document.querySelector(".App").scrollTo(0, 0);
 	}, []);
 
-	useEffect(() => {
-		document.querySelector(".App").scrollTo(0, 0);
-	}, [profile]);
-
 	return (
-		<div className='page'>
+		<div className='page' id={"profile-detail"}>
 			{profile ? <ProfileCard profile={profile} /> : null}
 		</div>
 	);

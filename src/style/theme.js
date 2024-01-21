@@ -10,6 +10,12 @@ const theme = createTheme({
 			main: "#505050",
 			disabled: "#d1d1d1",
 		},
+		dot: {
+			main: "#FF0000",
+		},
+		header: {
+			main: "#FFFFFF",
+		},
 	},
 	typography: {
 		fontFamily: ["Roboto", "Noto Sans KR", "sans-serif"].join(","),

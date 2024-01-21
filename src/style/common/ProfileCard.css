@@ -15,6 +15,7 @@
 .container-profile-card-info {
 	text-align: left;
 	position: relative;
+	top: 3vh;
 	margin-left: 5vw;
 	width: 90vw;
 	font-size: 20px;

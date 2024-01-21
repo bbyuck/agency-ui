@@ -1,4 +1,5 @@
 import ProfileListCard from "components/common/ProfileListCard";
+import ReceivedRequest from "components/common/ReceivedRequest";
 import { useEffect } from "react";
 import "style/common/Main.css";
 
@@ -49,18 +50,25 @@ function Main(props) {
 
 	useEffect(() => {
 		reset();
+		document.querySelector(".App").scrollTo(0, 0);
 	}, []);
 
 	return (
 		<div className={"page"}>
-			<div className={"container-main-profile-card-list"}>
-				{profiles.map((profile, index) => (
-					<ProfileListCard
-						select={select}
-						profile={profile}
-						key={`profile-card-${index}`}
-					/>
-				))}
+			<div
+				style={{
+					position: "relative",
+					top: "6vh",
+				}}>
+				<div className={"container-main-profile-card-list"}>
+					{profiles.map((profile, index) => (
+						<ProfileListCard
+							select={select}
+							profile={profile}
+							key={`profile-card-${index}`}
+						/>
+					))}
+				</div>
 			</div>
 		</div>
 	);
