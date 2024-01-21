@@ -1,4 +1,4 @@
-import "style/transition.css";
+import "style/common/Common.css";
 import { cloneElement, useEffect, useState } from "react";
 import GenderSelect from "./GenderSelect";
 import PhotoExchangeSelect from "./PhotoExchangeSelect";
@@ -36,6 +36,8 @@ function MakeProfile() {
 	const [selfDescription, setSelfDescription] = useState(null);
 	const [allowPhotoExchange, setAllowPhotoExchange] = useState(null);
 	const [smoking, setSmoking] = useState(null);
+
+	const [isNext, setIsNext] = useState(true);
 
 	const newProfileData = {
 		gender: null,
@@ -83,9 +85,11 @@ function MakeProfile() {
 	const [process, setProcess] = useState(1);
 	const next = () => {
 		setProcess(process + 1);
+		setIsNext(true);
 	};
 	const prev = () => {
 		setProcess(process - 1);
+		setIsNext(false);
 	};
 
 	/**
@@ -157,14 +161,14 @@ function MakeProfile() {
 			list={birthYears}
 			data={age}
 		/>,
-		<HeightSelect
-			key={"height-input"}
+		<AddressInput
+			key={"address-input"}
 			next={next}
-			select={selectHeight}
-			list={heights}
-			label={"키"}
+			input={inputAddress}
+			label={"사는 곳"}
 			buttonInfo={{ type: NEXT }}
-			data={height}
+			data={address}
+			limitByte={ADDRESS}
 		/>,
 		<JobInput
 			key={"job-input"}
@@ -175,14 +179,14 @@ function MakeProfile() {
 			data={job}
 			limitByte={JOB}
 		/>,
-		<AddressInput
-			key={"address-input"}
+		<HeightSelect
+			key={"height-input"}
 			next={next}
-			input={inputAddress}
-			label={"사는 곳"}
+			select={selectHeight}
+			list={heights}
+			label={"키"}
 			buttonInfo={{ type: NEXT }}
-			data={address}
-			limitByte={ADDRESS}
+			data={height}
 		/>,
 		<HobbyInput
 			key={"hobby-input"}
@@ -243,10 +247,14 @@ function MakeProfile() {
 				className={"transition-wrapper"}
 				childFactory={(child) => {
 					return cloneElement(child, {
-						classNames: "item",
+						classNames: isNext ? "right-to-left" : "left-to-right",
+						timeout: 1000,
 					});
 				}}>
-				<CSSTransition key={Pages[process].key} classNames={"item"} timeout={1000}>
+				<CSSTransition
+					key={Pages[process].key}
+					classNames={"right-to-left"}
+					timeout={1000}>
 					{Pages[process]}
 				</CSSTransition>
 			</TransitionGroup>

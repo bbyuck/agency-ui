@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import "./App.css";
+import "style/common/Common.css";
+
 import AuthenticatedRoutes from "pages/AuthenticatedRoutes";
 import UnAuthenticatedRoutes from "pages/UnAuthenticatedRoutes";
 import { useSelector } from "react-redux";

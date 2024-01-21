@@ -36,3 +36,11 @@
 		transform: rotate(360deg);
 	}
 }
+
+.App {
+	overflow: scroll;
+	-ms-overflow-style: none;
+} /*for ie*/
+.App::-webkit-scrollbar {
+	display: none;
+} /*for chrome, safari, firefox*/

@@ -1,5 +1,6 @@
 import "style/common/AppHeader.css";
 import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
+import { IconButton } from "@mui/material";
 
 function LinearHeader({ prev, process }) {
 	// const button = {
@@ -12,9 +13,9 @@ function LinearHeader({ prev, process }) {
 			<div className='header'>
 				<span className='header-left'>
 					{process > 1 ? (
-						<span onClick={prev}>
+						<IconButton onClick={prev}>
 							<ArrowBackIosOutlinedIcon />
-						</span>
+						</IconButton>
 					) : null}
 				</span>
 			</div>

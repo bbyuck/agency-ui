@@ -1,4 +1,4 @@
-import "style/transition.css";
+import "style/common/Common.css";
 
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Error from "pages/error/Error";
@@ -10,6 +10,7 @@ import { MATCH_MAKER, NEW, USER } from "constants/memberType";
 import MakeProfile from "pages/user/makeprofile/MakeProfile";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Join from "pages/join/Join";
+import UserHome from "./user/UserHome";
 
 const TempLogout = () => {
 	useEffect(() => {
@@ -35,11 +36,11 @@ const Main = () => {
 			return;
 		}
 		if (memberType === MATCH_MAKER) {
-			navigate("/home/matchmaker", { replace: true });
+			navigate("/matchmaker/home", { replace: true });
 			return;
 		}
 		if (memberType === USER) {
-			navigate("/home/user", { replace: true });
+			navigate("/user/home", { replace: true });
 		}
 	});
 
@@ -83,6 +84,13 @@ function AuthenticatedRoutes() {
 			name: "make-profile",
 			path: "/user/profile/make",
 			element: <MakeProfile />,
+			animation: true,
+			nodeRef: createRef(),
+		},
+		{
+			name: "user-home",
+			path: "/user/home",
+			element: <UserHome />,
 			animation: true,
 			nodeRef: createRef(),
 		},

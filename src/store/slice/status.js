@@ -23,7 +23,6 @@ const statusSlice = createSlice({
 			state.alert = action.payload.alert;
 		},
 		setAnimation(state = initialState, action) {
-			console.log(action);
 			if (!state.currentPath) {
 				state.currentPath = action.payload.path;
 				return;
