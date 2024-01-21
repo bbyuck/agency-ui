@@ -3,11 +3,11 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import { Grid, IconButton } from "@mui/material";
+import { Badge, Grid, IconButton } from "@mui/material";
 import ReadMoreOutlinedIcon from "@mui/icons-material/ReadMoreOutlined";
 
 export default function ProfileListCard(props) {
-	const { profile, select } = props;
+	const { profile, select, dot } = props;
 	return (
 		<Card
 			variant='outlined'
@@ -20,6 +20,11 @@ export default function ProfileListCard(props) {
 				borderRadius: "20px",
 			}}>
 			<CardContent className={"profile-list-card"}>
+				<Badge
+					sx={{ position: "absolute", right: "6vw", top: "3vh" }}
+					variant='dot'
+					invisible={!dot}
+					color={"dot"}></Badge>
 				<Box sx={{ width: "100%" }}>
 					<Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 						<Grid item xs={3}>
