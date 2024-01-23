@@ -9,8 +9,13 @@ export const getTokenFromSession = () => {
 export const saveAuthInfoOnClient = (authInfo) => {
 	sessionStorage.setItem("accessToken", authInfo.accessToken);
 	sessionStorage.setItem("refreshToken", authInfo.refreshToken);
-	localStorage.setItem("userId", authInfo.kakaoId);
+	localStorage.setItem("credentialToken", authInfo.credentialToken);
 	localStorage.setItem("memberType", authInfo.memberType);
+};
+
+export const removeAuthInfoOnClient = () => {
+	localStorage.removeItem("credentialToken");
+	localStorage.removeItem("memberType");
 };
 
 export const muiTextFieldFocus = (ref) => {
@@ -69,4 +74,12 @@ export const getHeights = () => {
 		heights.push({ label: height, value: height });
 	}
 	return heights;
+};
+
+export const forceHome = () => {
+	var Backlen = window.history.length;
+	window.history.go(-Backlen);
+	window.location.href = process.env.REACT_APP_CLIENT;
+
+	return false;
 };

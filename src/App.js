@@ -10,12 +10,15 @@ import ToastAlert from "components/common/ToastAlert";
 import AppHeader from "components/common/header/AppHeader";
 
 function App() {
-	const auth = useSelector((state) => state.auth);
+	const credentialToken = useSelector((state) => state.auth.credentialToken);
+	const memberType = useSelector((state) => state.auth.memberType);
+
+	console.log(credentialToken);
 
 	/**
 	 * 로그인 시 rerender
 	 */
-	useEffect(() => {}, [auth]);
+	useEffect(() => {}, [credentialToken, memberType]);
 
 	const preventClose = (e) => {
 		console.log(e);
@@ -37,7 +40,7 @@ function App() {
 		window.addEventListener("resize", setScreenSize);
 
 		// 페이지 변경 alert
-		window.addEventListener("beforeunload", preventClose);
+		// window.addEventListener("beforeunload", preventClose);
 
 		return () => {
 			window.removeEventListener("beforeunload", preventClose);
@@ -51,7 +54,7 @@ function App() {
 			<ToastAlert />
 			{/* <AppHeader /> */}
 			{/* TODO => 로그인 유지 기능 추가 필요 / 일단 무제한 로그인 */}
-			{auth.kakaoId ? <AuthenticatedRoutes /> : <UnAuthenticatedRoutes />}
+			{credentialToken ? <AuthenticatedRoutes /> : <UnAuthenticatedRoutes />}
 		</div>
 	);
 }

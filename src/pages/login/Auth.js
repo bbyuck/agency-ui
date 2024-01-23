@@ -4,12 +4,14 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { authenticate } from "store/slice/auth";
 import http from "api";
 import { saveAuthInfoOnClient } from "util";
+import { forceHome } from "util";
 
 function Auth() {
 	const [searchParams] = useSearchParams();
 	const authorizationCode = searchParams.get("code");
+	const error = searchParams.get("error");
+
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (authorizationCode) {
@@ -19,10 +21,10 @@ function Auth() {
 				})
 				.then((response) => {
 					dispatch(authenticate(response.data.data));
-					navigate("/", { replace: true, state: { animation: "next" } });
+					forceHome();
 				})
 				.catch(() => {
-					navigate("/");
+					forceHome();
 				});
 
 			/**
@@ -33,6 +35,8 @@ function Auth() {
 			// 		authToken: authToken,
 			// 	}),
 			// );
+		} else if (error) {
+			forceHome();
 		}
 	}, []);
 

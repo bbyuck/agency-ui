@@ -22,10 +22,10 @@ function UnAuthenticatedRoutes() {
 			<Route path='*' element={<DefaultRoute />} />
 			<Route path='/auth' element={<Auth />} />
 			<Route path='/login' element={<Login />} />
-			<Route path='/signup' element={<SignUp />} />
+			{/* <Route path='/signup' element={<SignUp />} /> */}
 
 			{/* 공통 라우팅 */}
-			<Route path='/error' element={<Error />} />
+			{/* <Route path='/error' element={<Error />} /> */}
 		</Routes>
 	);
 }

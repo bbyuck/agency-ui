@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import http from "api";
 import { setAlert } from "store/slice/status";
 import { isMobile } from "util";
+import { forceHome } from "util";
 
 function Login() {
 	const theme = useTheme();

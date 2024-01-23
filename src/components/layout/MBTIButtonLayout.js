@@ -59,9 +59,7 @@ function MBTIButtonLayout(props) {
 						</Box>
 					</div>
 				</div>
-				<div className='layout-button-area'>
-					<LayoutButton buttonInfo={buttonInfo} data={data} next={next} />
-				</div>
+				<LayoutButton buttonInfo={buttonInfo} data={data} next={next} />
 			</div>
 		</>
 	);

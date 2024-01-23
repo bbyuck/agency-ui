@@ -10,6 +10,7 @@ import http from "api";
 import { setAlert } from "store/slice/status";
 import messages from "messages";
 import { GENERAL, NEXT } from "constants/buttonType";
+import { authenticate, resetAuthentication } from "store/slice/auth";
 
 function Join() {
 	const auth = useSelector((state) => state.auth);
@@ -23,7 +24,11 @@ function Join() {
 	 */
 	const [process, setProcess] = useState(1);
 	const next = () => {
-		setProcess(process + 1);
+		if (memberType === MATCH_MAKER) {
+			matchMakerJoin();
+		} else if (memberType === USER) {
+			userJoin();
+		}
 	};
 	const prev = () => {
 		setProcess(process - 1);
@@ -66,11 +71,19 @@ function Join() {
 	const matchMakerJoin = () => {
 		http
 			.post("/v1/matchmaker/join", {
-				kakaoId: auth.kakaoId,
-				matchMakerName: matchMakerName,
+				credentialToken: auth.credentialToken,
 			})
 			.then((response) => {
-				console.log(response);
+				dispatch(authenticate(response.data.data));
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "success",
+							message: "가입이 완료되었습니다.",
+						},
+					}),
+				);
 			})
 			.catch((error) => {
 				dispatch(
@@ -84,13 +97,16 @@ function Join() {
 						},
 					}),
 				);
+				console.log(error.response.data.code);
+				if (error.response.data.code === "INVALID_CREDENTIAL_TOKEN") {
+					dispatch(resetAuthentication());
+				}
 			});
 	};
 	const userJoin = () => {
 		http
 			.post("/v1/user/join", {
-				kakaoId: auth.kakaoId,
-				matchMakerName: matchMakerName,
+				credentialToken: auth.credentialToken,
 			})
 			.then((response) => {
 				console.log(response);
@@ -107,6 +123,9 @@ function Join() {
 						},
 					}),
 				);
+				if (error.response.data.code === "INVALID_CREDENTIAL_TOKEN") {
+					dispatch(resetAuthentication());
+				}
 			});
 	};
 
@@ -120,18 +139,18 @@ function Join() {
 			select={selectMemberType}
 			data={memberType}
 		/>,
-		<EnterMatchMakerName
-			key='join-matchmakername'
-			buttonInfo={{
-				label: "가입하기",
-				handler: start,
-				type: GENERAL,
-			}}
-			input={inputMatchMakerName}
-			memberType={memberType}
-			data={matchMakerName}
-			closeConfirmDialog={closeConfirmDialog}
-		/>,
+		// <EnterMatchMakerName
+		// 	key='join-matchmakername'
+		// 	buttonInfo={{
+		// 		label: "가입하기",
+		// 		handler: start,
+		// 		type: GENERAL,
+		// 	}}
+		// 	input={inputMatchMakerName}
+		// 	memberType={memberType}
+		// 	data={matchMakerName}
+		// 	closeConfirmDialog={closeConfirmDialog}
+		// />,
 	];
 	return (
 		<>

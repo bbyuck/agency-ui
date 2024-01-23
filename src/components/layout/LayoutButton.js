@@ -8,16 +8,20 @@ function LayoutButton(props) {
 	return (
 		<>
 			{buttonInfo.type === NEXT ? (
-				<NextButton in={data !== null} next={next} />
+				<div className={"layout-next-button"}>
+					<NextButton in={data !== null} next={next} />
+				</div>
 			) : buttonInfo.type === GENERAL ? (
-				<Button
-					onClick={next}
-					variant='contained'
-					disabled={!data}
-					size='medium'
-					style={{ width: "90vw", position: "absolute" }}>
-					{buttonInfo.label}
-				</Button>
+				<div className={"layout-default-button"}>
+					<Button
+						onClick={next}
+						variant='contained'
+						disabled={!data}
+						size='medium'
+						style={{ width: "90vw" }}>
+						{buttonInfo.label}
+					</Button>
+				</div>
 			) : null}
 		</>
 	);

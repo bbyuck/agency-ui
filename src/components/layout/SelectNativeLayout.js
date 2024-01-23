@@ -54,9 +54,7 @@ function SelectNativeLayout(props) {
 						</Box>
 					</div>
 				</div>
-				<div className='layout-button-area'>
-					<LayoutButton buttonInfo={buttonInfo} next={next} data={data} />
-				</div>
+				<LayoutButton buttonInfo={buttonInfo} next={next} data={data} />
 			</div>
 		</>
 	);
