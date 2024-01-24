@@ -7,14 +7,16 @@ import UnAuthenticatedRoutes from "pages/UnAuthenticatedRoutes";
 import { useSelector } from "react-redux";
 import Loading from "components/common/Loading";
 import ToastAlert from "components/common/ToastAlert";
-import AppHeader from "components/common/header/AppHeader";
+import { useSearchParams } from "react-router-dom";
 
 function App() {
 	const credentialToken = useSelector((state) => state.auth.credentialToken);
 	const memberType = useSelector((state) => state.auth.memberType);
-
-	console.log(credentialToken);
-
+	const [searchParams] = useSearchParams();
+	const matchmakerCode = searchParams.get("matchmaker");
+	if (matchmakerCode) {
+		sessionStorage.setItem("mc", matchmakerCode);
+	}
 	/**
 	 * 로그인 시 rerender
 	 */
@@ -39,12 +41,18 @@ function App() {
 		}
 		window.addEventListener("resize", setScreenSize);
 
+		/**
+		 * 주선자 코드 자동입력
+		 */
+
 		// 페이지 변경 alert
 		// window.addEventListener("beforeunload", preventClose);
 
 		return () => {
 			window.removeEventListener("beforeunload", preventClose);
 			window.removeEventListener("resize", setScreenSize);
+
+			sessionStorage.clear();
 		};
 	}, []);
 

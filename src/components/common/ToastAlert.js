@@ -24,7 +24,7 @@ function ToastAlert() {
 				key={Slide.name}
 				open={alertState.open}
 				anchorOrigin={{ vertical: "top", horizontal: "center" }}
-				autoHideDuration={3000}
+				autoHideDuration={2000}
 				onClose={handleClose}>
 				<Alert
 					onClose={handleClose}

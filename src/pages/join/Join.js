@@ -1,7 +1,7 @@
 import { cloneElement, useEffect, useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import SelectMemberType from "./SelectMemberType";
-import EnterMatchMakerName from "./EnterMatchMakerName";
+import EnterMatchMakerCode from "./EnterMatchMakerCode";
 import LinearHeader from "components/common/header/LinearHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { MATCH_MAKER, NEW, USER } from "constants/memberType";
@@ -17,7 +17,7 @@ function Join() {
 	const dispatch = useDispatch();
 
 	const [memberType, setMemberType] = useState(null);
-	const [matchMakerName, setMatchMakerName] = useState(null);
+	const [matchMakerCode, setMatchMakerCode] = useState(null);
 
 	/**
 	 * common
@@ -27,7 +27,7 @@ function Join() {
 		if (memberType === MATCH_MAKER) {
 			matchMakerJoin();
 		} else if (memberType === USER) {
-			userJoin();
+			setProcess(process + 1);
 		}
 	};
 	const prev = () => {
@@ -42,12 +42,22 @@ function Join() {
 	};
 
 	/**
-	 * matchMakerName
+	 * matchMakerCode
 	 */
 	const [confirmOpen, setConfirmOpen] = useState(false);
-	const inputMatchMakerName = (matchMakerName) => {
-		setMatchMakerName(matchMakerName);
+	const [init, setInit] = useState(true);
+
+	const inputMatchMakerCode = (matchMakerCode) => {
+		if (init) {
+			setInit(false);
+		}
+		setMatchMakerCode(matchMakerCode);
 	};
+
+	if (init) {
+		inputMatchMakerCode(sessionStorage.getItem("mc"));
+	}
+
 	const closeConfirmDialog = () => {
 		setConfirmOpen(false);
 	};
@@ -56,7 +66,7 @@ function Join() {
 		if (memberType === MATCH_MAKER) {
 			matchMakerJoin();
 		} else if (memberType === USER) {
-			if (!matchMakerName) {
+			if (!matchMakerCode) {
 				if (confirmOpen) {
 					userJoin();
 				} else {
@@ -139,18 +149,19 @@ function Join() {
 			select={selectMemberType}
 			data={memberType}
 		/>,
-		// <EnterMatchMakerName
-		// 	key='join-matchmakername'
-		// 	buttonInfo={{
-		// 		label: "가입하기",
-		// 		handler: start,
-		// 		type: GENERAL,
-		// 	}}
-		// 	input={inputMatchMakerName}
-		// 	memberType={memberType}
-		// 	data={matchMakerName}
-		// 	closeConfirmDialog={closeConfirmDialog}
-		// />,
+		<EnterMatchMakerCode
+			key='join-matchmakername'
+			buttonInfo={{
+				label: "가입하기",
+				handler: start,
+				type: GENERAL,
+			}}
+			init={init}
+			input={inputMatchMakerCode}
+			memberType={memberType}
+			data={matchMakerCode}
+			closeConfirmDialog={closeConfirmDialog}
+		/>,
 	];
 	return (
 		<>

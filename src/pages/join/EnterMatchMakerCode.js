@@ -1,7 +1,8 @@
 import { MATCH_MAKER, USER } from "constants/memberType";
 import TextInputLayout from "components/layout/TextInputLayout";
+import { useEffect } from "react";
 
-function EnterMatchMakerName(props) {
+function EnterMatchMakerCode(props) {
 	const { memberType } = props;
 
 	const title =
@@ -14,7 +15,7 @@ function EnterMatchMakerName(props) {
 		memberType === MATCH_MAKER
 			? null
 			: memberType === USER
-			? "주선자의 닉네임을 입력해주세요."
+			? "주선자에게 전달받은 코드를 입력해주세요."
 			: null;
 
 	return (
@@ -24,4 +25,4 @@ function EnterMatchMakerName(props) {
 	);
 }
 
-export default EnterMatchMakerName;
+export default EnterMatchMakerCode;

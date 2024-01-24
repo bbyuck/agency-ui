@@ -1,5 +1,4 @@
 import ProfileListCard from "components/common/ProfileListCard";
-import ReceivedRequest from "components/common/ReceivedRequest";
 import { useEffect } from "react";
 import "style/common/Main.css";
 

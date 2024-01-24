@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
 	memberType: null,
-	matchMakerName: null,
+	matchMakerCode: null,
 };
 
 const joinInfoSlice = createSlice({
@@ -15,12 +15,12 @@ const joinInfoSlice = createSlice({
 		resetMemberType(state, action) {
 			state.memberType = null;
 		},
-		setMatchMakerName(state, action) {
-			state.matchMakerName =
-				action.payload.matchMakerName === "" ? null : action.payload.matchMakerName;
+		setMatchMakerCode(state, action) {
+			state.matchMakerCode =
+				action.payload.matchMakerCode === "" ? null : action.payload.matchMakerCode;
 		},
-		resetMatchMakerName(state, action) {
-			state.matchMakerName = null;
+		resetMatchMakerCode(state, action) {
+			state.matchMakerCode = null;
 		},
 	},
 });
@@ -32,7 +32,7 @@ const joinInfoSlice = createSlice({
 export const {
 	selectMemberType,
 	resetMemberType,
-	setMatchMakerName,
-	resetMatchMakerName,
+	setMatchMakerCode,
+	resetMatchMakerCode,
 } = joinInfoSlice.actions;
 export default joinInfoSlice.reducer;
