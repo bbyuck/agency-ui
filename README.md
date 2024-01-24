@@ -1,4 +1,4 @@
-# ddu admin ui project
+# 연애조작단 ui project
 
 # React project
 
