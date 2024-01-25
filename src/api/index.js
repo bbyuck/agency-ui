@@ -4,6 +4,10 @@ import { getTokenFromSession } from "util";
 import { Authorization } from "customHeader";
 const api = axios.create({
 	baseURL: process.env.REACT_APP_HOST,
+	headers: {
+		"Content-Type": "application/json;charset=UTF-8",
+		Accept: "application/json",
+	},
 });
 
 api.interceptors.request.use(
