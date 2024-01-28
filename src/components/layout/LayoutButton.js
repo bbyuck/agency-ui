@@ -14,7 +14,7 @@ function LayoutButton(props) {
 			) : buttonInfo.type === GENERAL ? (
 				<div className={"layout-default-button"}>
 					<Button
-						onClick={next}
+						onClick={buttonInfo.handler}
 						variant='contained'
 						disabled={!data}
 						size='medium'

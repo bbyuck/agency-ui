@@ -9,10 +9,10 @@ const joinInfoSlice = createSlice({
 	name: "joinInfo",
 	initialState,
 	reducers: {
-		selectMemberType(state, action) {
+		selectMemberCode(state, action) {
 			state.memberType = action.payload.memberType;
 		},
-		resetMemberType(state, action) {
+		resetMemberCode(state, action) {
 			state.memberType = null;
 		},
 		setMatchMakerCode(state, action) {
@@ -30,8 +30,8 @@ const joinInfoSlice = createSlice({
 
 // reducer 는 configureStore에 등록을 위해 export default 합니다.
 export const {
-	selectMemberType,
-	resetMemberType,
+	selectMemberCode,
+	resetMemberCode,
 	setMatchMakerCode,
 	resetMatchMakerCode,
 } = joinInfoSlice.actions;

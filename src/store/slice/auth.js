@@ -4,7 +4,10 @@ import { saveAuthInfoOnClient } from "util";
 
 const initialState = {
 	credentialToken: localStorage.getItem("credentialToken"),
-	memberType: localStorage.getItem("memberType"),
+	oauthCode: sessionStorage.getItem("oauthCode"),
+	oauthId: sessionStorage.getItem("oauthId"),
+	memberCode: localStorage.getItem("memberCode"),
+	memberStatus: sessionStorage.getItem("memberStatus"),
 };
 
 const authSlice = createSlice({
@@ -13,13 +16,14 @@ const authSlice = createSlice({
 	reducers: {
 		authenticate(state = initialState, action) {
 			state.credentialToken = action.payload.credentialToken;
-			state.memberType = action.payload.memberType;
+			state.memberCode = action.payload.memberCode;
+			state.memberStatus = action.payload.memberStatus;
 			saveAuthInfoOnClient(action.payload);
 		},
 		resetAuthentication(state, action) {
 			removeAuthInfoOnClient();
 			state.credentialToken = null;
-			state.memberType = null;
+			state.memberCode = null;
 		},
 	},
 });

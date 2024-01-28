@@ -1,10 +1,10 @@
-import { cloneElement, useEffect, useState } from "react";
+import { cloneElement, useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import SelectMemberType from "./SelectMemberType";
+import SelectMemberCode from "./SelectMemberCode";
 import EnterMatchMakerCode from "./EnterMatchMakerCode";
 import LinearHeader from "components/common/header/LinearHeader";
 import { useDispatch, useSelector } from "react-redux";
-import { MATCH_MAKER, NEW, USER } from "constants/memberType";
+import { MATCH_MAKER, USER } from "constants/memberCode";
 
 import http from "api";
 import { setAlert } from "store/slice/status";
@@ -13,10 +13,10 @@ import { GENERAL, NEXT } from "constants/buttonType";
 import { authenticate, resetAuthentication } from "store/slice/auth";
 
 function Join() {
-	const auth = useSelector((state) => state.auth);
+	const { oauthId, oauthCode } = useSelector((state) => state.auth);
 	const dispatch = useDispatch();
 
-	const [memberType, setMemberType] = useState(null);
+	const [memberCode, setMemberCode] = useState(null);
 	const [matchMakerCode, setMatchMakerCode] = useState(null);
 
 	/**
@@ -24,9 +24,9 @@ function Join() {
 	 */
 	const [process, setProcess] = useState(1);
 	const next = () => {
-		if (memberType === MATCH_MAKER) {
+		if (memberCode === MATCH_MAKER) {
 			matchMakerJoin();
-		} else if (memberType === USER) {
+		} else if (memberCode === USER) {
 			setProcess(process + 1);
 		}
 	};
@@ -37,8 +37,8 @@ function Join() {
 	/**
 	 * membertype
 	 */
-	const selectMemberType = (memberType) => {
-		setMemberType(memberType);
+	const selectMemberCode = (memberCode) => {
+		setMemberCode(memberCode);
 	};
 
 	/**
@@ -62,26 +62,13 @@ function Join() {
 		setConfirmOpen(false);
 	};
 
-	const start = () => {
-		if (memberType === MATCH_MAKER) {
-			matchMakerJoin();
-		} else if (memberType === USER) {
-			if (!matchMakerCode) {
-				if (confirmOpen) {
-					userJoin();
-				} else {
-					setConfirmOpen(true);
-				}
-			} else {
-				userJoin();
-			}
-		}
-	};
-
 	const matchMakerJoin = () => {
 		http
 			.post("/v1/matchmaker/join", {
-				credentialToken: auth.credentialToken,
+				oauthId: oauthId,
+				oauthCode: oauthCode,
+				accessToken: sessionStorage.getItem("accessToken"),
+				refreshToken: sessionStorage.getItem("refreshToken"),
 			})
 			.then((response) => {
 				dispatch(authenticate(response.data.data));
@@ -114,12 +101,15 @@ function Join() {
 			});
 	};
 	const userJoin = () => {
+		const param = {
+			oauthId: oauthId,
+			oauthCode: oauthCode,
+			matchMakerCode: matchMakerCode,
+		};
 		http
-			.post("/v1/user/join", {
-				credentialToken: auth.credentialToken,
-			})
+			.post("/v1/user/join", param)
 			.then((response) => {
-				console.log(response);
+				dispatch(authenticate(response.data.data));
 			})
 			.catch((error) => {
 				dispatch(
@@ -142,23 +132,23 @@ function Join() {
 	const Pages = [
 		<></>,
 
-		<SelectMemberType
+		<SelectMemberCode
 			key='join-membertype'
 			next={next}
 			buttonInfo={{ type: NEXT }}
-			select={selectMemberType}
-			data={memberType}
+			select={selectMemberCode}
+			data={memberCode}
 		/>,
 		<EnterMatchMakerCode
 			key='join-matchmakername'
 			buttonInfo={{
 				label: "가입하기",
-				handler: start,
+				handler: userJoin,
 				type: GENERAL,
 			}}
 			init={init}
 			input={inputMatchMakerCode}
-			memberType={memberType}
+			memberCode={memberCode}
 			data={matchMakerCode}
 			closeConfirmDialog={closeConfirmDialog}
 		/>,

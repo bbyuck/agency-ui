@@ -1,4 +1,4 @@
-import { MATCH_MAKER, USER } from "constants/memberType";
+import { MATCH_MAKER, USER } from "constants/memberCode";
 import SelectOneLayout from "components/layout/SelectOneLayout";
 import { NEXT } from "constants/buttonType";
 

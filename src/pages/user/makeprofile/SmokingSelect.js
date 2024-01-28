@@ -1,8 +1,8 @@
 import SelectOneLayout from "components/layout/SelectOneLayout";
 
 function SmokingSelect(props) {
-	const title = "마지막 질문이에요!";
-	const subtitle = "담배 피우세요?";
+	const title = "담배 피우세요?";
+	const subtitle = "마지막 질문이에요!";
 	const selectList = [
 		{
 			label: "흡연자에요.",

@@ -7,15 +7,33 @@ export const getTokenFromSession = () => {
 };
 
 export const saveAuthInfoOnClient = (authInfo) => {
-	sessionStorage.setItem("accessToken", authInfo.accessToken);
-	sessionStorage.setItem("refreshToken", authInfo.refreshToken);
-	localStorage.setItem("credentialToken", authInfo.credentialToken);
-	localStorage.setItem("memberType", authInfo.memberType);
+	if (authInfo.accessToken && authInfo.accessToken !== "null") {
+		sessionStorage.setItem("accessToken", authInfo.accessToken);
+	}
+	if (authInfo.refreshToken && authInfo.refreshToken !== "null") {
+		sessionStorage.setItem("refreshToken", authInfo.refreshToken);
+	}
+	sessionStorage.setItem("memberStatus", authInfo.memberStatus);
+	localStorage.setItem("memberCode", authInfo.memberCode);
+
+	if (
+		authInfo.oauthId &&
+		authInfo.oauthId !== "null" &&
+		authInfo.oauthCode &&
+		authInfo.oauthCode !== "null"
+	) {
+		sessionStorage.setItem("oauthId", authInfo.oauthId);
+		sessionStorage.setItem("oauthCode", authInfo.oauthCode);
+	}
+
+	if (authInfo.credentialToken && authInfo.credentialToken !== "null") {
+		localStorage.setItem("credentialToken", authInfo.credentialToken);
+	}
 };
 
 export const removeAuthInfoOnClient = () => {
 	localStorage.removeItem("credentialToken");
-	localStorage.removeItem("memberType");
+	localStorage.removeItem("memberCode");
 };
 
 export const muiTextFieldFocus = (ref) => {
