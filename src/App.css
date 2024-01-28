@@ -39,6 +39,7 @@
 
 .App {
 	overflow: scroll;
+	overflow-x: none;
 	-ms-overflow-style: none;
 } /*for ie*/
 .App::-webkit-scrollbar {

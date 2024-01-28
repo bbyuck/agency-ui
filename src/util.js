@@ -6,6 +6,10 @@ export const getTokenFromSession = () => {
 	return JSON.parse(sessionStorage.getItem("auth"));
 };
 
+export const getCredentialToken = () => {
+	return localStorage.getItem("credentialToken");
+};
+
 export const saveAuthInfoOnClient = (authInfo) => {
 	if (authInfo.accessToken && authInfo.accessToken !== "null") {
 		sessionStorage.setItem("accessToken", authInfo.accessToken);

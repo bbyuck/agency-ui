@@ -7,3 +7,4 @@ export const X_LOGIN_ID = "X-LOGIN_ID";
 export const X_PASSWORD = "X-PASSWORD";
 export const X_ACCESS_TOKEN = "X-ACCESS-TOKEN";
 export const X_REFRESH_TOKEN = "X-REFRESH-TOKEN";
+export const X_Credential_Token = "X-Credential-Token";

@@ -1,7 +1,7 @@
 import "style/common/Common.css";
 import { cloneElement, useEffect, useState } from "react";
 import GenderSelect from "./GenderSelect";
-import PhotoExchangeSelect from "./PhotoExchangeSelect";
+import PhotoUpload from "./PhotoUpload";
 import SmokingSelect from "./SmokingSelect";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import LinearHeader from "components/common/header/LinearHeader";
@@ -224,7 +224,7 @@ function MakeProfile() {
 			data={selfDescription}
 			limitByte={SELF_DESCRIPTION}
 		/>,
-		<PhotoExchangeSelect
+		<PhotoUpload
 			key={"photo-exchange-select"}
 			next={next}
 			select={selectPhotoExchangeYn}
