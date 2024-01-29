@@ -12,7 +12,7 @@ function LinearHeader({ prev, process }) {
 		<div className='container-header'>
 			<div className='header'>
 				<span className='header-left'>
-					{process > 1 ? (
+					{process > 0 ? (
 						<IconButton onClick={prev} aria-label='back button' size='large'>
 							<ArrowBackIosOutlinedIcon />
 						</IconButton>

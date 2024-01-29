@@ -3,8 +3,13 @@ import { IconButton, styled } from "@mui/material";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import UploadOutlinedIcon from "@mui/icons-material/UploadOutlined";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import uploadPhoto from "api/uploadPhoto";
+import http from "api";
+import { useDispatch } from "react-redux";
+import { setAlert } from "store/slice/status";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
+import Confirm from "components/common/Confirm";
 
 const VisuallyHiddenInput = styled("input")({
 	clip: "rect(0 0 0 0)",
@@ -18,14 +23,101 @@ const VisuallyHiddenInput = styled("input")({
 	width: 1,
 });
 
-function PhotoExchangeSelect(props) {
-	const title = "사진을 업로드해주세요.";
-	const subtitle = "서로의 사진은 매칭 성사시에만 확인할 수 있어요.";
+function PhotoUpload(props) {
+	const minCount = 2;
+	const maxCount = 5;
+
+	const dispatch = useDispatch();
+	const [photoInfo, setPhotoInfo] = useState([
+		{
+			id: null,
+			title: `photo-file-${0}`,
+			url: null,
+			exist: false,
+		},
+	]);
+	const [uploadedCount, setUploadedCount] = useState(0);
+
+	const photoLoad = (response) => {
+		const loadedPhotoData = response.data.data.photoDataList.map(
+			(photoData, index) => {
+				return {
+					id: photoData.id,
+					title: `photo-file-${index}`,
+					url: `data:image/png;base64,${photoData.physicalData}`,
+					exist: true,
+				};
+			},
+		);
+		setUploadedCount(loadedPhotoData.length);
+
+		if (loadedPhotoData.length < maxCount) {
+			loadedPhotoData.push({
+				title: `photo-file-${loadedPhotoData.length}`,
+				url: null,
+				exist: false,
+			});
+		}
+		setPhotoInfo(loadedPhotoData);
+	};
+
+	useEffect(() => {
+		http
+			.get("/v1/photo")
+			.then((response) => {
+				photoLoad(response);
+			})
+			.catch((error) => {
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response.data.message,
+						},
+					}),
+				);
+			});
+	}, []);
+
+	const title = "사진을 올려주세요.";
+	const subtitle = `최소 ${minCount}장 이상, 최대 ${maxCount}장 이하로 올려주세요.`;
 	const { buttonInfo, data, next } = props;
 	//화면에 출력되는 파일
 	const [selectedImages, setSelectedImages] = useState([]);
 	//서버에 보내지는 파일
 	const [selectedFiles, setSelectedFiles] = useState(null);
+
+	const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+	const closeConfirmDialog = () => {
+		setDeleteConfirmOpen(false);
+		setDeleteTarget(null);
+	};
+
+	const [deleteTarget, setDeleteTarget] = useState(null);
+	const openDeleteConfirmDialog = (photo) => {
+		setDeleteConfirmOpen(true);
+		setDeleteTarget(photo);
+	};
+
+	const deletePhoto = () => {
+		http
+			.delete("/v1/photo", { data: { id: deleteTarget.id } })
+			.then((response) => {
+				photoLoad(response);
+			})
+			.catch((error) => {
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response.data.message,
+						},
+					}),
+				);
+			});
+	};
 
 	const onSelectFile = (e) => {
 		e.preventDefault();
@@ -55,31 +147,43 @@ function PhotoExchangeSelect(props) {
 
 		uploadPhoto(selectedFiles)
 			.then((response) => {
-				console.log(response);
+				if (response.data.status === 200) {
+					http
+						.get("/v1/photo")
+						.then((response) => {
+							photoLoad(response);
+						})
+						.catch((error) => {
+							dispatch(
+								setAlert({
+									alert: {
+										open: true,
+										type: "error",
+										message: error.response.data.message,
+									},
+								}),
+							);
+						});
+				}
 			})
 			.catch((error) => {
-				console.log(error);
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response.data.message,
+						},
+					}),
+				);
 			});
 
 		// 첨부파일 삭제시
 		setSelectedImages((previousImages) => previousImages.concat(imageArray));
 		e.target.value = "";
 
-		console.log(fileUrlList);
+		// console.log(fileUrlList);
 	};
-
-	const photoInfo = [
-		{
-			title: "photo_1",
-			url: `${process.env.PUBLIC_URL}/assets/images/sample_img_1.jpeg`,
-			exist: true,
-		},
-		{
-			title: "photo_2",
-			url: null,
-			exist: false,
-		},
-	];
 
 	return (
 		<div className='page'>
@@ -102,7 +206,7 @@ function PhotoExchangeSelect(props) {
 						top: "30vh",
 					}}>
 					<Carousel
-						showArrows={true}
+						showArrows={false}
 						showStatus={false}
 						showIndicators={true}
 						infiniteLoop={false}
@@ -120,18 +224,28 @@ function PhotoExchangeSelect(props) {
 						swipeScrollTolerance={2}>
 						{photoInfo.map((photo, index) => {
 							return photo.exist ? (
-								<div key={index}>
+								<div
+									style={{ width: "100%", height: "100%", position: "relative" }}
+									key={`image-downloaded-${index}`}>
+									<IconButton
+										sx={{ position: "absolute" }}
+										onClick={() => {
+											openDeleteConfirmDialog(photo);
+										}}>
+										<DeleteForeverOutlinedIcon />
+									</IconButton>
 									<img
 										alt={photo.title}
 										src={photo.url}
-										style={{ width: "100%", height: "100%", objectFit: "cover" }}
+										style={{ width: "100%", height: "90vw", objectFit: "scale-down" }}
 									/>
 								</div>
 							) : (
 								<div
+									key={`file-upload-${index}`}
 									style={{
 										width: "100%",
-										height: "100%",
+										height: "90vw",
 										display: "flex",
 										flexDirection: "row",
 										justifyContent: "center",
@@ -153,10 +267,24 @@ function PhotoExchangeSelect(props) {
 						})}
 					</Carousel>
 				</div>
-				<LayoutButton buttonInfo={buttonInfo} data={data} next={next} />
+				<LayoutButton
+					buttonInfo={buttonInfo}
+					data={uploadedCount < 2 ? null : uploadedCount}
+					next={next}
+				/>
+				<Confirm
+					confirmOpen={deleteConfirmOpen}
+					closeConfirmDialog={closeConfirmDialog}
+					title={"사진 삭제"}
+					contents={"사진을 삭제합니다."}
+					confirm={() => {
+						deletePhoto();
+						setDeleteConfirmOpen(false);
+					}}
+				/>
 			</div>
 		</div>
 	);
 }
 
-export default PhotoExchangeSelect;
+export default PhotoUpload;

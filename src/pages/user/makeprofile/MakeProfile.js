@@ -20,9 +20,23 @@ import HobbyInput from "./HobbyInput";
 import JobInput from "./JobInput";
 import SelfDescriptionInput from "./SelfDescriptionInput";
 import IdealTypeInput from "./IdealTypeInput";
-import { getBirthYears } from "util";
-import { getHeights } from "util";
 import MBTISelect from "./MBTISelect";
+import { getBirthYearDistance } from "util";
+import { getHeightDistance } from "util";
+import http from "api";
+
+let loadedData = {
+	address: null,
+	age: null,
+	gender: null,
+	height: null,
+	hobby: null,
+	idealType: null,
+	mbti: null,
+	photoData: null,
+	selfDescription: null,
+	smoking: null,
+};
 
 function MakeProfile() {
 	const [gender, setGender] = useState(null);
@@ -34,24 +48,10 @@ function MakeProfile() {
 	const [idealType, setIdealType] = useState(null);
 	const [mbti, setMbti] = useState(null);
 	const [selfDescription, setSelfDescription] = useState(null);
-	const [allowPhotoExchange, setAllowPhotoExchange] = useState(null);
 	const [smoking, setSmoking] = useState(null);
-
+	const [photoData, setPhotoData] = useState(null);
 	const [isNext, setIsNext] = useState(true);
 
-	const newProfileData = {
-		gender: null,
-		age: null,
-		height: null,
-		job: null,
-		address: null,
-		hobby: null,
-		idealType: null,
-		mbti: null,
-		selfDescription: null,
-		allowPhotoExchange: null,
-		smoking: null,
-	};
 	const selectInitData = [{ label: "선택", value: "none" }];
 	const [birthYears, setBirthYears] = useState(selectInitData);
 	const [heights, setHeights] = useState(selectInitData);
@@ -78,18 +78,120 @@ function MakeProfile() {
 	];
 
 	useEffect(() => {
-		setBirthYears(getBirthYears());
-		setHeights(getHeights());
+		setBirthYears(getBirthYearDistance());
+		setHeights(getHeightDistance());
+
+		/**
+		 * 중간 저장된 프로필 정보 로드
+		 */
+		http
+			.get("/v1/user/profile/my")
+			.then((response) => {
+				loadedData = response.data.data;
+
+				setAddress(loadedData.address);
+				setAge(loadedData.age);
+				setGender(loadedData.gender);
+				setHeight(loadedData.height);
+				setHobby(loadedData.hobby);
+				setIdealType(loadedData.idealType);
+				setMbti(loadedData.mbti);
+				setPhotoData(loadedData.photoData);
+				setSelfDescription(loadedData.selfDescription);
+				setSmoking(loadedData.smoking);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	}, []);
 
-	const [process, setProcess] = useState(1);
-	const next = () => {
+	const bindData = [
+		{
+			key: "gender",
+			value: gender,
+		},
+		{
+			key: "age",
+			value: age,
+		},
+		{
+			key: "address",
+			value: address,
+		},
+		{
+			key: "job",
+			value: job,
+		},
+		{
+			key: "height",
+			value: height,
+		},
+		{
+			key: "hobby",
+			value: hobby,
+		},
+		{
+			key: "mbti",
+			value: mbti,
+		},
+		{
+			key: "idealType",
+			value: idealType,
+		},
+		{
+			key: "selfDescription",
+			value: selfDescription,
+		},
+		{
+			key: "photoData",
+			value: photoData,
+		},
+		{
+			key: "smoking",
+			value: smoking,
+		},
+	];
+
+	const [process, setProcess] = useState(0);
+	const next = async () => {
+		console.log(bindData[process]);
+		if (bindData[process].value !== loadedData[bindData[process].key]) {
+			await saveProfile();
+		}
 		setProcess(process + 1);
 		setIsNext(true);
 	};
-	const prev = () => {
+	const prev = async () => {
+		if (bindData[process].value !== loadedData[bindData[process].key]) {
+			await saveProfile();
+		}
 		setProcess(process - 1);
 		setIsNext(false);
+	};
+
+	const saveProfile = () => {
+		const param = {
+			gender: gender,
+			age: age,
+			job: job,
+			address: address,
+			height: height,
+			idealType: idealType,
+			hobby: hobby,
+			mbti: mbti,
+			smoking: smoking,
+			selfDescription: selfDescription,
+		};
+
+		http
+			.post("/v1/user/profile/my", param)
+			.then((response) => {
+				console.log(response);
+				loadedData = response.data.data;
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	};
 
 	/**
@@ -97,10 +199,6 @@ function MakeProfile() {
 	 */
 	const selectGender = (gender) => {
 		setGender(gender);
-	};
-
-	const selectPhotoExchangeYn = (photoExchange) => {
-		setAllowPhotoExchange(photoExchange);
 	};
 
 	const selectSmokingYn = (smoking) => {
@@ -144,7 +242,6 @@ function MakeProfile() {
 	};
 
 	const Pages = [
-		<div>makeprofile start</div>,
 		<GenderSelect
 			key={"gender-select"}
 			next={next}
@@ -227,9 +324,9 @@ function MakeProfile() {
 		<PhotoUpload
 			key={"photo-exchange-select"}
 			next={next}
-			select={selectPhotoExchangeYn}
 			buttonInfo={{ type: NEXT }}
-			data={allowPhotoExchange}
+			setPhotoData={setPhotoData}
+			data={photoData}
 		/>,
 		<SmokingSelect
 			key={"smoking-select"}

@@ -6,15 +6,6 @@ import LayoutButton from "./LayoutButton";
 function SelectOneLayout(props) {
 	const { title, subtitle, list, next, select, data, buttonInfo } = props;
 
-	const [selected, setSelected] = useState(null);
-	useEffect(() => {
-		list.map((elem, index) => {
-			if (elem.value === data) {
-				setSelected(index);
-			}
-		});
-	}, []);
-
 	return (
 		<>
 			<div className='layout-container'>
@@ -36,7 +27,6 @@ function SelectOneLayout(props) {
 									className='layout-select-button'
 									onClick={() => {
 										select(list[index].value);
-										setSelected(index);
 									}}
 									key={`layout-select-button-${index}`}
 									style={{
@@ -58,7 +48,7 @@ function SelectOneLayout(props) {
 											position: "absolute",
 											right: "5vw",
 										}}>
-										<Radio checked={selected === index} />
+										<Radio checked={data === list[index].value} />
 									</div>
 								</div>
 							);

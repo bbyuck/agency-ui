@@ -69,7 +69,7 @@ export const getBytes = (str) => {
 		);
 };
 
-export const getBirthYears = () => {
+export const getBirthYearDistance = () => {
 	const birthYears = [];
 	const oldest = 90;
 	const youngest = 100;
@@ -86,7 +86,7 @@ export const getBirthYears = () => {
 	return birthYears;
 };
 
-export const getHeights = () => {
+export const getHeightDistance = () => {
 	const heights = [];
 	const shortest = 140;
 	const tallest = 200;

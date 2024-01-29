@@ -30,7 +30,7 @@ const uploadPhoto = async (selectedFiles) => {
 		formData.append("file", selectedFiles[i]);
 	}
 
-	return fileApi.post("/v1/photo/upload", formData);
+	return fileApi.post("/v1/photo", formData);
 };
 
 export default uploadPhoto;

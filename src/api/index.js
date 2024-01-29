@@ -1,7 +1,8 @@
 import axios from "axios";
 
 import { getTokenFromSession } from "util";
-import { Authorization } from "customHeader";
+import { Authorization, X_Credential_Token } from "customHeader";
+import { getCredentialToken } from "util";
 const api = axios.create({
 	baseURL: process.env.REACT_APP_HOST,
 	headers: {
@@ -13,6 +14,7 @@ const api = axios.create({
 api.interceptors.request.use(
 	(config) => {
 		config.headers[Authorization] = getTokenFromSession();
+		config.headers[X_Credential_Token] = getCredentialToken();
 		return config;
 	},
 	(err) => {

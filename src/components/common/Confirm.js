@@ -9,7 +9,7 @@ import {
 import { Fragment } from "react";
 
 function Confirm(props) {
-	const { confirmOpen, closeConfirmDialog, title, contnents, confirm } = props;
+	const { confirmOpen, closeConfirmDialog, title, contents, confirm } = props;
 
 	// const title =  "주선자를 알려주세요!"
 	/* const contents = "주선자를 입력하지 않았습니다.
@@ -33,7 +33,7 @@ function Confirm(props) {
 					</DialogTitle>
 					<DialogContent>
 						<DialogContentText style={{ fontSize: "15px" }}>
-							{contnents}
+							{contents}
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
