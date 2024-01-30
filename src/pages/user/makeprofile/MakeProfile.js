@@ -24,21 +24,29 @@ import MBTISelect from "./MBTISelect";
 import { getBirthYearDistance } from "util";
 import { getHeightDistance } from "util";
 import http from "api";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setAlert } from "store/slice/status";
+import { authenticate, changeMemberStatus } from "store/slice/auth";
 
 let loadedData = {
 	address: null,
 	age: null,
 	gender: null,
+	job: null,
 	height: null,
 	hobby: null,
 	idealType: null,
 	mbti: null,
-	photoData: null,
+	photoInfo: null,
 	selfDescription: null,
 	smoking: null,
 };
 
 function MakeProfile() {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
 	const [gender, setGender] = useState(null);
 	const [age, setAge] = useState(null);
 	const [height, setHeight] = useState(null);
@@ -49,10 +57,9 @@ function MakeProfile() {
 	const [mbti, setMbti] = useState(null);
 	const [selfDescription, setSelfDescription] = useState(null);
 	const [smoking, setSmoking] = useState(null);
-	const [photoData, setPhotoData] = useState(null);
 	const [isNext, setIsNext] = useState(true);
-
 	const selectInitData = [{ label: "선택", value: "none" }];
+	const [photoUploadInit, setPhotoUploadInit] = useState(true);
 	const [birthYears, setBirthYears] = useState(selectInitData);
 	const [heights, setHeights] = useState(selectInitData);
 	const mbtiList = [
@@ -91,18 +98,21 @@ function MakeProfile() {
 
 				setAddress(loadedData.address);
 				setAge(loadedData.age);
+				setJob(loadedData.job);
 				setGender(loadedData.gender);
 				setHeight(loadedData.height);
 				setHobby(loadedData.hobby);
 				setIdealType(loadedData.idealType);
 				setMbti(loadedData.mbti);
-				setPhotoData(loadedData.photoData);
 				setSelfDescription(loadedData.selfDescription);
 				setSmoking(loadedData.smoking);
 			})
 			.catch((error) => {
 				console.log(error);
 			});
+		return () => {
+			sessionStorage.removeItem("photoData");
+		};
 	}, []);
 
 	const bindData = [
@@ -143,8 +153,8 @@ function MakeProfile() {
 			value: selfDescription,
 		},
 		{
-			key: "photoData",
-			value: photoData,
+			key: "photoInfo",
+			value: null,
 		},
 		{
 			key: "smoking",
@@ -154,15 +164,20 @@ function MakeProfile() {
 
 	const [process, setProcess] = useState(0);
 	const next = async () => {
-		console.log(bindData[process]);
-		if (bindData[process].value !== loadedData[bindData[process].key]) {
+		if (
+			bindData[process].key !== "photoInfo" &&
+			bindData[process].value !== loadedData[bindData[process].key]
+		) {
 			await saveProfile();
 		}
 		setProcess(process + 1);
 		setIsNext(true);
 	};
 	const prev = async () => {
-		if (bindData[process].value !== loadedData[bindData[process].key]) {
+		if (
+			bindData[process].key !== "photoInfo" &&
+			bindData[process].value !== loadedData[bindData[process].key]
+		) {
 			await saveProfile();
 		}
 		setProcess(process - 1);
@@ -179,14 +194,13 @@ function MakeProfile() {
 			idealType: idealType,
 			hobby: hobby,
 			mbti: mbti,
-			smoking: smoking,
+			smoking: smoking === "1",
 			selfDescription: selfDescription,
 		};
 
 		http
 			.post("/v1/user/profile/my", param)
 			.then((response) => {
-				console.log(response);
 				loadedData = response.data.data;
 			})
 			.catch((error) => {
@@ -237,8 +251,42 @@ function MakeProfile() {
 		setMbti(mbti);
 	};
 
-	const makeProfile = () => {
-		console.log("프로필 만들기 api 호출");
+	const registerProfile = () => {
+		const param = {
+			address: address,
+			age: age,
+			gender: gender,
+			job: job,
+			height: height,
+			hobby: hobby,
+			idealType: idealType,
+			mbti: mbti,
+			selfDescription: selfDescription,
+			smoking: smoking === "1",
+		};
+		http
+			.post("/v1/user/profile/new", param)
+			.then((response) => {
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "success",
+							message: "프로필 생성이 완료되었습니다.",
+						},
+					}),
+				);
+				// userInfoSet
+				dispatch(
+					changeMemberStatus({
+						memberCode: response.data.data.memberCode,
+						memberStatus: response.data.data.memberStatus,
+					}),
+				);
+				// navigate
+				navigate("/user/wait", { replace: true });
+			})
+			.catch((error) => {});
 	};
 
 	const Pages = [
@@ -324,15 +372,21 @@ function MakeProfile() {
 		<PhotoUpload
 			key={"photo-exchange-select"}
 			next={next}
+			init={photoUploadInit}
+			changeInit={() => {
+				setPhotoUploadInit(false);
+			}}
 			buttonInfo={{ type: NEXT }}
-			setPhotoData={setPhotoData}
-			data={photoData}
 		/>,
 		<SmokingSelect
 			key={"smoking-select"}
 			next={next}
 			select={selectSmokingYn}
-			buttonInfo={{ label: "프로필 만들기", handler: makeProfile, type: GENERAL }}
+			buttonInfo={{
+				label: "프로필 만들기",
+				handler: registerProfile,
+				type: GENERAL,
+			}}
 			data={smoking}
 		/>,
 	];

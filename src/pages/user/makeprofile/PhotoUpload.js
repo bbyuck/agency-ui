@@ -1,5 +1,12 @@
 import LayoutButton from "components/layout/LayoutButton";
-import { IconButton, styled } from "@mui/material";
+import {
+	Box,
+	CircularProgress,
+	IconButton,
+	LinearProgress,
+	Skeleton,
+	styled,
+} from "@mui/material";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import UploadOutlinedIcon from "@mui/icons-material/UploadOutlined";
@@ -27,6 +34,9 @@ function PhotoUpload(props) {
 	const minCount = 2;
 	const maxCount = 5;
 
+	const { init, changeInit } = props;
+	const [loaded, setLoaded] = useState(false);
+
 	const dispatch = useDispatch();
 	const [photoInfo, setPhotoInfo] = useState([
 		{
@@ -38,17 +48,16 @@ function PhotoUpload(props) {
 	]);
 	const [uploadedCount, setUploadedCount] = useState(0);
 
-	const photoLoad = (response) => {
-		const loadedPhotoData = response.data.data.photoDataList.map(
-			(photoData, index) => {
-				return {
-					id: photoData.id,
-					title: `photo-file-${index}`,
-					url: `data:image/png;base64,${photoData.physicalData}`,
-					exist: true,
-				};
-			},
-		);
+	const photoLoad = (photoDataList) => {
+		const loadedPhotoData = photoDataList.map((photoData, index) => {
+			return {
+				id: photoData.id,
+				title: `photo-file-${index}`,
+				url: `data:image/png;base64,${photoData.physicalData}`,
+				exist: true,
+			};
+		});
+
 		setUploadedCount(loadedPhotoData.length);
 
 		if (loadedPhotoData.length < maxCount) {
@@ -59,21 +68,27 @@ function PhotoUpload(props) {
 			});
 		}
 		setPhotoInfo(loadedPhotoData);
+		setLoaded(true);
 	};
 
 	useEffect(() => {
+		if (init) {
+			changeInit();
+		}
 		http
 			.get("/v1/photo")
 			.then((response) => {
-				photoLoad(response);
+				const data = response.data.data.photoDataList;
+				photoLoad(data);
 			})
 			.catch((error) => {
+				setLoaded(true);
 				dispatch(
 					setAlert({
 						alert: {
 							open: true,
 							type: "error",
-							message: error.response.data.message,
+							message: error.response,
 						},
 					}),
 				);
@@ -101,6 +116,9 @@ function PhotoUpload(props) {
 	};
 
 	const deletePhoto = () => {
+		if (init) {
+			changeInit(false);
+		}
 		http
 			.delete("/v1/photo", { data: { id: deleteTarget.id } })
 			.then((response) => {
@@ -151,9 +169,11 @@ function PhotoUpload(props) {
 					http
 						.get("/v1/photo")
 						.then((response) => {
-							photoLoad(response);
+							const data = response.data.data.photoDataList;
+							photoLoad(data);
 						})
 						.catch((error) => {
+							setLoaded(true);
 							dispatch(
 								setAlert({
 									alert: {

@@ -25,6 +25,10 @@ const authSlice = createSlice({
 			state.credentialToken = null;
 			state.memberCode = null;
 		},
+		changeMemberStatus(state = initialState, action) {
+			state.memberStatus = action.payload.memberStatus;
+			saveAuthInfoOnClient(action.payload);
+		},
 	},
 });
 
@@ -32,5 +36,6 @@ const authSlice = createSlice({
 // dispatch(add(1)) 이런식으로 사용 -> dispatch(counterSlice.actions.add(1)) 형태
 
 // reducer 는 configureStore에 등록을 위해 export default 합니다.
-export const { authenticate, resetAuthentication } = authSlice.actions;
+export const { authenticate, resetAuthentication, changeMemberStatus } =
+	authSlice.actions;
 export default authSlice.reducer;

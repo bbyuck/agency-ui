@@ -94,7 +94,6 @@ function Join() {
 						},
 					}),
 				);
-				console.log(error.response.data.code);
 				if (error.response.data.code === "INVALID_CREDENTIAL_TOKEN") {
 					dispatch(resetAuthentication());
 				}
