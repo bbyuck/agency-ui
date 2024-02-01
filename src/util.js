@@ -107,7 +107,6 @@ export const forceHome = () => {
 };
 
 export const scrollDisable = () => {
-	debugger;
 	const html = document.getElementById("html");
 	const body = document.getElementById("body");
 
