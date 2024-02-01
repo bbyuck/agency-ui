@@ -122,7 +122,7 @@ function PhotoUpload(props) {
 		http
 			.delete("/v1/photo", { data: { id: deleteTarget.id } })
 			.then((response) => {
-				photoLoad(response);
+				photoLoad(response.data.data.photoDataList);
 			})
 			.catch((error) => {
 				dispatch(
@@ -220,10 +220,11 @@ function PhotoUpload(props) {
 				</div>
 				<div
 					style={{
-						width: "90vw",
-						height: "90vw",
+						width: "100vw",
+						height: "100vw",
 						position: "absolute",
 						top: "30vh",
+						marginLeft: 0,
 					}}>
 					<Carousel
 						showArrows={false}
@@ -245,10 +246,18 @@ function PhotoUpload(props) {
 						{photoInfo.map((photo, index) => {
 							return photo.exist ? (
 								<div
-									style={{ width: "100%", height: "100%", position: "relative" }}
+									style={{
+										width: "100vw",
+										height: "100vw",
+										position: "relative",
+										display: "flex",
+										flexDirection: "row",
+										justifyContent: "center",
+										alignItems: "center",
+									}}
 									key={`image-downloaded-${index}`}>
 									<IconButton
-										sx={{ position: "absolute" }}
+										sx={{ position: "absolute", right: "2vw", top: 0 }}
 										onClick={() => {
 											openDeleteConfirmDialog(photo);
 										}}>
@@ -257,15 +266,16 @@ function PhotoUpload(props) {
 									<img
 										alt={photo.title}
 										src={photo.url}
-										style={{ width: "100%", height: "90vw", objectFit: "contain" }}
+										style={{ width: "90vw", height: "90vw", objectFit: "contain" }}
 									/>
 								</div>
 							) : (
 								<div
 									key={`file-upload-${index}`}
 									style={{
-										width: "100%",
-										height: "90vw",
+										width: "100vw",
+										height: "100vw",
+										position: "relative",
 										display: "flex",
 										flexDirection: "row",
 										justifyContent: "center",
