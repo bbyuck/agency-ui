@@ -105,3 +105,34 @@ export const forceHome = () => {
 
 	return false;
 };
+
+export const scrollDisable = () => {
+	debugger;
+	const html = document.getElementById("html");
+	const body = document.getElementById("body");
+
+	html.classList.add("noscroll");
+	body.classList.add("noscroll");
+
+	body.addEventListener("scroll", (e) => {
+		e.preventDefault();
+	});
+	body.addEventListener("touchmove", (e) => {
+		e.preventDefault();
+	});
+	body.addEventListener("mousewheel", (e) => {
+		e.preventDefault();
+	});
+};
+
+export const scrollAble = () => {
+	const html = document.getElementById("html");
+	const body = document.getElementById("body");
+
+	html.classList.remove("noscroll");
+	body.classList.remove("noscroll");
+
+	body.removeEventListener("scroll");
+	body.removeEventListener("touchmove");
+	body.removeEventListener("mousewheel");
+};
