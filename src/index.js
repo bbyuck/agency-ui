@@ -13,8 +13,9 @@ import theme from "./style/theme";
  */
 import { Provider } from "react-redux";
 import store from "store";
-import { scrollDisable } from "util";
+import { scrollDisable, setScreenSize } from "util";
 
+setScreenSize();
 scrollDisable();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

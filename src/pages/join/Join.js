@@ -80,7 +80,12 @@ function Join() {
 		setConfirmOpen(false);
 	};
 
-	const matchMakerJoin = () => {
+	const matchMakerJoin = async () => {
+		await window.Kakao.Auth.authorize({
+			redirectUri: `${process.env.REACT_APP_CLIENT}/auth`,
+			scope: "friends",
+		});
+
 		http
 			.post("/v1/matchmaker/join", {
 				oauthId: oauthId,

@@ -136,3 +136,8 @@ export const scrollAble = () => {
 	body.removeEventListener("touchmove");
 	body.removeEventListener("mousewheel");
 };
+
+export const setScreenSize = () => {
+	let vh = window.innerHeight * 0.01;
+	document.documentElement.style.setProperty("--vh", `${vh}px`); //"--vh"라는 속성으로 정의해준다.
+};
