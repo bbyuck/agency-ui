@@ -22,7 +22,7 @@ function Join() {
 	/**
 	 * common
 	 */
-	const [process, setProcess] = useState(1);
+	const [process, setProcess] = useState(0);
 	const next = () => {
 		if (memberCode === MATCH_MAKER) {
 			matchMakerJoin();
@@ -129,8 +129,6 @@ function Join() {
 	};
 
 	const Pages = [
-		<></>,
-
 		<SelectMemberCode
 			key='join-membertype'
 			next={next}

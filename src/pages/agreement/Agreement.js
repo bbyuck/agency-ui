@@ -86,9 +86,7 @@ function Agreement() {
 		{
 			label: "면책 사항 동의",
 			value: DISCLAIMER,
-			handler: () => {
-				setDisclaimerAgree(true);
-			},
+			handler: () => {},
 			selected: disclaimerAgree,
 		},
 	];
@@ -97,6 +95,9 @@ function Agreement() {
 	const subtitle = "";
 
 	const beforeSelect = (index) => {
+		if (selectList[index].selected) {
+			return;
+		}
 		agreements[index].opener();
 	};
 
