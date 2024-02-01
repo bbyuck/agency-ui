@@ -1,4 +1,4 @@
-import { cloneElement, useState } from "react";
+import { cloneElement, useEffect, useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import SelectMemberCode from "./SelectMemberCode";
 import EnterMatchMakerCode from "./EnterMatchMakerCode";
@@ -7,31 +7,49 @@ import { useDispatch, useSelector } from "react-redux";
 import { MATCH_MAKER, USER } from "constants/memberCode";
 
 import http from "api";
-import { setAlert } from "store/slice/status";
+import { resetCallBackPage, setAlert } from "store/slice/status";
 import messages from "messages";
 import { GENERAL, NEXT } from "constants/buttonType";
 import { authenticate, resetAuthentication } from "store/slice/auth";
+import KakaoFriendSelect from "./KakaoFriendSelect";
 
 function Join() {
 	const { oauthId, oauthCode } = useSelector((state) => state.auth);
-	const dispatch = useDispatch();
-
+	const { callbackPage } = useSelector((state) => state.status);
 	const [memberCode, setMemberCode] = useState(null);
 	const [matchMakerCode, setMatchMakerCode] = useState(null);
 
-	/**
-	 * common
-	 */
 	const [process, setProcess] = useState(0);
+
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if (callbackPage === "KAKAO-FRIEND-SELECT") {
+			setProcess(2);
+		}
+
+		return () => {
+			dispatch(resetCallBackPage());
+		};
+	}, []);
+
 	const next = () => {
 		if (memberCode === MATCH_MAKER) {
 			matchMakerJoin();
 		} else if (memberCode === USER) {
-			setProcess(process + 1);
+			if (matchMakerCode) {
+				setProcess(1);
+			} else {
+				setProcess(2);
+			}
 		}
 	};
 	const prev = () => {
-		setProcess(process - 1);
+		if (matchMakerCode) {
+			setProcess(process - 1);
+		} else {
+			setProcess(process - 2);
+		}
 	};
 
 	/**
@@ -148,6 +166,11 @@ function Join() {
 			memberCode={memberCode}
 			data={matchMakerCode}
 			closeConfirmDialog={closeConfirmDialog}
+		/>,
+		<KakaoFriendSelect
+			back={() => {
+				setProcess(0);
+			}}
 		/>,
 	];
 	return (

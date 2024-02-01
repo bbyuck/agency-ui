@@ -21,6 +21,7 @@ function Auth() {
 				})
 				.then((response) => {
 					dispatch(authenticate(response.data.data));
+					window.Kakao.Auth.setAccessToken(response.data.data.getAccessToken);
 					forceHome();
 				})
 				.catch(() => {

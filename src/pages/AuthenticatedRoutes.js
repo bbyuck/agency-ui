@@ -15,6 +15,7 @@ import UserHome from "pages/user/UserHome";
 import MatchMakerHome from "pages/matchmaker/MatchMakerHome";
 import Agreement from "pages/agreement/Agreement";
 import WaitPage from "./common/WaitPage";
+import Auth from "./login/Auth";
 
 const TempLogout = () => {
 	useEffect(() => {
@@ -157,6 +158,13 @@ function AuthenticatedRoutes() {
 			name: "logout",
 			path: "/logout",
 			element: <TempLogout />,
+			animation: false,
+			nodeRef: createRef(),
+		},
+		{
+			name: "auth",
+			path: "/auth",
+			element: <Auth />,
 			animation: false,
 			nodeRef: createRef(),
 		},

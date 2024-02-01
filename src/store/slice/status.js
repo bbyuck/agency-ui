@@ -10,6 +10,7 @@ const initialState = {
 	},
 	currentPath: null,
 	animation: "next",
+	callbackPage: null,
 };
 
 const statusSlice = createSlice({
@@ -37,8 +38,20 @@ const statusSlice = createSlice({
 			}
 			state.currentPath = action.payload.path;
 		},
+		setCallbackPage(state, action) {
+			state.callbackPage = action.payload.callbackPage;
+		},
+		resetCallBackPage(state) {
+			state.callbackPage = null;
+		},
 	},
 });
 
-export const { setLoading, setAlert, setAnimation } = statusSlice.actions;
+export const {
+	setLoading,
+	setAlert,
+	setAnimation,
+	setCallbackPage,
+	resetCallBackPage,
+} = statusSlice.actions;
 export default statusSlice.reducer;
