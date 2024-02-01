@@ -11,16 +11,17 @@ function MatchMakerHome() {
 		http
 			.get("/v1/matchmaker/link", { params })
 			.then((response) => {
-				window.navigator.clipboard.writeText(response.data.data);
-				dispatch(
-					setAlert({
-						alert: {
-							open: true,
-							type: "success",
-							message: "클립보드에 복사 되었습니다.",
-						},
-					}),
-				);
+				window.navigator.clipboard.writeText(response.data.data).then(() => {
+					dispatch(
+						setAlert({
+							alert: {
+								open: true,
+								type: "success",
+								message: "클립보드에 복사 되었습니다.",
+							},
+						}),
+					);
+				});
 			})
 			.catch((error) => {
 				console.log(error);

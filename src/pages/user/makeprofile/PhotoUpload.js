@@ -257,7 +257,7 @@ function PhotoUpload(props) {
 									<img
 										alt={photo.title}
 										src={photo.url}
-										style={{ width: "100%", height: "90vw", objectFit: "scale-down" }}
+										style={{ width: "100%", height: "90vw", objectFit: "contain" }}
 									/>
 								</div>
 							) : (
@@ -279,7 +279,7 @@ function PhotoUpload(props) {
 										<VisuallyHiddenInput
 											type='file'
 											onChange={onSelectFile}
-											accept='.png, .jpg, image/*'
+											accept='image/*'
 										/>
 									</IconButton>
 								</div>
