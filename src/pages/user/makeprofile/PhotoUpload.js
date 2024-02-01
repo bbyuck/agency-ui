@@ -11,7 +11,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from "react-responsive-carousel";
 import UploadOutlinedIcon from "@mui/icons-material/UploadOutlined";
 import { useEffect, useState } from "react";
-import uploadPhoto from "api/uploadPhoto";
+import { uploadPhoto } from "api/file";
 import http from "api";
 import { useDispatch } from "react-redux";
 import { setAlert } from "store/slice/status";

@@ -2,7 +2,7 @@ import axios from "axios";
 import { getTokenFromSession, getCredentialToken } from "util";
 import { Authorization, X_Credential_Token } from "customHeader";
 
-const fileApi = axios.create({
+const file = axios.create({
 	baseURL: process.env.REACT_APP_HOST,
 	headers: {
 		"Content-Type": "multipart/form-data",
@@ -10,7 +10,7 @@ const fileApi = axios.create({
 	},
 });
 
-fileApi.interceptors.request.use(
+file.interceptors.request.use(
 	(config) => {
 		config.headers[Authorization] = getTokenFromSession();
 		config.headers[X_Credential_Token] = getCredentialToken();
@@ -30,7 +30,8 @@ const uploadPhoto = async (selectedFiles) => {
 		formData.append("file", selectedFiles[i]);
 	}
 
-	return fileApi.post("/v1/photo", formData);
+	return file.post("/v1/photo", formData);
 };
 
-export default uploadPhoto;
+export { uploadPhoto };
+export default file;

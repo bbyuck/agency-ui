@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { setLoading } from "store/slice/status";
 import { useDispatch, useSelector } from "react-redux";
 import api from "api";
+import fileApi from "api/file";
 import Modal from "@mui/material/Modal";
 import { Box, CircularProgress } from "@mui/material";
 
@@ -28,6 +29,29 @@ function Loading() {
 		);
 
 		api.interceptors.response.use(
+			(config) => {
+				dispatch(setLoading({ loading: false }));
+				return config;
+			},
+			(err) => {
+				dispatch(setLoading({ loading: false }));
+				return Promise.reject(err);
+			},
+		);
+
+		/* fileApi */
+		fileApi.interceptors.request.use(
+			(config) => {
+				dispatch(setLoading({ loading: true }));
+				return config;
+			},
+			(err) => {
+				dispatch(setLoading({ loading: false }));
+				return Promise.reject(err);
+			},
+		);
+
+		fileApi.interceptors.response.use(
 			(config) => {
 				dispatch(setLoading({ loading: false }));
 				return config;
