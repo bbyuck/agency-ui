@@ -27,7 +27,7 @@ import http from "api";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setAlert } from "store/slice/status";
-import { authenticate, changeMemberStatus } from "store/slice/auth";
+import { setMemberCode, setMemberStatus } from "store/slice/memberInfo";
 
 let loadedData = {
 	address: null,
@@ -277,16 +277,22 @@ function MakeProfile() {
 					}),
 				);
 				// userInfoSet
-				dispatch(
-					changeMemberStatus({
-						memberCode: response.data.data.memberCode,
-						memberStatus: response.data.data.memberStatus,
-					}),
-				);
+				dispatch(setMemberCode(response.data.data.memberCode));
+				dispatch(setMemberStatus(response.data.data.memberStatus));
 				// navigate
 				navigate("/user/wait", { replace: true });
 			})
-			.catch((error) => {});
+			.catch((error) => {
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response.data.message,
+						},
+					}),
+				);
+			});
 	};
 
 	const Pages = [

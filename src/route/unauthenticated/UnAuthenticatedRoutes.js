@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Login from "pages/login/Login";
 import SignUp from "pages/login/SignUp";
-import Auth from "pages/login/Auth";
+import LoginAuth from "pages/login/LoginAuth";
 import Error from "pages/error/Error";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -20,7 +20,7 @@ function UnAuthenticatedRoutes() {
 	return (
 		<Routes>
 			<Route path='*' element={<DefaultRoute />} />
-			<Route path='/auth' element={<Auth />} />
+			<Route path='/login/auth' element={<LoginAuth />} />
 			<Route path='/login' element={<Login />} />
 			{/* <Route path='/signup' element={<SignUp />} /> */}
 

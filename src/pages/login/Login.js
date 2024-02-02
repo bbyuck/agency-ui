@@ -15,7 +15,8 @@ function Login() {
 		http
 			.get("/v1/kakao/key/rest")
 			.then((response) => {
-				const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${response.data.data}&redirect_uri=${process.env.REACT_APP_CLIENT}/auth&response_type=code`;
+				const redirectUri = `${process.env.REACT_APP_CLIENT}/login/auth`;
+				const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${response.data.data}&redirect_uri=${redirectUri}&response_type=code`;
 				window.location.href = kakaoURL;
 			})
 			.catch((error) => {

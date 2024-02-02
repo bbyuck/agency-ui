@@ -1,6 +1,7 @@
 export const TEMP = "TEMP";
 export const NEW = "NEW";
 export const PROFILE_MAKING = "PROFILE_MAKING";
+export const WAIT = "WAIT";
 export const ACTIVE = "ACTIVE";
 export const INACTIVE = "INACTIVE";
 export const MATCHING = "MATCHING";

@@ -16,7 +16,7 @@ function Auth() {
 	useEffect(() => {
 		if (authorizationCode) {
 			http
-				.post("/v1/kakao/login", {
+				.post("/v1/kakao/authentication", {
 					code: authorizationCode,
 				})
 				.then((response) => {

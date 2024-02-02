@@ -12,20 +12,20 @@ import messages from "messages";
 import { GENERAL, NEXT } from "constants/buttonType";
 import { authenticate, resetAuthentication } from "store/slice/auth";
 import KakaoFriendSelect from "./KakaoFriendSelect";
+import { setMemberStatus, setMemberCode } from "store/slice/memberInfo";
 
 function Join() {
 	const { oauthId, oauthCode } = useSelector((state) => state.auth);
 	const { callbackPage } = useSelector((state) => state.status);
-	const [memberCode, setMemberCode] = useState(null);
+	const [inputMemberCode, setInputMemberCode] = useState(null);
 	const [matchMakerCode, setMatchMakerCode] = useState(null);
 
-	const [process, setProcess] = useState(0);
-
+	const [pageNum, setPageNum] = useState(0);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
 		if (callbackPage === "KAKAO-FRIEND-SELECT") {
-			setProcess(2);
+			setPageNum(2);
 		}
 
 		return () => {
@@ -34,29 +34,29 @@ function Join() {
 	}, []);
 
 	const next = () => {
-		if (memberCode === MATCH_MAKER) {
+		if (inputMemberCode === MATCH_MAKER) {
 			matchMakerJoin();
-		} else if (memberCode === USER) {
+		} else if (inputMemberCode === USER) {
 			if (matchMakerCode) {
-				setProcess(1);
+				setPageNum(1);
 			} else {
-				setProcess(2);
+				setPageNum(2);
 			}
 		}
 	};
 	const prev = () => {
 		if (matchMakerCode) {
-			setProcess(process - 1);
+			setPageNum(pageNum - 1);
 		} else {
-			setProcess(process - 2);
+			setPageNum(pageNum - 2);
 		}
 	};
 
 	/**
 	 * membertype
 	 */
-	const selectMemberCode = (memberCode) => {
-		setMemberCode(memberCode);
+	const selectMemberCode = (inputMemberCode) => {
+		setInputMemberCode(inputMemberCode);
 	};
 
 	/**
@@ -81,10 +81,14 @@ function Join() {
 	};
 
 	const matchMakerJoin = async () => {
-		await window.Kakao.Auth.authorize({
-			redirectUri: `${process.env.REACT_APP_CLIENT}/auth`,
-			scope: "friends",
-		});
+		/*
+			TODO - 친구 목록에 노출 허용 관련 authorize 구현
+		*/
+		// const authorizeParam = {
+		// 	redirectUri: `${process.env.REACT_APP_CLIENT}/auth`,
+		// 	scope: "friends",
+		// };
+		// await window.Kakao.Auth.authorize(authorizeParam);
 
 		http
 			.post("/v1/matchmaker/join", {
@@ -95,6 +99,8 @@ function Join() {
 			})
 			.then((response) => {
 				dispatch(authenticate(response.data.data));
+				dispatch(setMemberCode(response.data.data.memberCode));
+				dispatch(setMemberStatus(response.data.data.memberStatus));
 				dispatch(
 					setAlert({
 						alert: {
@@ -132,6 +138,17 @@ function Join() {
 			.post("/v1/user/join", param)
 			.then((response) => {
 				dispatch(authenticate(response.data.data));
+				dispatch(setMemberCode(response.data.data.memberCode));
+				dispatch(setMemberStatus(response.data.data.memberStatus));
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "success",
+							message: "가입이 완료되었습니다.\n프로필을 만들어주세요.",
+						},
+					}),
+				);
 			})
 			.catch((error) => {
 				dispatch(
@@ -145,9 +162,6 @@ function Join() {
 						},
 					}),
 				);
-				if (error.response.data.code === "INVALID_CREDENTIAL_TOKEN") {
-					dispatch(resetAuthentication());
-				}
 			});
 	};
 
@@ -157,7 +171,7 @@ function Join() {
 			next={next}
 			buttonInfo={{ type: NEXT }}
 			select={selectMemberCode}
-			data={memberCode}
+			data={inputMemberCode}
 		/>,
 		<EnterMatchMakerCode
 			key='join-matchmakername'
@@ -168,19 +182,19 @@ function Join() {
 			}}
 			init={init}
 			input={inputMatchMakerCode}
-			memberCode={memberCode}
+			inputMemberCode={inputMemberCode}
 			data={matchMakerCode}
 			closeConfirmDialog={closeConfirmDialog}
 		/>,
 		<KakaoFriendSelect
 			back={() => {
-				setProcess(0);
+				setPageNum(0);
 			}}
 		/>,
 	];
 	return (
 		<>
-			<LinearHeader prev={prev} process={process} />
+			<LinearHeader prev={prev} process={pageNum} />
 			<TransitionGroup
 				className={"transition-wrapper"}
 				childFactory={(child) => {
@@ -188,8 +202,8 @@ function Join() {
 						classNames: "item",
 					});
 				}}>
-				<CSSTransition key={Pages[process].key} classNames={"item"} timeout={1000}>
-					{Pages[process]}
+				<CSSTransition key={Pages[pageNum].key} classNames={"item"} timeout={1000}>
+					{Pages[pageNum]}
 				</CSSTransition>
 			</TransitionGroup>
 		</>

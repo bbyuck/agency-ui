@@ -1,33 +1,12 @@
-import {
-	AppBar,
-	Box,
-	Button,
-	Dialog,
-	Grid,
-	IconButton,
-	Paper,
-	Slide,
-	Toolbar,
-	Typography,
-} from "@mui/material";
+import { Box, Button, Dialog, Grid, Slide } from "@mui/material";
 import { Fragment, forwardRef } from "react";
-import CloseIcon from "@mui/icons-material/Close";
-import styled from "@emotion/styled";
 
 const Transition = forwardRef(function Transition(props, ref) {
 	return <Slide direction='up' ref={ref} {...props} />;
 });
 
-const Item = styled(Button)(({ theme }) => ({
-	backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-	...theme.typography.body2,
-	padding: theme.spacing(1),
-	textAlign: "center",
-	color: theme.palette.text.secondary,
-}));
-
 function AgreementForm(props) {
-	const { open, handleClose, id, agree, disagree } = props;
+	const { open, handleClose, id, agree } = props;
 	return (
 		<Fragment>
 			<Dialog

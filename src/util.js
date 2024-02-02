@@ -17,8 +17,6 @@ export const saveAuthInfoOnClient = (authInfo) => {
 	if (authInfo.refreshToken && authInfo.refreshToken !== "null") {
 		sessionStorage.setItem("refreshToken", authInfo.refreshToken);
 	}
-	sessionStorage.setItem("memberStatus", authInfo.memberStatus);
-	localStorage.setItem("memberCode", authInfo.memberCode);
 
 	if (
 		authInfo.oauthId &&
@@ -37,7 +35,6 @@ export const saveAuthInfoOnClient = (authInfo) => {
 
 export const removeAuthInfoOnClient = () => {
 	localStorage.removeItem("credentialToken");
-	localStorage.removeItem("memberCode");
 };
 
 export const muiTextFieldFocus = (ref) => {
@@ -113,15 +110,27 @@ export const scrollDisable = () => {
 	html.classList.add("noscroll");
 	body.classList.add("noscroll");
 
-	body.addEventListener("scroll", (e) => {
-		e.preventDefault();
-	});
-	body.addEventListener("touchmove", (e) => {
-		e.preventDefault();
-	});
-	body.addEventListener("mousewheel", (e) => {
-		e.preventDefault();
-	});
+	body.addEventListener(
+		"scroll",
+		(e) => {
+			e.preventDefault();
+		},
+		{ passive: false },
+	);
+	body.addEventListener(
+		"touchmove",
+		(e) => {
+			e.preventDefault();
+		},
+		{ passive: false },
+	);
+	body.addEventListener(
+		"mousewheel",
+		(e) => {
+			e.preventDefault();
+		},
+		{ passive: false },
+	);
 };
 
 export const scrollAble = () => {

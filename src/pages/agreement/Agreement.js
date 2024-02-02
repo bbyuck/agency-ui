@@ -1,26 +1,23 @@
-import { forwardRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import LinearHeader from "components/common/header/LinearHeader";
 import { useDispatch, useSelector } from "react-redux";
-import { MATCH_MAKER, TEMP, USER } from "constants/memberCode";
+import { TEMP } from "constants/memberCode";
 
 import http from "api";
 import { setAlert } from "store/slice/status";
 import messages from "messages";
 import { NEXT } from "constants/buttonType";
-import { authenticate, resetAuthentication } from "store/slice/auth";
-import SelectOneLayout from "components/layout/SelectOneLayout";
-import { Slide } from "@mui/material";
+import { authenticate } from "store/slice/auth";
 import { DISCLAIMER, PERSONAL_INFORMATION_USE } from "constants/codes";
 import SelectMultiLayout from "components/layout/SelectMultiLayout";
 import AgreementForm from "components/agreement/AgreementForm";
 import { useNavigate } from "react-router-dom";
+import { setMemberCode, setMemberStatus } from "store/slice/memberInfo";
 
 function Agreement() {
 	const dispatch = useDispatch();
-	const { oauthId, oauthCode, memberCode, memberStatus } = useSelector(
-		(state) => state.auth,
-	);
-
+	const { oauthId, oauthCode } = useSelector((state) => state.auth);
+	const { memberCode, memberStatus } = useSelector((state) => state.memberInfo);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -28,7 +25,23 @@ function Agreement() {
 			navigate("/", { replace: true });
 			return;
 		}
-	}, []);
+
+		const params = {
+			oauthCode: oauthCode,
+			oauthId: oauthId,
+		};
+
+		http
+			.get("/v1/agreement/check", { params })
+			.then((response) => {
+				if (response.data.data) {
+					navigate("/join", { replace: true });
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}, [memberCode, memberStatus, navigate, oauthCode, oauthId, dispatch]);
 
 	const [personalInformationUseAgree, setPersonalInformationUseAgree] =
 		useState(false);
@@ -119,7 +132,8 @@ function Agreement() {
 			})
 			.then((response) => {
 				dispatch(authenticate(response.data.data));
-				navigate("/join", { replace: true });
+				dispatch(setMemberStatus(response.data.data.memberStatus));
+				dispatch(setMemberCode(response.data.data.memberCode));
 			})
 			.catch((error) => {
 				console.log(error);

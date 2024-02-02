@@ -6,8 +6,6 @@ const initialState = {
 	credentialToken: localStorage.getItem("credentialToken"),
 	oauthCode: sessionStorage.getItem("oauthCode"),
 	oauthId: sessionStorage.getItem("oauthId"),
-	memberCode: localStorage.getItem("memberCode"),
-	memberStatus: sessionStorage.getItem("memberStatus"),
 };
 
 const authSlice = createSlice({
@@ -16,18 +14,11 @@ const authSlice = createSlice({
 	reducers: {
 		authenticate(state = initialState, action) {
 			state.credentialToken = action.payload.credentialToken;
-			state.memberCode = action.payload.memberCode;
-			state.memberStatus = action.payload.memberStatus;
 			saveAuthInfoOnClient(action.payload);
 		},
 		resetAuthentication(state, action) {
 			removeAuthInfoOnClient();
 			state.credentialToken = null;
-			state.memberCode = null;
-		},
-		changeMemberStatus(state = initialState, action) {
-			state.memberStatus = action.payload.memberStatus;
-			saveAuthInfoOnClient(action.payload);
 		},
 	},
 });
@@ -36,6 +27,5 @@ const authSlice = createSlice({
 // dispatch(add(1)) 이런식으로 사용 -> dispatch(counterSlice.actions.add(1)) 형태
 
 // reducer 는 configureStore에 등록을 위해 export default 합니다.
-export const { authenticate, resetAuthentication, changeMemberStatus } =
-	authSlice.actions;
+export const { authenticate, resetAuthentication } = authSlice.actions;
 export default authSlice.reducer;
