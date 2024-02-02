@@ -35,7 +35,6 @@ function PhotoUpload(props) {
 	const maxCount = 5;
 
 	const { init, changeInit } = props;
-	const [loaded, setLoaded] = useState(false);
 
 	const dispatch = useDispatch();
 	const [photoInfo, setPhotoInfo] = useState([
@@ -68,7 +67,6 @@ function PhotoUpload(props) {
 			});
 		}
 		setPhotoInfo(loadedPhotoData);
-		setLoaded(true);
 	};
 
 	useEffect(() => {
@@ -82,13 +80,12 @@ function PhotoUpload(props) {
 				photoLoad(data);
 			})
 			.catch((error) => {
-				setLoaded(true);
 				dispatch(
 					setAlert({
 						alert: {
 							open: true,
 							type: "error",
-							message: error.response,
+							message: error.response.data.message,
 						},
 					}),
 				);
@@ -173,7 +170,6 @@ function PhotoUpload(props) {
 							photoLoad(data);
 						})
 						.catch((error) => {
-							setLoaded(true);
 							dispatch(
 								setAlert({
 									alert: {
@@ -221,9 +217,9 @@ function PhotoUpload(props) {
 				<div
 					style={{
 						width: "100vw",
-						height: "100vw",
+						height: "calc(100vw + 5vh)",
 						position: "absolute",
-						top: "30vh",
+						top: "25vh",
 						marginLeft: 0,
 					}}>
 					<Carousel
@@ -248,7 +244,7 @@ function PhotoUpload(props) {
 								<div
 									style={{
 										width: "100vw",
-										height: "100vw",
+										height: "100%",
 										position: "relative",
 										display: "flex",
 										flexDirection: "row",
@@ -266,7 +262,11 @@ function PhotoUpload(props) {
 									<img
 										alt={photo.title}
 										src={photo.url}
-										style={{ width: "90vw", height: "90vw", objectFit: "contain" }}
+										style={{
+											width: "90vw",
+											height: "calc(100vw + 5vh)",
+											objectFit: "contain",
+										}}
 									/>
 								</div>
 							) : (
