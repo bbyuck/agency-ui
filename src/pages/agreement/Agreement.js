@@ -13,6 +13,8 @@ import SelectMultiLayout from "components/layout/SelectMultiLayout";
 import AgreementForm from "components/agreement/AgreementForm";
 import { useNavigate } from "react-router-dom";
 import { setMemberCode, setMemberStatus } from "store/slice/memberInfo";
+import { scrollDisable } from "util";
+import { scrollAble } from "util";
 
 function Agreement() {
 	const dispatch = useDispatch();
@@ -21,6 +23,7 @@ function Agreement() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
+		scrollDisable();
 		if (memberCode !== TEMP || memberStatus !== TEMP) {
 			navigate("/", { replace: true });
 			return;
@@ -41,6 +44,10 @@ function Agreement() {
 			.catch((error) => {
 				console.log(error);
 			});
+
+		return () => {
+			scrollAble();
+		};
 	}, [memberCode, memberStatus, navigate, oauthCode, oauthId, dispatch]);
 
 	const [personalInformationUseAgree, setPersonalInformationUseAgree] =

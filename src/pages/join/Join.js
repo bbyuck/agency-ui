@@ -13,6 +13,8 @@ import { GENERAL, NEXT } from "constants/buttonType";
 import { authenticate, resetAuthentication } from "store/slice/auth";
 import KakaoFriendSelect from "./KakaoFriendSelect";
 import { setMemberStatus, setMemberCode } from "store/slice/memberInfo";
+import { scrollDisable } from "util";
+import { scrollAble } from "util";
 
 function Join() {
 	const { oauthId, oauthCode } = useSelector((state) => state.auth);
@@ -24,14 +26,18 @@ function Join() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
+		scrollDisable();
+
 		if (callbackPage === "KAKAO-FRIEND-SELECT") {
 			setPageNum(2);
 		}
 
 		return () => {
+			scrollAble();
+
 			dispatch(resetCallBackPage());
 		};
-	}, []);
+	}, [callbackPage, dispatch]);
 
 	const next = () => {
 		if (inputMemberCode === MATCH_MAKER) {

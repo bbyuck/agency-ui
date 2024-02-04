@@ -66,14 +66,6 @@ export default function ProfileListCard(props) {
 							{profile.smoking ? "O" : "X"}
 						</Grid>
 					</Grid>
-					<Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-						<Grid item xs={3}>
-							<div>사진 교환</div>
-						</Grid>
-						<Grid item xs={9}>
-							{profile.allowPhotoExchange ? "O" : "X"}
-						</Grid>
-					</Grid>
 				</Box>
 			</CardContent>
 			<CardActions sx={{ justifyContent: "right" }}>

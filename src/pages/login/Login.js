@@ -6,10 +6,19 @@ import http from "api";
 import { setAlert } from "store/slice/status";
 import { isMobile } from "util";
 import { forceHome } from "util";
+import { scrollDisable } from "util";
+import { scrollAble } from "util";
 
 function Login() {
 	const theme = useTheme();
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		scrollDisable();
+		return () => {
+			scrollAble();
+		};
+	}, []);
 
 	const pcKakaoLogin = () => {
 		http

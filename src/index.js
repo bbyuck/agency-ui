@@ -15,10 +15,9 @@ import { Provider } from "react-redux";
 import store from "store";
 import { scrollDisable, setScreenSize } from "util";
 
-setScreenSize();
-scrollDisable();
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
+setScreenSize();
+
 root.render(
 	// <React.StrictMode>
 	<BrowserRouter>

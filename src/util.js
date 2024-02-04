@@ -103,6 +103,10 @@ export const forceHome = () => {
 	return false;
 };
 
+const blockEventBubbling = (e) => {
+	e.preventDefault();
+};
+
 export const scrollDisable = () => {
 	const html = document.getElementById("html");
 	const body = document.getElementById("body");
@@ -110,27 +114,9 @@ export const scrollDisable = () => {
 	html.classList.add("noscroll");
 	body.classList.add("noscroll");
 
-	body.addEventListener(
-		"scroll",
-		(e) => {
-			e.preventDefault();
-		},
-		{ passive: false },
-	);
-	body.addEventListener(
-		"touchmove",
-		(e) => {
-			e.preventDefault();
-		},
-		{ passive: false },
-	);
-	body.addEventListener(
-		"mousewheel",
-		(e) => {
-			e.preventDefault();
-		},
-		{ passive: false },
-	);
+	body.addEventListener("scroll", blockEventBubbling, { passive: false });
+	body.addEventListener("touchmove", blockEventBubbling, { passive: false });
+	body.addEventListener("mousewheel", blockEventBubbling, { passive: false });
 };
 
 export const scrollAble = () => {
@@ -140,9 +126,9 @@ export const scrollAble = () => {
 	html.classList.remove("noscroll");
 	body.classList.remove("noscroll");
 
-	body.removeEventListener("scroll");
-	body.removeEventListener("touchmove");
-	body.removeEventListener("mousewheel");
+	body.removeEventListener("scroll", blockEventBubbling);
+	body.removeEventListener("touchmove", blockEventBubbling);
+	body.removeEventListener("mousewheel", blockEventBubbling);
 };
 
 export const setScreenSize = () => {

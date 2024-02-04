@@ -49,7 +49,7 @@ function Main(props) {
 
 	useEffect(() => {
 		reset();
-		document.querySelector(".App").scrollTo(0, 0);
+		// document.querySelector(".App").scrollTo(0, 0);
 	}, []);
 
 	return (

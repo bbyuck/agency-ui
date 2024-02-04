@@ -28,6 +28,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setAlert } from "store/slice/status";
 import { setMemberCode, setMemberStatus } from "store/slice/memberInfo";
+import { scrollDisable } from "util";
+import { scrollAble } from "util";
 
 let loadedData = {
 	address: null,
@@ -85,6 +87,8 @@ function MakeProfile() {
 	];
 
 	useEffect(() => {
+		scrollDisable();
+
 		setBirthYears(getBirthYearDistance());
 		setHeights(getHeightDistance());
 
@@ -111,6 +115,7 @@ function MakeProfile() {
 				console.log(error);
 			});
 		return () => {
+			scrollAble();
 			sessionStorage.removeItem("photoData");
 		};
 	}, []);
