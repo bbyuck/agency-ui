@@ -14,13 +14,19 @@ import UserRoutes from "./UserRoutes";
 import JoinRoutes from "./JoinRoutes";
 import Error from "pages/error/Error";
 import { setMemberCode, setMemberStatus } from "store/slice/memberInfo";
-import { setAlert } from "store/slice/status";
+import {
+	setAlert,
+	setRequestReceived,
+	setRequestRejected,
+} from "store/slice/status";
 import ForceRouting from "./ForceRouting";
 import {
 	setItems,
 	setSendMessage,
 	setSocketConnected,
 } from "store/slice/websocket";
+import RequestReceivedAlert from "components/user/RequestReceivedAlert";
+import RequestRejectedAlert from "components/user/RequestRejectedAlert";
 // ===============================================
 
 function AuthenticatedRoutes() {
@@ -39,7 +45,6 @@ function AuthenticatedRoutes() {
 	/**
 	 * member type에 따른 라우팅
 	 */
-
 	const defaultRoutes = [
 		{
 			name: "default",
@@ -61,8 +66,19 @@ function AuthenticatedRoutes() {
 		},
 	];
 
+	const alertDialogs = [
+		{
+			name: "request-received-alert",
+			element: <RequestReceivedAlert />,
+		},
+		{
+			name: "request-rejected-alert",
+			element: <RequestRejectedAlert />,
+		},
+	];
+
 	useEffect(() => {
-		// wet socket 연결
+		// websocket 연결
 		if (!ws.current) {
 			ws.current = new WebSocket(process.env.REACT_APP_WEBSOCKET);
 			ws.current.onopen = () => {
@@ -75,6 +91,24 @@ function AuthenticatedRoutes() {
 			};
 			ws.current.onerror = (error) => {
 				console.log(error);
+			};
+			ws.current.onmessage = (e) => {
+				console.log(e);
+
+				const response = JSON.parse(e.data);
+				if (response.type === "CONNECT") {
+					sessionStorage.setItem("wsSessionId", response.sessionId);
+					http.post("/v1/ws/session/register", {
+						credentialToken: credentialToken,
+						sessionId: response.sessionId,
+					});
+				}
+				if (response.type === "SEND_REQUEST") {
+					dispatch(setRequestReceived(true));
+				}
+				if (response.type === "REJECT_REQUEST") {
+					dispatch(setRequestRejected(true));
+				}
 			};
 		}
 		return () => {
@@ -97,14 +131,6 @@ function AuthenticatedRoutes() {
 			dispatch(setSendMessage(true));
 		}
 	}, [socketConnected]);
-
-	useEffect(() => {
-		if (sendMessage) {
-			ws.current.onmessage = (e) => {
-				console.log(JSON.parse(e.data));
-			};
-		}
-	}, [sendMessage]);
 
 	useEffect(() => {
 		if (memberStatus === null) {
@@ -167,6 +193,9 @@ function AuthenticatedRoutes() {
 					);
 				})}
 			</Routes>
+			{alertDialogs.map((alertDialog) => {
+				return <div key={alertDialog.name}>{alertDialog.element}</div>;
+			})}
 		</>
 	);
 }

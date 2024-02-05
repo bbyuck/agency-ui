@@ -11,6 +11,8 @@ const initialState = {
 	currentPath: null,
 	animation: "next",
 	callbackPage: null,
+	requestReceived: false,
+	requestRejected: false,
 };
 
 const statusSlice = createSlice({
@@ -44,6 +46,12 @@ const statusSlice = createSlice({
 		resetCallBackPage(state) {
 			state.callbackPage = null;
 		},
+		setRequestReceived(state = initialState, action) {
+			state.requestReceived = action.payload;
+		},
+		setRequestRejected(state = initialState, action) {
+			state.requestRejected = action.payload;
+		},
 	},
 });
 
@@ -53,5 +61,7 @@ export const {
 	setAnimation,
 	setCallbackPage,
 	resetCallBackPage,
+	setRequestReceived,
+	setRequestRejected,
 } = statusSlice.actions;
 export default statusSlice.reducer;
