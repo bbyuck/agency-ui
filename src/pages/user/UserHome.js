@@ -4,10 +4,14 @@ import ProfileDetail from "pages/user/main/ProfileDetail";
 import { cloneElement, useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import ReceivedRequest from "components/common/ReceivedRequest";
+import http from "api";
+import { useDispatch } from "react-redux";
+import { setAlert } from "store/slice/status";
 
 function UserHome() {
 	const [process, setProcess] = useState(0);
 	const [selectedProfileId, setSelectedProfileId] = useState(null);
+	const dispatch = useDispatch();
 
 	const next = () => {
 		setProcess(process + 1);
@@ -27,9 +31,39 @@ function UserHome() {
 	};
 
 	const [receivedListOpen, setReceivedListOpen] = useState(false);
+	const [receivedRequest, setReceivedRequest] = useState(null);
 
 	const openReceivedList = () => {
-		setReceivedListOpen(true);
+		searchReceivedRequest()
+			.then((success) => {
+				if (success) {
+					setReceivedListOpen(true);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+	const searchReceivedRequest = () => {
+		return http
+			.get("/v1/matching/request/received")
+			.then((response) => {
+				setReceivedRequest(response.data.data);
+				return true;
+			})
+			.catch((error) => {
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response.data.message,
+						},
+					}),
+				);
+				return false;
+			});
 	};
 
 	const Pages = [

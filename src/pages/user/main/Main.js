@@ -1,75 +1,103 @@
 import ProfileListCard from "components/common/ProfileListCard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "style/common/Main.css";
+import http from "api";
+import { useDispatch } from "react-redux";
+import { setAlert } from "store/slice/status";
+import messages from "messages";
+import { Box, Button, IconButton } from "@mui/material";
+import PromptText from "components/common/PromptText";
+import SearchIcon from "@mui/icons-material/YoutubeSearchedForOutlined";
 
 function Main(props) {
 	const { reset, select } = props;
-	const profiles = [
-		{
-			id: "encryptedId1",
-			age: "94",
-			address: "서울 화곡동",
-			job: "개발자",
-			height: 178,
-			mbti: "ISFP",
-			smoking: false,
-			allowPhotoExchange: true,
-		},
-		{
-			id: "encryptedId2",
-			age: "94",
-			address: "동탄",
-			job: "삼성전자",
-			height: 182,
-			mbti: "ENTP",
-			smoking: true,
-			allowPhotoExchange: false,
-		},
-		{
-			id: "encryptedId3",
-			age: "빠른 92",
-			address: "인천",
-			job: "LG 마그나 연구원",
-			height: 178,
-			mbti: "ISTP",
-			smoking: true,
-			allowPhotoExchange: true,
-		},
-		{
-			id: "encryptedId4",
-			age: "94",
-			address: "인천",
-			job: "LG 마그나 연구원",
-			height: 178,
-			mbti: "ISTP",
-			smoking: true,
-			allowPhotoExchange: true,
-		},
-	];
+	const [profiles, setProfiles] = useState([]);
+	const [searching, setSearching] = useState(false);
+	const [init, setInit] = useState(true);
+
+	const dispatch = useDispatch();
+
+	const search = () => {
+		if (searching) {
+			return;
+		}
+
+		setSearching(true);
+
+		http
+			.get("/v1/profile")
+			.then((response) => {
+				setProfiles(response.data.data);
+			})
+			.catch((error) => {
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response
+								? error.response.data.message
+								: messages.error.connect_to_server,
+						},
+					}),
+				);
+				console.log(error);
+			})
+			.finally(() => {
+				setSearching(false);
+				if (init) {
+					setInit(false);
+				}
+			});
+	};
 
 	useEffect(() => {
 		reset();
+
+		search();
+
 		// document.querySelector(".App").scrollTo(0, 0);
-	}, []);
+	}, [dispatch]);
 
 	return (
-		<div className={"page"}>
-			<div
-				style={{
-					position: "relative",
-					top: "6vh",
-				}}>
-				<div className={"container-main-profile-card-list"}>
-					{profiles.map((profile, index) => (
-						<ProfileListCard
-							select={select}
-							profile={profile}
-							key={`profile-card-${index}`}
-						/>
-					))}
+		<>
+			{init ? null : profiles.length === 0 ? (
+				<Box>
+					<PromptText
+						title={"매칭 가능한 사람이 없어요."}
+						subtitle={"잠시 후 다시 시도해주세요."}
+					/>
+					<IconButton
+						onClick={search}
+						sx={{
+							position: "relative",
+							width: "100vw",
+							height: "100vw",
+							bottom: "70vh",
+						}}>
+						<SearchIcon color={"primary"} />
+					</IconButton>
+				</Box>
+			) : (
+				<div className={"page"}>
+					<div
+						style={{
+							position: "relative",
+							top: "6vh",
+						}}>
+						<div className={"container-main-profile-card-list"}>
+							{profiles.map((profile, index) => (
+								<ProfileListCard
+									select={select}
+									profile={profile}
+									key={`profile-card-${index}`}
+								/>
+							))}
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
+			)}
+		</>
 	);
 }
 

@@ -1,3 +1,4 @@
+import PromptText from "components/common/PromptText";
 import { useEffect } from "react";
 import { scrollAble } from "util";
 import { scrollDisable } from "util";
@@ -16,18 +17,7 @@ function WaitPage(props) {
 
 	return (
 		<>
-			<div className='layout-container'>
-				<div className='layout-contents'>
-					<div className='layout-title' style={{ fontSize: "30px" }}>
-						{title}
-					</div>
-					<div
-						className='layout-subtitle'
-						style={{ height: "15px", fontSize: "15px" }}>
-						{subtitle}
-					</div>
-				</div>
-			</div>
+			<PromptText title={title} subtitle={subtitle} />
 		</>
 	);
 }

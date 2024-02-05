@@ -13,9 +13,11 @@ import theme from "./style/theme";
  */
 import { Provider } from "react-redux";
 import store from "store";
-import { scrollDisable, setScreenSize } from "util";
+import { setScreenSize } from "util";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// 1. 모바일 사이즈 set
 setScreenSize();
 
 root.render(

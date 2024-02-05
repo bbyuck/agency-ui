@@ -1,35 +1,34 @@
 import ProfileCard from "components/common/ProfileCard";
 import { useEffect, useState } from "react";
 import "style/common/ProfileCard.css";
-
-const testData = {
-	id: "encryptedId1",
-	age: "94년생",
-	address: "서울 화곡동",
-	job: "개발자",
-	height: 178,
-	mbti: "ISFP",
-	smoking: false,
-	allowPhotoExchange: true,
-	badges: ["ISFP", "비흡연자"],
-	idealType: "165미만의 귀염상",
-	hobby: "여행",
-	selfDescription:
-		"처음엔 무뚝뚝하지만 나중에는 장난도 잘 치고 활발해요. 흡연하구요 주량은 소주 한 병 반입니다!",
-};
+import http from "api";
 
 function ProfileDetail(props) {
 	const [profile, setProfile] = useState(null);
 	const { selectedProfileId } = props;
 
+	document.querySelector(".App").scrollTo(0, 0);
+
 	useEffect(() => {
 		/**
 		 * 선택된 프로필 id로 조회 api 호출
 		 */
+		http
+			.get(`/v1/profile/detail/${selectedProfileId}`)
+			.then((response) => {
+				setProfile(response.data.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 
-		setProfile(testData);
-		document.querySelector(".App").scrollTo(0, 0);
-	}, []);
+		// setProfile(testData);
+		// window.scrollTo(0, 0);
+
+		return () => {
+			document.querySelector(".App").scrollTo(0, 0);
+		};
+	}, [selectedProfileId]);
 
 	return (
 		<div className='page' id={"profile-detail"}>

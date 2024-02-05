@@ -2,7 +2,7 @@ import "style/common/Common.css";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 
-import { createRef, useEffect } from "react";
+import { createRef, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MATCH_MAKER, TEMP, USER } from "constants/memberCode";
 
@@ -16,13 +16,25 @@ import Error from "pages/error/Error";
 import { setMemberCode, setMemberStatus } from "store/slice/memberInfo";
 import { setAlert } from "store/slice/status";
 import ForceRouting from "./ForceRouting";
-
+import {
+	setItems,
+	setSendMessage,
+	setSocketConnected,
+} from "store/slice/websocket";
 // ===============================================
 
 function AuthenticatedRoutes() {
 	const location = useLocation();
+	const { credentialToken } = useSelector((state) => state.auth);
 	const { memberCode, memberStatus } = useSelector((state) => state.memberInfo);
 	const dispatch = useDispatch();
+	/**
+	 * WebSocket 관련 변수
+	 */
+	const ws = useRef(null);
+	const { socketConnected, sendMessage } = useSelector(
+		(state) => state.websocket,
+	);
 
 	/**
 	 * member type에 따른 라우팅
@@ -48,6 +60,51 @@ function AuthenticatedRoutes() {
 			nodeRef: createRef(),
 		},
 	];
+
+	useEffect(() => {
+		// wet socket 연결
+		if (!ws.current) {
+			ws.current = new WebSocket(process.env.REACT_APP_WEBSOCKET);
+			ws.current.onopen = () => {
+				console.log(`connected to ${process.env.REACT_APP_WEBSOCKET}`);
+				dispatch(setSocketConnected(true));
+			};
+			ws.current.onclose = () => {
+				console.log(`disconnect from ${process.env.REACT_APP_WEBSOCKET}`);
+				dispatch(setSocketConnected(false));
+			};
+			ws.current.onerror = (error) => {
+				console.log(error);
+			};
+		}
+		return () => {
+			/**
+			 * websocket close
+			 */
+			ws.current.close();
+		};
+	}, []);
+
+	useEffect(() => {
+		if (socketConnected) {
+			ws.current.send(
+				JSON.stringify({
+					credentialToken: credentialToken,
+					type: "CONNECT",
+				}),
+			);
+
+			dispatch(setSendMessage(true));
+		}
+	}, [socketConnected]);
+
+	useEffect(() => {
+		if (sendMessage) {
+			ws.current.onmessage = (e) => {
+				console.log(JSON.parse(e.data));
+			};
+		}
+	}, [sendMessage]);
 
 	useEffect(() => {
 		if (memberStatus === null) {

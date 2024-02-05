@@ -1,13 +1,36 @@
 import { useEffect, useState } from "react";
 import { Box, Button, Divider, Grid } from "@mui/material";
 import ProfileCardBadge from "./ProfileCardBadge";
+import http from "api";
+import { useDispatch } from "react-redux";
+import { setAlert } from "store/slice/status";
 
 function ProfileCard(props) {
 	const [photoExchanged, setPhotoExchanged] = useState(false);
-
+	const dispatch = useDispatch();
 	const { profile } = props;
 
-	useEffect(() => {}, []);
+	const sendRequest = () => {
+		http
+			.post("/v1/matching/request", {
+				id: profile.id,
+			})
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((error) => {
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response.data.message,
+						},
+					}),
+				);
+				console.log(error);
+			});
+	};
 
 	return (
 		<div>
@@ -23,9 +46,9 @@ function ProfileCard(props) {
 			) : null}
 
 			<div className={"container-profile-card-info"}>
-				<div className={"profile-card-badges"}>
+				{/* <div className={"profile-card-badges"}>
 					<ProfileCardBadge badges={profile.badges} />
-				</div>
+				</div> */}
 
 				<Box>
 					<Grid container spacing={2}>
@@ -79,9 +102,7 @@ function ProfileCard(props) {
 			<div className={"container-profile-card-button"}>
 				<Box></Box>
 				<Button
-					onClick={() => {
-						console.log("요청보내기");
-					}}
+					onClick={sendRequest}
 					variant='contained'
 					size='medium'
 					style={{ width: "90vw" }}>

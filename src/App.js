@@ -1,16 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import "./App.css";
 import "style/common/Common.css";
 
 import AuthenticatedRoutes from "route/authenticated/AuthenticatedRoutes";
 import UnAuthenticatedRoutes from "route/unauthenticated/UnAuthenticatedRoutes";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loading from "components/common/Loading";
 import ToastAlert from "components/common/ToastAlert";
 import { useSearchParams } from "react-router-dom";
 import { TEMP } from "constants/memberCode";
+import {
+	setItems,
+	setSendMessage,
+	setSocketConnected,
+} from "store/slice/websocket";
 
 function App() {
+	const dispatch = useDispatch();
+
 	const { credentialToken, oauthId, oauthCode } = useSelector(
 		(state) => state.auth,
 	);
@@ -20,6 +27,7 @@ function App() {
 	if (matchmakerCode) {
 		sessionStorage.setItem("mc", matchmakerCode);
 	}
+
 	/**
 	 * 로그인 시 rerender
 	 */
@@ -30,11 +38,10 @@ function App() {
 			window.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY);
 		}
 
-		/**
-		 * 주선자 코드 자동입력
-		 */
-
 		return () => {
+			/**
+			 * 1. session storage clear
+			 */
 			sessionStorage.clear();
 		};
 	}, []);
