@@ -4,7 +4,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import { useEffect, useState } from "react";
 
 function HomeHeader(props) {
-	const { leftButton, process, rightButton } = props;
+	const { center, leftButton, process, rightButton } = props;
 	const [received, setReceived] = useState(false);
 	useEffect(() => {
 		setTimeout(() => {
@@ -21,6 +21,11 @@ function HomeHeader(props) {
 							<ArrowBackIosOutlinedIcon aria-label='back button' size='large' />
 						</IconButton>
 					) : null}
+				</span>
+				<span
+					className='header-center'
+					style={{ position: "relative", fontWeight: 800, fontSize: "25px" }}>
+					{center}
 				</span>
 				<span className='header-right'>
 					{process === 0 ? (

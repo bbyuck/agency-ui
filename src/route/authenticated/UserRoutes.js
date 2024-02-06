@@ -1,8 +1,15 @@
 import { USER } from "constants/memberCode";
-import { NEW, PROFILE_MAKING } from "constants/memberStatus";
+import {
+	MATCHING_WAIT,
+	NEW,
+	PROFILE_MAKING,
+	REQUEST_RECEIVED,
+} from "constants/memberStatus";
 import WaitPage from "pages/common/WaitPage";
 import UserHome from "pages/user/UserHome";
 import MakeProfile from "pages/user/makeprofile/MakeProfile";
+import MatchingRequestReceivedPage from "pages/user/matching/MatchingRequestReceivedPage";
+import MatchingWaitPage from "pages/user/matching/MatchingWaitPage";
 import { createRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
@@ -26,9 +33,21 @@ function UserRoutes() {
 			nodeRef: createRef(),
 		},
 		{
-			name: "user-wait",
+			name: "user-join-wait",
 			path: "/user/wait",
 			element: <WaitPage approver={"주선자"} />,
+			nodeRef: createRef(),
+		},
+		{
+			name: "user-matching-wait",
+			path: "/user/matching/wait",
+			element: <MatchingWaitPage />,
+			nodeRef: createRef(),
+		},
+		{
+			name: "user-matching-request-received",
+			path: "/user/matching/request/received",
+			element: <MatchingRequestReceivedPage />,
 			nodeRef: createRef(),
 		},
 	];
@@ -43,6 +62,16 @@ function UserRoutes() {
 			location.pathname !== "/user/profile/make"
 		) {
 			navigate("/user/profile/make", { replace: true });
+		} else if (
+			memberStatus === MATCHING_WAIT &&
+			location.pathname !== "/user/matching/wait"
+		) {
+			navigate("/user/matching/wait", { replace: true });
+		} else if (
+			memberStatus === REQUEST_RECEIVED &&
+			location.pathname !== "/user/matching/request/received"
+		) {
+			navigate("/user/matching/request/received", { replace: true });
 		}
 		// else {
 		// 	navigate("/user/home", { replace: true });

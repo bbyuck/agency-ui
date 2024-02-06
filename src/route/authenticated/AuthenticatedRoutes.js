@@ -16,8 +16,9 @@ import Error from "pages/error/Error";
 import { setMemberCode, setMemberStatus } from "store/slice/memberInfo";
 import {
 	setAlert,
-	setRequestReceived,
+	setRequestReceivedDialogOpen,
 	setRequestRejected,
+	setRequestSend,
 } from "store/slice/status";
 import ForceRouting from "./ForceRouting";
 import {
@@ -33,6 +34,7 @@ function AuthenticatedRoutes() {
 	const location = useLocation();
 	const { credentialToken } = useSelector((state) => state.auth);
 	const { memberCode, memberStatus } = useSelector((state) => state.memberInfo);
+	const { requestSend } = useSelector((state) => state.status);
 	const dispatch = useDispatch();
 	/**
 	 * WebSocket 관련 변수
@@ -104,7 +106,7 @@ function AuthenticatedRoutes() {
 					});
 				}
 				if (response.type === "SEND_REQUEST") {
-					dispatch(setRequestReceived(true));
+					dispatch(setRequestReceivedDialogOpen(true));
 				}
 				if (response.type === "REJECT_REQUEST") {
 					dispatch(setRequestRejected(true));
@@ -133,13 +135,14 @@ function AuthenticatedRoutes() {
 	}, [socketConnected]);
 
 	useEffect(() => {
-		if (memberStatus === null) {
+		if (memberStatus === null || !requestSend.searched) {
 			if (memberCode === USER) {
 				http
 					.get("/v1/user/info/my")
 					.then((response) => {
 						dispatch(setMemberCode(response.data.data.userDto.memberCode));
 						dispatch(setMemberStatus(response.data.data.userDto.memberStatus));
+						dispatch(setRequestSend(response.data.data.matchingRequestRemainDto));
 					})
 					.catch((error) => {
 						console.log(error);

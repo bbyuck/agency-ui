@@ -8,24 +8,53 @@ import Slide from "@mui/material/Slide";
 import { Fragment, forwardRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import http from "api";
-import { setAlert, setRequestReceived } from "store/slice/status";
+import {
+	confirmRequestReceived,
+	setAlert,
+	setRequestReceivedDialogOpen,
+} from "store/slice/status";
 import messages from "messages";
 import { setMemberStatus } from "store/slice/memberInfo";
+import { useNavigate } from "react-router-dom";
 
 const Transition = forwardRef(function Transition(props, ref) {
 	return <Slide direction='down' ref={ref} {...props} />;
 });
 
 function RequestReceivedAlert() {
-	const { requestReceived } = useSelector((state) => state.status);
+	const { requestReceivedDialogOpen } = useSelector((state) => state.status);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const rejectRequest = () => {
 		http
 			.post("/v1/matching/request/reject")
 			.then((response) => {
 				dispatch(setMemberStatus(response.data.data.memberStatus));
-				dispatch(setRequestReceived(false));
+				dispatch(setRequestReceivedDialogOpen(false));
+			})
+			.catch((error) => {
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response
+								? error.response.data.message
+								: messages.error.connect_to_server,
+						},
+					}),
+				);
+			});
+	};
+
+	const confirmRequest = () => {
+		http
+			.post("/v1/matching/request/confirm")
+			.then((response) => {
+				dispatch(setRequestReceivedDialogOpen(false));
+				dispatch(confirmRequestReceived());
+				navigate("/user/matching/request/received", { replace: true });
 			})
 			.catch((error) => {
 				dispatch(
@@ -45,7 +74,7 @@ function RequestReceivedAlert() {
 	return (
 		<Fragment>
 			<Dialog
-				open={requestReceived}
+				open={requestReceivedDialogOpen}
 				TransitionComponent={Transition}
 				keepMounted
 				onClose={() => {
@@ -67,15 +96,10 @@ function RequestReceivedAlert() {
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
-					<Button sx={{ color: "red" }} onClick={rejectRequest}>
+					<Button sx={{ color: "grey" }} onClick={rejectRequest}>
 						거절하기
 					</Button>
-					<Button
-						onClick={() => {
-							console.log("ok");
-						}}>
-						확인하기
-					</Button>
+					<Button onClick={confirmRequest}>확인하기</Button>
 				</DialogActions>
 			</Dialog>
 		</Fragment>

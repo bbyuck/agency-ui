@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import http from "api";
 import {
 	setAlert,
-	setRequestReceived,
+	setRequestReceivedDialogOpen,
 	setRequestRejected,
 } from "store/slice/status";
 import messages from "messages";

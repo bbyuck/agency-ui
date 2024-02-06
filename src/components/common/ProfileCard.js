@@ -1,36 +1,9 @@
-import { useEffect, useState } from "react";
-import { Box, Button, Divider, Grid } from "@mui/material";
-import ProfileCardBadge from "./ProfileCardBadge";
-import http from "api";
-import { useDispatch } from "react-redux";
-import { setAlert } from "store/slice/status";
+import { useState } from "react";
+import { Box, Divider, Grid } from "@mui/material";
 
 function ProfileCard(props) {
 	const [photoExchanged, setPhotoExchanged] = useState(false);
-	const dispatch = useDispatch();
 	const { profile } = props;
-
-	const sendRequest = () => {
-		http
-			.post("/v1/matching/request", {
-				id: profile.id,
-			})
-			.then((response) => {
-				console.log(response);
-			})
-			.catch((error) => {
-				dispatch(
-					setAlert({
-						alert: {
-							open: true,
-							type: "error",
-							message: error.response.data.message,
-						},
-					}),
-				);
-				console.log(error);
-			});
-	};
 
 	return (
 		<div>
@@ -98,16 +71,6 @@ function ProfileCard(props) {
 						</Grid>
 					</Grid>
 				</Box>
-			</div>
-			<div className={"container-profile-card-button"}>
-				<Box></Box>
-				<Button
-					onClick={sendRequest}
-					variant='contained'
-					size='medium'
-					style={{ width: "90vw" }}>
-					{"매칭 요청"}
-				</Button>
 			</div>
 		</div>
 	);

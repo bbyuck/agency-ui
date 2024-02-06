@@ -34,7 +34,6 @@ function Join() {
 
 		return () => {
 			scrollAble();
-
 			dispatch(resetCallBackPage());
 		};
 	}, [callbackPage, dispatch]);

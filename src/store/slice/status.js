@@ -11,8 +11,14 @@ const initialState = {
 	currentPath: null,
 	animation: "next",
 	callbackPage: null,
-	requestReceived: false,
+	requestReceivedDialogOpen: false,
+	requestReceivedConfirmed: false,
 	requestRejected: false,
+	requestSend: {
+		maxCount: 0,
+		currentCount: 0,
+		searched: false,
+	},
 };
 
 const statusSlice = createSlice({
@@ -46,11 +52,17 @@ const statusSlice = createSlice({
 		resetCallBackPage(state) {
 			state.callbackPage = null;
 		},
-		setRequestReceived(state = initialState, action) {
-			state.requestReceived = action.payload;
+		setRequestReceivedDialogOpen(state = initialState, action) {
+			state.requestReceivedDialogOpen = action.payload;
 		},
 		setRequestRejected(state = initialState, action) {
 			state.requestRejected = action.payload;
+		},
+		setRequestSend(state = initialState, action) {
+			state.requestSend = action.payload;
+		},
+		confirmRequestReceived(state = initialState, action) {
+			state.requestReceivedConfirmed = true;
 		},
 	},
 });
@@ -61,7 +73,9 @@ export const {
 	setAnimation,
 	setCallbackPage,
 	resetCallBackPage,
-	setRequestReceived,
+	setRequestReceivedDialogOpen,
 	setRequestRejected,
+	setRequestSend,
+	confirmRequestReceived,
 } = statusSlice.actions;
 export default statusSlice.reducer;

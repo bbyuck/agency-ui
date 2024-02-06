@@ -1,5 +1,11 @@
 import { MATCH_MAKER, TEMP, USER } from "constants/memberCode";
-import { NEW, PROFILE_MAKING, WAIT } from "constants/memberStatus";
+import {
+	MATCHING_WAIT,
+	NEW,
+	PROFILE_MAKING,
+	REQUEST_RECEIVED,
+	WAIT,
+} from "constants/memberStatus";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +19,10 @@ function ForceRouting() {
 				navigate("/user/profile/make", { replace: true });
 			} else if (memberStatus === WAIT) {
 				navigate("/user/wait");
+			} else if (memberStatus === MATCHING_WAIT) {
+				navigate("/user/matching/wait");
+			} else if (memberStatus === REQUEST_RECEIVED) {
+				navigate("/user/matching/request/received");
 			} else {
 				navigate("/user/home", { replace: true });
 			}

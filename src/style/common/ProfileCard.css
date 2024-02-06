@@ -35,7 +35,7 @@
 
 .container-profile-card-button {
 	position: relative;
-	margin-top: 25vh;
 	width: 100%;
-	bottom: 5vh;
+	margin-top: 20vh;
+	padding-bottom: 10vh;
 }
