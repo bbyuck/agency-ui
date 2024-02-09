@@ -21,11 +21,7 @@ import {
 	setRequestSend,
 } from "store/slice/status";
 import ForceRouting from "./ForceRouting";
-import {
-	setItems,
-	setSendMessage,
-	setSocketConnected,
-} from "store/slice/websocket";
+import { setSendMessage, setSocketConnected } from "store/slice/websocket";
 import RequestReceivedAlert from "components/user/RequestReceivedAlert";
 import RequestRejectedAlert from "components/user/RequestRejectedAlert";
 // ===============================================

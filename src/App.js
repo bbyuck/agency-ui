@@ -9,11 +9,7 @@ import Loading from "components/common/Loading";
 import ToastAlert from "components/common/ToastAlert";
 import { useSearchParams } from "react-router-dom";
 import { TEMP } from "constants/memberCode";
-import {
-	setItems,
-	setSendMessage,
-	setSocketConnected,
-} from "store/slice/websocket";
+import { registerServiceWorker, requestPermission } from "config/fcmConfig";
 
 function App() {
 	const dispatch = useDispatch();
@@ -31,12 +27,20 @@ function App() {
 	/**
 	 * 로그인 시 rerender
 	 */
-	useEffect(() => {}, [credentialToken, memberCode, oauthId, oauthCode]);
 	useEffect(() => {
+		/**
+		 * 1. Kakao SDK
+		 */
 		if (!window.Kakao.isInitialized()) {
 			// JavaScript key를 인자로 주고 SDK 초기화
 			window.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY);
 		}
+
+		/**
+		 * 2. Firebase register
+		 */
+		// registerServiceWorker();
+		requestPermission();
 
 		return () => {
 			/**
