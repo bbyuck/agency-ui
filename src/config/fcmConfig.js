@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
-import { onBackgroundMessage } from "firebase/messaging/sw";
+import http from "api";
 
 // Initialize Firebase
 export const firebaseConfig = {
@@ -30,14 +30,32 @@ export const requestPermission = () => {
 
 const getFcmToken = () => {
 	return getToken(messaging, {
-		vapidKey:
-			"BIXM8eSCp7QjleRMEVI1MdzuwZvEGtl4ho2AOQAFoa_D8etzBnXX1lULwZQ7FmZTwWJcr-KS1f2eNMU0_BgnEtM",
+		vapidKey: process.env.REACT_APP_FCM_VAPID_KEY,
 	})
 		.then((currentToken) => {
 			if (currentToken) {
 				// Send the token to your server and update the UI if necessary
 				// ...
-				console.log(currentToken);
+				const memberCode = localStorage.getItem("memberCode");
+
+				if (!memberCode) {
+					alert("멤버코드가 없습니다.");
+					return false;
+				}
+
+				if (memberCode === "USER") {
+					http
+						.post("/v1/user/fcm/token", {
+							token: currentToken,
+						})
+						.then((response) => {
+							localStorage.setItem("fcmToken", JSON.parse(response.data.data).token);
+						})
+						.catch((error) => {
+							console.log(error);
+						});
+				} else if (memberCode === "MATCH_MAKER") {
+				}
 			} else {
 				// Show permission request UI
 				console.log(

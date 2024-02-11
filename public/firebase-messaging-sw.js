@@ -10,13 +10,13 @@ importScripts(
 // your app's Firebase config object.
 // https://firebase.google.com/docs/web/setup#config-object
 firebase.initializeApp({
-	apiKey: process.env.REACT_APP_FCM_API_KEY,
-	authDomain: process.env.REACT_APP_FCM_AUTH_DOMAIN,
-	projectId: process.env.REACT_APP_FCM_PROJECT_ID,
-	storageBucket: process.env.REACT_APP_FCM_STORAGE_BUCKET,
-	messagingSenderId: process.env.REACT_APP_FCM_MESSAGING_SENDER_ID,
-	appId: process.env.REACT_APP_FCM_APP_ID,
-	measurementId: process.env.REACT_APP_FCM_MEASUREMENT_ID,
+	apiKey: "AIzaSyA0HsncamJrwfAJr45faI8t2siKesITUpk",
+	authDomain: "dating-agency-ab5a0.firebaseapp.com",
+	projectId: "dating-agency-ab5a0",
+	storageBucket: "dating-agency-ab5a0.appspot.com",
+	messagingSenderId: "191218134860",
+	appId: "1:191218134860:web:ae537a12b7bbabde01e9e9",
+	measurementId: "G-32V0472N5L",
 });
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
