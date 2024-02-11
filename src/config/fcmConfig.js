@@ -24,7 +24,6 @@ export const requestPermission = () => {
 		if (permission === "granted") {
 			getFcmToken();
 		}
-		return false;
 	});
 };
 

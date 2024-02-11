@@ -9,7 +9,6 @@ import Loading from "components/common/Loading";
 import ToastAlert from "components/common/ToastAlert";
 import { useSearchParams } from "react-router-dom";
 import { TEMP } from "constants/memberCode";
-import { registerServiceWorker, requestPermission } from "config/fcmConfig";
 
 function App() {
 	const dispatch = useDispatch();
@@ -35,12 +34,6 @@ function App() {
 			// JavaScript key를 인자로 주고 SDK 초기화
 			window.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY);
 		}
-
-		/**
-		 * 2. Firebase register
-		 */
-		// registerServiceWorker();
-		requestPermission();
 
 		return () => {
 			/**

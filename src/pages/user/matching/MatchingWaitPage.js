@@ -1,4 +1,6 @@
+import { Button } from "@mui/material";
 import PromptText from "components/common/PromptText";
+import { requestPermission } from "config/fcmConfig";
 import { useEffect } from "react";
 import { scrollAble } from "util";
 import { scrollDisable } from "util";
@@ -18,6 +20,15 @@ function MatchingWaitPage(props) {
 	return (
 		<>
 			<PromptText title={title} subtitle={subtitle} />
+			<Button
+				onClick={() => {
+					/**
+					 * 1. Firebase register
+					 */
+					requestPermission();
+				}}>
+				푸시알람 허용
+			</Button>
 		</>
 	);
 }
