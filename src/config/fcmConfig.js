@@ -46,10 +46,10 @@ const getFcmToken = () => {
 				if (memberCode === "USER") {
 					http
 						.post("/v1/user/fcm/token", {
-							token: currentToken,
+							value: currentToken,
 						})
 						.then((response) => {
-							localStorage.setItem("fcmToken", JSON.parse(response.data.data).token);
+							localStorage.setItem("fcmToken", response.data.data.value);
 						})
 						.catch((error) => {
 							console.log(error);
