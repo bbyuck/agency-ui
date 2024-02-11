@@ -62,7 +62,7 @@ function Login() {
 					<div className='button-kakao-login' onClick={pcKakaoLogin}>
 						<span>
 							<img
-								src={`${process.env.PUBLIC_URL}/assets/icons/kakao_login_medium_wide.png`}
+								src={`${process.env.PUBLIC_URL}/assets/images/kakao_login_medium_wide.png`}
 								alt={"카카오 로그인"}
 							/>
 						</span>
