@@ -19,7 +19,6 @@ function MatchingWaitPage(props) {
 
 	return (
 		<>
-			<PromptText title={title} subtitle={subtitle} />
 			<Button
 				onClick={() => {
 					/**
@@ -29,6 +28,7 @@ function MatchingWaitPage(props) {
 				}}>
 				푸시알람 허용
 			</Button>
+			<PromptText title={title} subtitle={subtitle} />
 		</>
 	);
 }
