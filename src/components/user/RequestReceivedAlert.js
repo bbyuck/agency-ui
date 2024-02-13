@@ -52,9 +52,10 @@ function RequestReceivedAlert() {
 		http
 			.post("/v1/matching/request/confirm")
 			.then((response) => {
+				dispatch(setMemberStatus(response.data.data.memberStatus));
 				dispatch(setRequestReceivedDialogOpen(false));
-				dispatch(confirmRequestReceived());
-				navigate("/user/matching/request/received", { replace: true });
+				// dispatch(confirmRequestReceived());
+				// navigate("/user/matching/request/received", { replace: true });
 			})
 			.catch((error) => {
 				dispatch(

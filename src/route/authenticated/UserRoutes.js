@@ -3,6 +3,7 @@ import {
 	MATCHING_WAIT,
 	NEW,
 	PROFILE_MAKING,
+	REQUEST_CONFIRMED,
 	REQUEST_RECEIVED,
 } from "constants/memberStatus";
 import WaitPage from "pages/common/WaitPage";
@@ -68,7 +69,7 @@ function UserRoutes() {
 		) {
 			navigate("/user/matching/wait", { replace: true });
 		} else if (
-			memberStatus === REQUEST_RECEIVED &&
+			(memberStatus === REQUEST_RECEIVED || memberStatus === REQUEST_CONFIRMED) &&
 			location.pathname !== "/user/matching/request/received"
 		) {
 			navigate("/user/matching/request/received", { replace: true });

@@ -3,6 +3,7 @@ import {
 	MATCHING_WAIT,
 	NEW,
 	PROFILE_MAKING,
+	REQUEST_CONFIRMED,
 	REQUEST_RECEIVED,
 	WAIT,
 } from "constants/memberStatus";
@@ -21,7 +22,10 @@ function ForceRouting() {
 				navigate("/user/wait");
 			} else if (memberStatus === MATCHING_WAIT) {
 				navigate("/user/matching/wait");
-			} else if (memberStatus === REQUEST_RECEIVED) {
+			} else if (
+				memberStatus === REQUEST_RECEIVED ||
+				memberStatus === REQUEST_CONFIRMED
+			) {
 				navigate("/user/matching/request/received");
 			} else {
 				navigate("/user/home", { replace: true });
