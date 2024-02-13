@@ -24,6 +24,10 @@ import ForceRouting from "./ForceRouting";
 import { setSendMessage, setSocketConnected } from "store/slice/websocket";
 import RequestReceivedAlert from "components/user/RequestReceivedAlert";
 import RequestRejectedAlert from "components/user/RequestRejectedAlert";
+import {
+	REQUEST_RECEIVED,
+	REQUEST_REJECTED,
+} from "constants/clientMessageCode";
 // ===============================================
 
 function AuthenticatedRoutes() {
@@ -101,10 +105,10 @@ function AuthenticatedRoutes() {
 						sessionId: response.sessionId,
 					});
 				}
-				if (response.type === "SEND_REQUEST") {
+				if (response.type === REQUEST_RECEIVED) {
 					dispatch(setRequestReceivedDialogOpen(true));
 				}
-				if (response.type === "REJECT_REQUEST") {
+				if (response.type === REQUEST_REJECTED) {
 					dispatch(setRequestRejected(true));
 				}
 			};
