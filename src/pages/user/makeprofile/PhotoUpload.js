@@ -1,12 +1,5 @@
 import LayoutButton from "components/layout/LayoutButton";
-import {
-	Box,
-	CircularProgress,
-	IconButton,
-	LinearProgress,
-	Skeleton,
-	styled,
-} from "@mui/material";
+import { IconButton, styled } from "@mui/material";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import UploadOutlinedIcon from "@mui/icons-material/UploadOutlined";
@@ -217,7 +210,7 @@ function PhotoUpload(props) {
 				<div
 					style={{
 						width: "100vw",
-						height: "calc(100vw + 5vh)",
+						height: "calc(100vw + 20vh)",
 						position: "absolute",
 						top: "25vh",
 						marginLeft: 0,
@@ -264,7 +257,7 @@ function PhotoUpload(props) {
 										src={photo.url}
 										style={{
 											width: "90vw",
-											height: "calc(100vw + 5vh)",
+											height: "calc(100vw + 10vh)",
 											objectFit: "contain",
 										}}
 									/>

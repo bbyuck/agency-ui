@@ -19,6 +19,7 @@ const initialState = {
 		currentCount: 0,
 		searched: false,
 	},
+	requestAccepted: false,
 };
 
 const statusSlice = createSlice({
@@ -61,8 +62,8 @@ const statusSlice = createSlice({
 		setRequestSend(state = initialState, action) {
 			state.requestSend = action.payload;
 		},
-		confirmRequestReceived(state = initialState, action) {
-			state.requestReceivedConfirmed = true;
+		setRequestAccepted(state = initialState, action) {
+			state.requestAccepted = action.payload;
 		},
 	},
 });
@@ -76,6 +77,6 @@ export const {
 	setRequestReceivedDialogOpen,
 	setRequestRejected,
 	setRequestSend,
-	confirmRequestReceived,
+	setRequestAccepted,
 } = statusSlice.actions;
 export default statusSlice.reducer;

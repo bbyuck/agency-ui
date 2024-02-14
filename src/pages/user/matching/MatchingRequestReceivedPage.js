@@ -18,10 +18,33 @@ function MatchingRequestReceivedPage() {
 	const { memberStatus } = useSelector((state) => state.memberInfo);
 
 	const [rejectConfirmOpen, setRejectConfrimOpen] = useState(false);
+	const [receviedRequestId, setReceivedRequestId] = useState(null);
+
 	const rejectConfirmContents = `만약, 거절하시면 요청보내신 분의 프로필은 앞으로 확인하실 수 없어요.`;
 	const rejectRequest = async () => {
 		http
 			.post("/v1/matching/request/reject")
+			.then((response) => {
+				dispatch(setMemberStatus(response.data.data.memberStatus));
+			})
+			.catch((error) => {
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response
+								? error.response.data.message
+								: messages.error.connect_to_server,
+						},
+					}),
+				);
+			});
+	};
+
+	const acceptRequest = () => {
+		http
+			.post("/v1/matching/request/accept", { id: receviedRequestId })
 			.then((response) => {
 				dispatch(setMemberStatus(response.data.data.memberStatus));
 			})
@@ -46,8 +69,10 @@ function MatchingRequestReceivedPage() {
 				http
 					.get("/v1/matching/request/received")
 					.then((response) => {
-						const senderProfileInfo = response.data.data;
-						if (senderProfileInfo.matchingRequestStatus === CONFIRMED) {
+						const { senderProfileInfo, matchingRequestStatus, id } =
+							response.data.data;
+						if (matchingRequestStatus === CONFIRMED) {
+							setReceivedRequestId(id);
 							setProfile(senderProfileInfo);
 						} else {
 							dispatch(setRequestReceivedDialogOpen(true));
@@ -98,10 +123,10 @@ function MatchingRequestReceivedPage() {
 								<Grid item xs={6}>
 									<Button
 										sx={{ width: "45vw" }}
-										onClick={() => {}}
+										onClick={acceptRequest}
 										variant='contained'
 										size='medium'>
-										{"소개받기"}
+										{"수락하기"}
 									</Button>
 								</Grid>
 							</Grid>

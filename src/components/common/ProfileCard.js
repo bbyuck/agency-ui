@@ -24,26 +24,26 @@ function ProfileCard(props) {
 				</div> */}
 
 				<Box>
-					<Grid container spacing={2}>
-						<Grid item xs={5}>
+					<Grid container spacing={1}>
+						<Grid item xs={6}>
 							<div className={"profile-card-info"}>
 								<div className={"profile-card-property-key"}>나이</div>
 								<div>{profile.age}</div>
 							</div>
 						</Grid>
-						<Grid item xs={7}>
+						<Grid item xs={6}>
 							<div className={"profile-card-info"}>
 								<div className={"profile-card-property-key"}>사는 곳</div>
 								<div>{profile.address}</div>
 							</div>
 						</Grid>
-						<Grid item xs={5}>
+						<Grid item xs={6}>
 							<div className={"profile-card-info"}>
 								<div className={"profile-card-property-key"}>키</div>
 								<div>{profile.height}</div>
 							</div>
 						</Grid>
-						<Grid item xs={7}>
+						<Grid item xs={6}>
 							<div className={"profile-card-info"}>
 								<div className={"profile-card-property-key"}>하는 일</div>
 								<div>{profile.job}</div>

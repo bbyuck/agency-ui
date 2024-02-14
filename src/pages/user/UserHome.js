@@ -49,7 +49,7 @@ function UserHome() {
 		return http
 			.get("/v1/matching/request/received")
 			.then((response) => {
-				setReceivedRequest(response.data.data);
+				setReceivedRequest(response.data.data.senderProfileInfo);
 				return true;
 			})
 			.catch((error) => {

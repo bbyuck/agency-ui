@@ -8,11 +8,7 @@ import Slide from "@mui/material/Slide";
 import { Fragment, forwardRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import http from "api";
-import {
-	confirmRequestReceived,
-	setAlert,
-	setRequestReceivedDialogOpen,
-} from "store/slice/status";
+import { setAlert, setRequestReceivedDialogOpen } from "store/slice/status";
 import messages from "messages";
 import { setMemberStatus } from "store/slice/memberInfo";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +20,6 @@ const Transition = forwardRef(function Transition(props, ref) {
 function RequestReceivedAlert() {
 	const { requestReceivedDialogOpen } = useSelector((state) => state.status);
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 
 	const rejectRequest = () => {
 		http
@@ -54,8 +49,6 @@ function RequestReceivedAlert() {
 			.then((response) => {
 				dispatch(setMemberStatus(response.data.data.memberStatus));
 				dispatch(setRequestReceivedDialogOpen(false));
-				// dispatch(confirmRequestReceived());
-				// navigate("/user/matching/request/received", { replace: true });
 			})
 			.catch((error) => {
 				dispatch(

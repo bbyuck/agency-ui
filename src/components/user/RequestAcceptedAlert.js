@@ -1,27 +1,25 @@
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Slide from "@mui/material/Slide";
-import { Fragment, forwardRef, useState } from "react";
+import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	Slide,
+} from "@mui/material";
+import { Fragment, forwardRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import http from "api";
-import {
-	setAlert,
-	setRequestReceivedDialogOpen,
-	setRequestRejected,
-} from "store/slice/status";
-import messages from "messages";
 import { setMemberStatus } from "store/slice/memberInfo";
+import { setAlert, setRequestAccepted } from "store/slice/status";
+import messages from "messages";
 
 const Transition = forwardRef(function Transition(props, ref) {
 	return <Slide direction='down' ref={ref} {...props} />;
 });
 
-function RequestRejectedAlert() {
-	const { requestRejected } = useSelector((state) => state.status);
+function RequestAcceptedAlert() {
+	const { requestAccepted } = useSelector((state) => state.status);
 	const dispatch = useDispatch();
 
 	const confirm = () => {
@@ -30,7 +28,7 @@ function RequestRejectedAlert() {
 			.then((response) => {
 				console.log(response.data.data);
 				dispatch(setMemberStatus(response.data.data.userDto.memberStatus));
-				dispatch(setRequestRejected(false));
+				dispatch(setRequestAccepted(false));
 			})
 			.catch((error) => {
 				dispatch(
@@ -50,17 +48,17 @@ function RequestRejectedAlert() {
 	return (
 		<Fragment>
 			<Dialog
-				open={requestRejected}
+				open={requestAccepted}
 				TransitionComponent={Transition}
 				keepMounted
 				onClose={confirm}
 				aria-describedby='alert-dialog-slide-description'>
-				<DialogTitle>{"매칭이 성사되지 않았어요."}</DialogTitle>
+				<DialogTitle>{"매칭이 성사됐어요!"}</DialogTitle>
 				<DialogContent>
 					<DialogContentText
 						id='alert-dialog-slide-description'
 						sx={{ fontSize: "18px" }}>
-						상대방의 거절로 매칭이 성사되지 않았습니다.
+						상대방의 프로필을 확인하고 매칭을 완료해주세요.
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
@@ -71,4 +69,4 @@ function RequestRejectedAlert() {
 	);
 }
 
-export default RequestRejectedAlert;
+export default RequestAcceptedAlert;

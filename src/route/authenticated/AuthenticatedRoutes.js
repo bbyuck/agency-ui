@@ -16,6 +16,7 @@ import Error from "pages/error/Error";
 import { setMemberCode, setMemberStatus } from "store/slice/memberInfo";
 import {
 	setAlert,
+	setRequestAccepted,
 	setRequestReceivedDialogOpen,
 	setRequestRejected,
 	setRequestSend,
@@ -25,9 +26,11 @@ import { setSendMessage, setSocketConnected } from "store/slice/websocket";
 import RequestReceivedAlert from "components/user/RequestReceivedAlert";
 import RequestRejectedAlert from "components/user/RequestRejectedAlert";
 import {
+	REQUEST_ACCEPTED,
 	REQUEST_RECEIVED,
 	REQUEST_REJECTED,
 } from "constants/clientMessageCode";
+import RequestAcceptedAlert from "components/user/RequestAcceptedAlert";
 // ===============================================
 
 function AuthenticatedRoutes() {
@@ -77,6 +80,10 @@ function AuthenticatedRoutes() {
 			name: "request-rejected-alert",
 			element: <RequestRejectedAlert />,
 		},
+		{
+			name: "request-accepted-alert",
+			element: <RequestAcceptedAlert />,
+		},
 	];
 
 	useEffect(() => {
@@ -110,6 +117,9 @@ function AuthenticatedRoutes() {
 				}
 				if (response.type === REQUEST_REJECTED) {
 					dispatch(setRequestRejected(true));
+				}
+				if (response.type === REQUEST_ACCEPTED) {
+					dispatch(setRequestAccepted(true));
 				}
 			};
 		}

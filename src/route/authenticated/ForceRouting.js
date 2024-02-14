@@ -1,5 +1,7 @@
 import { MATCH_MAKER, TEMP, USER } from "constants/memberCode";
 import {
+	MATCHING,
+	MATCHING_CONFIRMED,
 	MATCHING_WAIT,
 	NEW,
 	PROFILE_MAKING,
@@ -19,14 +21,19 @@ function ForceRouting() {
 			if (memberStatus === PROFILE_MAKING) {
 				navigate("/user/profile/make", { replace: true });
 			} else if (memberStatus === WAIT) {
-				navigate("/user/wait");
+				navigate("/user/wait", { replace: true });
 			} else if (memberStatus === MATCHING_WAIT) {
-				navigate("/user/matching/wait");
+				navigate("/user/matching/wait", { replace: true });
 			} else if (
 				memberStatus === REQUEST_RECEIVED ||
 				memberStatus === REQUEST_CONFIRMED
 			) {
-				navigate("/user/matching/request/received");
+				navigate("/user/matching/request/received", { replace: true });
+			} else if (
+				memberStatus === MATCHING ||
+				memberStatus === MATCHING_CONFIRMED
+			) {
+				navigate("/user/matching", { replace: true });
 			} else {
 				navigate("/user/home", { replace: true });
 			}
