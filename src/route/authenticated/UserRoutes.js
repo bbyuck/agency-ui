@@ -1,6 +1,7 @@
 import { USER } from "constants/memberCode";
 import {
 	MATCHING,
+	MATCHING_ACCEPTED,
 	MATCHING_CONFIRMED,
 	MATCHING_WAIT,
 	NEW,
@@ -13,6 +14,7 @@ import UserHome from "pages/user/UserHome";
 import MakeProfile from "pages/user/makeprofile/MakeProfile";
 import MatchingPage from "pages/user/matching/MatchingPage";
 import MatchingRequestReceivedPage from "pages/user/matching/MatchingRequestReceivedPage";
+import MatchingAcceptedPage from "pages/user/matching/MatchingAcceptedPage";
 import MatchingWaitPage from "pages/user/matching/MatchingWaitPage";
 import { createRef, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -60,6 +62,12 @@ function UserRoutes() {
 			element: <MatchingPage />,
 			nodeRef: createRef(),
 		},
+		{
+			name: "user-matching-success",
+			path: "/user/matching/success",
+			element: <MatchingAcceptedPage />,
+			nodeRef: createRef(),
+		},
 	];
 
 	useEffect(() => {
@@ -84,6 +92,8 @@ function UserRoutes() {
 			navigate("/user/matching/request/received", { replace: true });
 		} else if (memberStatus === MATCHING || memberStatus === MATCHING_CONFIRMED) {
 			navigate("/user/matching", { replace: true });
+		} else if (memberStatus === MATCHING_ACCEPTED) {
+			navigate("/user/matching/success", { replace: true });
 		}
 
 		// else {

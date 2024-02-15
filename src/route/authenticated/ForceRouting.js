@@ -1,6 +1,7 @@
 import { MATCH_MAKER, TEMP, USER } from "constants/memberCode";
 import {
 	MATCHING,
+	MATCHING_ACCEPTED,
 	MATCHING_CONFIRMED,
 	MATCHING_WAIT,
 	NEW,
@@ -34,6 +35,8 @@ function ForceRouting() {
 				memberStatus === MATCHING_CONFIRMED
 			) {
 				navigate("/user/matching", { replace: true });
+			} else if (memberStatus === MATCHING_ACCEPTED) {
+				navigate("/user/matching/success", { replace: true });
 			} else {
 				navigate("/user/home", { replace: true });
 			}
@@ -41,7 +44,7 @@ function ForceRouting() {
 
 		if (memberCode === MATCH_MAKER) {
 			if (memberStatus === WAIT) {
-				navigate("/matchmaker/wait");
+				navigate("/matchmaker/wait", { replace: true });
 			} else {
 				navigate("/matchmaker/home", { replace: true });
 			}
