@@ -15,9 +15,7 @@ export const firebaseConfig = {
 };
 
 const fcm = initializeApp(firebaseConfig);
-
-const analytics = getAnalytics(fcm);
-const messaging = getMessaging();
+const messaging = getMessaging(fcm);
 
 export const requestPermission = () => {
 	Notification.requestPermission().then((permission) => {

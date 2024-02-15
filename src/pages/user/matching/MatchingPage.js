@@ -19,7 +19,7 @@ function MatchingPage() {
 	const [matchingId, setMatchingId] = useState(null);
 
 	const [cancelConfirmOpen, setCancelConfirmOpen] = useState(false);
-	const cancelConfirmContents = `만약, 취소하시면 상대방의 프로필은 앞으로 확인하실 수 없어요.`;
+	const cancelConfirmContents = `만약, 취소하시면 상대의 프로필은 앞으로 확인하실 수 없어요.`;
 
 	const dispatch = useDispatch();
 

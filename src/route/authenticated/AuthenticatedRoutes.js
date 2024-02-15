@@ -16,6 +16,8 @@ import Error from "pages/error/Error";
 import { setMemberCode, setMemberStatus } from "store/slice/memberInfo";
 import {
 	setAlert,
+	setMatchingCancel,
+	setMatchingSuccess,
 	setRequestAccepted,
 	setRequestReceivedDialogOpen,
 	setRequestRejected,
@@ -23,14 +25,19 @@ import {
 } from "store/slice/status";
 import ForceRouting from "./ForceRouting";
 import { setSendMessage, setSocketConnected } from "store/slice/websocket";
-import RequestReceivedAlert from "components/user/RequestReceivedAlert";
+import RequestReceivedConfirm from "components/user/RequestReceivedConfirm";
 import RequestRejectedAlert from "components/user/RequestRejectedAlert";
 import {
+	MATCHING_CANCEL,
+	MATCHING_SUCCESS,
 	REQUEST_ACCEPTED,
 	REQUEST_RECEIVED,
 	REQUEST_REJECTED,
 } from "constants/clientMessageCode";
 import RequestAcceptedAlert from "components/user/RequestAcceptedAlert";
+import messages from "messages";
+import MatchingSuccessAlert from "components/user/MatchingSuccessAlert";
+import MatchingCancelAlert from "components/user/MatchingCancelAlert";
 // ===============================================
 
 function AuthenticatedRoutes() {
@@ -74,7 +81,7 @@ function AuthenticatedRoutes() {
 	const alertDialogs = [
 		{
 			name: "request-received-alert",
-			element: <RequestReceivedAlert />,
+			element: <RequestReceivedConfirm />,
 		},
 		{
 			name: "request-rejected-alert",
@@ -83,6 +90,14 @@ function AuthenticatedRoutes() {
 		{
 			name: "request-accepted-alert",
 			element: <RequestAcceptedAlert />,
+		},
+		{
+			name: "matching-success-alert",
+			element: <MatchingSuccessAlert />,
+		},
+		{
+			name: "matching-cancel-alert",
+			element: <MatchingCancelAlert />,
 		},
 	];
 
@@ -111,15 +126,16 @@ function AuthenticatedRoutes() {
 						credentialToken: credentialToken,
 						sessionId: response.sessionId,
 					});
-				}
-				if (response.type === REQUEST_RECEIVED) {
+				} else if (response.type === REQUEST_RECEIVED.key) {
 					dispatch(setRequestReceivedDialogOpen(true));
-				}
-				if (response.type === REQUEST_REJECTED) {
+				} else if (response.type === REQUEST_REJECTED.key) {
 					dispatch(setRequestRejected(true));
-				}
-				if (response.type === REQUEST_ACCEPTED) {
+				} else if (response.type === REQUEST_ACCEPTED.key) {
 					dispatch(setRequestAccepted(true));
+				} else if (response.type === MATCHING_CANCEL.key) {
+					dispatch(setMatchingCancel(true));
+				} else if (response.type === MATCHING_SUCCESS.key) {
+					dispatch(setMatchingSuccess(true));
 				}
 			};
 		}
@@ -161,7 +177,9 @@ function AuthenticatedRoutes() {
 								alert: {
 									open: true,
 									type: "error",
-									message: error.response.data.message,
+									message: error.response.data.message
+										? error.response.data.message
+										: messages.error.connect_to_server,
 								},
 							}),
 						);

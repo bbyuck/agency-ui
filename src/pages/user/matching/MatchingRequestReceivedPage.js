@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAlert, setRequestReceivedDialogOpen } from "store/slice/status";
 import messages from "messages";
 import HomeHeader from "components/common/header/HomeHeader";
-import RequestReceivedAlert from "components/user/RequestReceivedAlert";
 import { CONFIRMED } from "constants/matchingRequestStatus";
 import { setMemberStatus } from "store/slice/memberInfo";
 import Confirm from "components/common/Confirm";
@@ -146,7 +145,6 @@ function MatchingRequestReceivedPage() {
 					/>
 				</>
 			) : null}
-			<RequestReceivedAlert />
 		</>
 	);
 }

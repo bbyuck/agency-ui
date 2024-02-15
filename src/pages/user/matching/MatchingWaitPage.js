@@ -4,12 +4,10 @@ import { requestPermission } from "config/fcmConfig";
 import { useEffect, useState } from "react";
 import { scrollAble } from "util";
 import { scrollDisable } from "util";
-import { useDispatch } from "react-redux";
 
 function MatchingWaitPage(props) {
 	const title = "잠시만 기다려주세요!";
-	const subtitle = `상대방이 요청을 확인중입니다.`;
-	const dispatch = useDispatch();
+	const subtitle = `상대가 요청을 확인중입니다.`;
 	const [pushSetting, setPushSetting] = useState(false);
 
 	useEffect(() => {

@@ -1,24 +1,10 @@
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Slide from "@mui/material/Slide";
-import { Fragment, forwardRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import http from "api";
-import {
-	setAlert,
-	setRequestReceivedDialogOpen,
-	setRequestRejected,
-} from "store/slice/status";
+import { setAlert, setRequestRejected } from "store/slice/status";
 import messages from "messages";
 import { setMemberStatus } from "store/slice/memberInfo";
-
-const Transition = forwardRef(function Transition(props, ref) {
-	return <Slide direction='down' ref={ref} {...props} />;
-});
+import ClientMessageAlert from "./ClientMessageAlert";
+import { REQUEST_REJECTED } from "constants/clientMessageCode";
 
 function RequestRejectedAlert() {
 	const { requestRejected } = useSelector((state) => state.status);
@@ -48,26 +34,16 @@ function RequestRejectedAlert() {
 	};
 
 	return (
-		<Fragment>
-			<Dialog
-				open={requestRejected}
-				TransitionComponent={Transition}
-				keepMounted
-				onClose={confirm}
-				aria-describedby='alert-dialog-slide-description'>
-				<DialogTitle>{"매칭이 되지 않았어요."}</DialogTitle>
-				<DialogContent>
-					<DialogContentText
-						id='alert-dialog-slide-description'
-						sx={{ fontSize: "18px" }}>
-						상대방의 거절로 매칭이 되지 않았습니다.
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={confirm}>확인</Button>
-				</DialogActions>
-			</Dialog>
-		</Fragment>
+		<>
+			<ClientMessageAlert
+				dialogOpen={requestRejected}
+				confirmButtonHandler={confirm}
+				confirmButtonLabel={REQUEST_REJECTED.confirm}
+				title={REQUEST_REJECTED.title}
+				subtitle={REQUEST_REJECTED.subtitle}
+				body={REQUEST_REJECTED.body}
+			/>
+		</>
 	);
 }
 

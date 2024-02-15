@@ -20,6 +20,8 @@ const initialState = {
 		searched: false,
 	},
 	requestAccepted: false,
+	matchingCancel: false,
+	matchingSuccess: false,
 };
 
 const statusSlice = createSlice({
@@ -65,6 +67,12 @@ const statusSlice = createSlice({
 		setRequestAccepted(state = initialState, action) {
 			state.requestAccepted = action.payload;
 		},
+		setMatchingCancel(state = initialState, action) {
+			state.matchingCancel = action.payload;
+		},
+		setMatchingSuccess(state = initialState, action) {
+			state.matchingSuccess = action.payload;
+		},
 	},
 });
 
@@ -78,5 +86,7 @@ export const {
 	setRequestRejected,
 	setRequestSend,
 	setRequestAccepted,
+	setMatchingCancel,
+	setMatchingSuccess,
 } = statusSlice.actions;
 export default statusSlice.reducer;
