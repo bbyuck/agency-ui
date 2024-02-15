@@ -53,7 +53,7 @@ function RequestAcceptedAlert() {
 				keepMounted
 				onClose={confirm}
 				aria-describedby='alert-dialog-slide-description'>
-				<DialogTitle>{"매칭이 성사됐어요!"}</DialogTitle>
+				<DialogTitle>{"매칭이 되었어요!"}</DialogTitle>
 				<DialogContent>
 					<DialogContentText
 						id='alert-dialog-slide-description'

@@ -10,6 +10,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from "react-responsive-carousel";
 import HomeHeader from "components/common/header/HomeHeader";
 import { Box, Button, Grid } from "@mui/material";
+import Confirm from "components/common/Confirm";
 
 function MatchingPage() {
 	const { memberStatus } = useSelector((state) => state.memberInfo);
@@ -17,7 +18,56 @@ function MatchingPage() {
 	const [matchingStatus, setMatchingStatus] = useState(null);
 	const [matchingId, setMatchingId] = useState(null);
 
+	const [cancelConfirmOpen, setCancelConfirmOpen] = useState(false);
+	const cancelConfirmContents = `만약, 취소하시면 상대방의 프로필은 앞으로 확인하실 수 없어요.`;
+
 	const dispatch = useDispatch();
+
+	const cancelMatching = async () => {
+		http
+			.post("/v1/matching/cancel", {
+				id: matchingId,
+			})
+			.then((response) => {
+				dispatch(setMemberStatus(response.data.data.memberStatus));
+			})
+			.catch((error) => {
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response
+								? error.response.data.message
+								: messages.error.connect_to_server,
+						},
+					}),
+				);
+			});
+	};
+
+	const successMatching = () => {
+		http
+			.post("/v1/matching/complete", {
+				id: matchingId,
+			})
+			.then((response) => {
+				dispatch(setMemberStatus(response.data.data.memberStatus));
+			})
+			.catch((error) => {
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response
+								? error.response.data.message
+								: messages.error.connect_to_server,
+						},
+					}),
+				);
+			});
+	};
 
 	useEffect(() => {
 		if (memberStatus === MATCHING) {
@@ -128,7 +178,9 @@ function MatchingPage() {
 								<Grid item xs={6}>
 									<Button
 										sx={{ width: "45vw" }}
-										onClick={() => {}}
+										onClick={() => {
+											setCancelConfirmOpen(true);
+										}}
 										color={"grey"}
 										variant='contained'
 										size='medium'>
@@ -138,7 +190,7 @@ function MatchingPage() {
 								<Grid item xs={6}>
 									<Button
 										sx={{ width: "45vw" }}
-										onClick={null}
+										onClick={successMatching}
 										variant='contained'
 										size='medium'>
 										{"소개받기"}
@@ -147,6 +199,18 @@ function MatchingPage() {
 							</Grid>
 						</Box>
 					</div>
+					<Confirm
+						title={"매칭을 취소할까요?"}
+						contents={cancelConfirmContents}
+						confirm={async () => {
+							await cancelMatching();
+							setCancelConfirmOpen(false);
+						}}
+						confirmOpen={cancelConfirmOpen}
+						closeConfirmDialog={() => {
+							setCancelConfirmOpen(false);
+						}}
+					/>
 				</>
 			) : null}
 		</>

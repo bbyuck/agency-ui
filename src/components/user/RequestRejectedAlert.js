@@ -55,12 +55,12 @@ function RequestRejectedAlert() {
 				keepMounted
 				onClose={confirm}
 				aria-describedby='alert-dialog-slide-description'>
-				<DialogTitle>{"매칭이 성사되지 않았어요."}</DialogTitle>
+				<DialogTitle>{"매칭이 되지 않았어요."}</DialogTitle>
 				<DialogContent>
 					<DialogContentText
 						id='alert-dialog-slide-description'
 						sx={{ fontSize: "18px" }}>
-						상대방의 거절로 매칭이 성사되지 않았습니다.
+						상대방의 거절로 매칭이 되지 않았습니다.
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>

@@ -85,7 +85,7 @@ export const getBirthYearDistance = () => {
 
 export const getHeightDistance = () => {
 	const heights = [];
-	const shortest = 140;
+	const shortest = 150;
 	const tallest = 200;
 
 	heights.push({ label: "선택", value: "none" });
