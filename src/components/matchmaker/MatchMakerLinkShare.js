@@ -62,6 +62,36 @@ function MatchMakerLinkShare() {
 			key: "icon-COPY",
 			value: `${process.env.PUBLIC_URL}/assets/icons/copy_icon_60.png`,
 			label: "링크 복사",
+			handler: () => {
+				getLink()
+					.then((response) => {
+						window.navigator.clipboard.writeText(response.data.data).then(() => {
+							// 복사가 완료되면 호출된다.
+							dispatch(
+								setAlert({
+									alert: {
+										open: true,
+										type: "success",
+										message: "링크가 복사되었습니다.",
+									},
+								}),
+							);
+						});
+					})
+					.catch((error) => {
+						dispatch(
+							setAlert({
+								alert: {
+									open: true,
+									type: "error",
+									message: error.response
+										? error.response.data.message
+										: messages.error.connect_to_server,
+								},
+							}),
+						);
+					});
+			},
 		},
 		{
 			key: "icon-DUMMY2",
