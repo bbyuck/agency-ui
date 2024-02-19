@@ -2,18 +2,20 @@ import ProfileListCard from "components/common/ProfileListCard";
 import { useEffect, useState } from "react";
 import "style/common/Main.css";
 import http from "api";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "store/slice/status";
 import messages from "messages";
 import { Box, Button, IconButton } from "@mui/material";
 import PromptText from "components/common/PromptText";
 import SearchIcon from "@mui/icons-material/YoutubeSearchedForOutlined";
 
-function Main(props) {
+function UserMain(props) {
 	const { reset, select } = props;
 	const [profiles, setProfiles] = useState([]);
 	const [searching, setSearching] = useState(false);
 	const [init, setInit] = useState(true);
+
+	const { matchMakerFriends } = useSelector((state) => state.userInfo);
 
 	const dispatch = useDispatch();
 
@@ -54,14 +56,20 @@ function Main(props) {
 	useEffect(() => {
 		reset();
 
-		search();
+		// search();
+		setInit(false);
 
 		// document.querySelector(".App").scrollTo(0, 0);
 	}, [dispatch]);
 
 	return (
 		<>
-			{init ? null : profiles.length === 0 ? (
+			{init ? null : matchMakerFriends.length === 0 ? (
+				<PromptText
+					title={"연결된 주선자가 없습니다."}
+					subtitle={"소개해주시는 분에게 링크를 공유받아 연결해주세요."}
+				/>
+			) : profiles.length === 0 ? (
 				<Box>
 					<PromptText
 						title={"매칭 가능한 사람이 없어요."}
@@ -101,4 +109,4 @@ function Main(props) {
 	);
 }
 
-export default Main;
+export default UserMain;

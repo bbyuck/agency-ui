@@ -19,11 +19,12 @@ import MatchingWaitPage from "pages/user/matching/MatchingWaitPage";
 import { createRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import UserForceRouting from "./UserForceRouting";
 
 function UserRoutes() {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const { memberCode, memberStatus } = useSelector((state) => state.memberInfo);
+	const { userStatus } = useSelector((state) => state.memberInfo);
 	const routes = [
 		{
 			name: "make-profile",
@@ -41,7 +42,7 @@ function UserRoutes() {
 		{
 			name: "user-join-wait",
 			path: "/user/wait",
-			element: <WaitPage approver={"주선자"} />,
+			element: <WaitPage approver={"관리자"} memberCode={USER} />,
 			nodeRef: createRef(),
 		},
 		{
@@ -71,49 +72,50 @@ function UserRoutes() {
 	];
 
 	useEffect(() => {
-		if (memberCode !== USER) {
-			navigate("/error", { replace: true });
-		} else if (memberStatus === NEW && location.pathname !== "/user/wait") {
+		if (userStatus === NEW && location.pathname !== "/user/wait") {
 			navigate("/user/wait", { replace: true });
 		} else if (
-			memberStatus === PROFILE_MAKING &&
+			userStatus === PROFILE_MAKING &&
 			location.pathname !== "/user/profile/make"
 		) {
 			navigate("/user/profile/make", { replace: true });
 		} else if (
-			memberStatus === MATCHING_WAIT &&
+			userStatus === MATCHING_WAIT &&
 			location.pathname !== "/user/matching/wait"
 		) {
 			navigate("/user/matching/wait", { replace: true });
 		} else if (
-			(memberStatus === REQUEST_RECEIVED || memberStatus === REQUEST_CONFIRMED) &&
+			(userStatus === REQUEST_RECEIVED || userStatus === REQUEST_CONFIRMED) &&
 			location.pathname !== "/user/matching/request/received"
 		) {
 			navigate("/user/matching/request/received", { replace: true });
-		} else if (memberStatus === MATCHING || memberStatus === MATCHING_CONFIRMED) {
+		} else if (userStatus === MATCHING || userStatus === MATCHING_CONFIRMED) {
 			navigate("/user/matching", { replace: true });
-		} else if (memberStatus === MATCHING_ACCEPTED) {
+		} else if (userStatus === MATCHING_ACCEPTED) {
 			navigate("/user/matching/success", { replace: true });
 		}
 
 		// else {
 		// 	navigate("/user/home", { replace: true });
 		// }
-	}, [memberCode, memberStatus, navigate, location.pathname]);
+	}, [userStatus, navigate, location.pathname]);
 
 	return (
-		<Routes>
-			{routes.map((route) => {
-				return (
-					<Route
-						key={location.pathname}
-						path={route.path}
-						name={route.name}
-						element={route.element}
-					/>
-				);
-			})}
-		</Routes>
+		<>
+			<Routes>
+				{routes.map((route) => {
+					return (
+						<Route
+							key={location.pathname}
+							path={route.path}
+							name={route.name}
+							element={route.element}
+						/>
+					);
+				})}
+			</Routes>
+			<UserForceRouting />
+		</>
 	);
 }
 

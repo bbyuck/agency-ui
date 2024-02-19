@@ -1,6 +1,5 @@
-import { Badge, Box, Grid, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
-import MailIcon from "@mui/icons-material/Mail";
 import { useEffect, useState } from "react";
 
 function HomeHeader(props) {
@@ -27,19 +26,7 @@ function HomeHeader(props) {
 					style={{ position: "relative", fontWeight: 800, fontSize: "25px" }}>
 					{center}
 				</span>
-				<span className='header-right'>
-					{process === 0 ? (
-						<IconButton
-							aria-label='profile'
-							color='primary'
-							size='large'
-							onClick={rightButton}>
-							<Badge variant='dot' invisible={!received} color={"dot"}>
-								<MailIcon />
-							</Badge>
-						</IconButton>
-					) : null}
-				</span>
+				<span className='header-right'></span>
 			</div>
 		</div>
 	);

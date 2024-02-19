@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import http from "api";
-import { setMemberStatus } from "store/slice/memberInfo";
+import { setUserStatus } from "store/slice/memberInfo";
 import { setAlert, setMatchingSuccess } from "store/slice/status";
 import messages from "messages";
 import ClientMessageAlert from "./ClientMessageAlert";
@@ -15,7 +15,7 @@ function MatchingSuccessAlert() {
 			.get("/v1/user/info/my")
 			.then((response) => {
 				console.log(response.data.data);
-				dispatch(setMemberStatus(response.data.data.userDto.memberStatus));
+				dispatch(setUserStatus(response.data.data.userDto.userStatus));
 				dispatch(setMatchingSuccess(false));
 			})
 			.catch((error) => {

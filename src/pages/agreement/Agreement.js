@@ -12,43 +12,38 @@ import { DISCLAIMER, PERSONAL_INFORMATION_USE } from "constants/codes";
 import SelectMultiLayout from "components/layout/SelectMultiLayout";
 import AgreementForm from "components/agreement/AgreementForm";
 import { useNavigate } from "react-router-dom";
-import { setMemberCode, setMemberStatus } from "store/slice/memberInfo";
+import { setMatchMakerStatus, setUserStatus } from "store/slice/memberInfo";
 import { scrollDisable } from "util";
 import { scrollAble } from "util";
 
 function Agreement() {
 	const dispatch = useDispatch();
 	const { oauthId, oauthCode } = useSelector((state) => state.auth);
-	const { memberCode, memberStatus } = useSelector((state) => state.memberInfo);
+	const { userStatus, matchMakerStatus } = useSelector(
+		(state) => state.memberInfo,
+	);
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		scrollDisable();
-		if (memberCode !== TEMP || memberStatus !== TEMP) {
+		if (userStatus !== TEMP || matchMakerStatus !== TEMP) {
 			navigate("/", { replace: true });
 			return;
 		}
 
-		const params = {
-			oauthCode: oauthCode,
-			oauthId: oauthId,
-		};
-
-		http
-			.get("/v1/agreement/check", { params })
-			.then((response) => {
-				if (response.data.data) {
-					navigate("/join", { replace: true });
-				}
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		// http
+		// 	.get("/v1/agreement/check")
+		// 	.then((response) => {
+		// 		console.log(response);
+		// 	})
+		// 	.catch((error) => {
+		// 		console.log(error);
+		// 	});
 
 		return () => {
 			scrollAble();
 		};
-	}, [memberCode, memberStatus, navigate, oauthCode, oauthId, dispatch]);
+	}, [navigate, userStatus, matchMakerStatus, dispatch]);
 
 	const [personalInformationUseAgree, setPersonalInformationUseAgree] =
 		useState(false);
@@ -138,9 +133,8 @@ function Agreement() {
 				],
 			})
 			.then((response) => {
-				dispatch(authenticate(response.data.data));
-				dispatch(setMemberStatus(response.data.data.memberStatus));
-				dispatch(setMemberCode(response.data.data.memberCode));
+				dispatch(setUserStatus(response.data.data.userStatus));
+				dispatch(setMatchMakerStatus(response.data.data.matchMakerStatus));
 			})
 			.catch((error) => {
 				console.log(error);

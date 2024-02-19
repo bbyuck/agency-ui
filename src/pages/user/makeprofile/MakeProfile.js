@@ -27,9 +27,10 @@ import http from "api";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setAlert } from "store/slice/status";
-import { setMemberCode, setMemberStatus } from "store/slice/memberInfo";
 import { scrollDisable } from "util";
 import { scrollAble } from "util";
+import { setUserStatus } from "store/slice/memberInfo";
+import MakeProfileIndex from "./MakeProfileIndex";
 
 let loadedData = {
 	address: null,
@@ -99,7 +100,7 @@ function MakeProfile() {
 			.get("/v1/user/profile/my")
 			.then((response) => {
 				loadedData = response.data.data;
-
+				console.log(loadedData.gender);
 				setAddress(loadedData.address);
 				setAge(loadedData.age);
 				setJob(loadedData.job);
@@ -121,6 +122,10 @@ function MakeProfile() {
 	}, []);
 
 	const bindData = [
+		{
+			key: "dummy",
+			value: "",
+		},
 		{
 			key: "gender",
 			value: gender,
@@ -171,7 +176,9 @@ function MakeProfile() {
 	const next = async () => {
 		if (
 			bindData[process].key !== "photoInfo" &&
-			bindData[process].value !== loadedData[bindData[process].key]
+			String(bindData[process].value) !==
+				String(loadedData[bindData[process].key]) &&
+			process > 0
 		) {
 			await saveProfile();
 		}
@@ -181,7 +188,9 @@ function MakeProfile() {
 	const prev = async () => {
 		if (
 			bindData[process].key !== "photoInfo" &&
-			bindData[process].value !== loadedData[bindData[process].key]
+			String(bindData[process].value) !==
+				String(loadedData[bindData[process].key]) &&
+			process > 0
 		) {
 			await saveProfile();
 		}
@@ -282,8 +291,7 @@ function MakeProfile() {
 					}),
 				);
 				// userInfoSet
-				dispatch(setMemberCode(response.data.data.memberCode));
-				dispatch(setMemberStatus(response.data.data.memberStatus));
+				dispatch(setUserStatus(response.data.data.userStatus));
 				// navigate
 				navigate("/user/wait", { replace: true });
 			})
@@ -301,6 +309,12 @@ function MakeProfile() {
 	};
 
 	const Pages = [
+		<MakeProfileIndex
+			key={"make-profile-index"}
+			next={next}
+			data={"dummy"}
+			buttonInfo={{ type: NEXT }}
+		/>,
 		<GenderSelect
 			key={"gender-select"}
 			next={next}

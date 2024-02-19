@@ -8,7 +8,9 @@ import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 function JoinRoutes() {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const { memberCode, memberStatus } = useSelector((state) => state.memberInfo);
+	const { userStatus, matchMakerStatus } = useSelector(
+		(state) => state.memberInfo,
+	);
 
 	const routes = [
 		{
@@ -17,19 +19,19 @@ function JoinRoutes() {
 			element: <Agreement />,
 			nodeRef: createRef(),
 		},
-		{
-			name: "join",
-			path: "/join",
-			element: <Join />,
-			nodeRef: createRef(),
-		},
+		// {
+		// 	name: "join",
+		// 	path: "/join",
+		// 	element: <Join />,
+		// 	nodeRef: createRef(),
+		// },
 	];
 
 	useEffect(() => {
-		if (memberCode !== TEMP || memberStatus !== TEMP) {
+		if (userStatus !== TEMP || matchMakerStatus !== TEMP) {
 			navigate("/error", { replace: true });
 		}
-	}, [memberCode, memberStatus, navigate]);
+	}, [matchMakerStatus, userStatus, navigate]);
 
 	return (
 		<Routes>

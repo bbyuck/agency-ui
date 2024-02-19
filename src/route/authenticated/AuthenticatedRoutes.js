@@ -4,16 +4,12 @@ import { Route, Routes, useLocation } from "react-router-dom";
 
 import { createRef, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { MATCH_MAKER, TEMP, USER } from "constants/memberCode";
 
 import http from "api";
 
 import Auth from "pages/common/Auth";
-import MatchMakerRoutes from "./MatchMakerRoutes";
-import UserRoutes from "./UserRoutes";
 import JoinRoutes from "./JoinRoutes";
 import Error from "pages/error/Error";
-import { setMemberCode, setMemberStatus } from "store/slice/memberInfo";
 import {
 	setAlert,
 	setMatchingCancel,
@@ -21,9 +17,7 @@ import {
 	setRequestAccepted,
 	setRequestReceivedDialogOpen,
 	setRequestRejected,
-	setRequestSend,
 } from "store/slice/status";
-import ForceRouting from "./ForceRouting";
 import { setSendMessage, setSocketConnected } from "store/slice/websocket";
 import RequestReceivedConfirm from "components/user/RequestReceivedConfirm";
 import RequestRejectedAlert from "components/user/RequestRejectedAlert";
@@ -38,13 +32,18 @@ import RequestAcceptedAlert from "components/user/RequestAcceptedAlert";
 import messages from "messages";
 import MatchingSuccessAlert from "components/user/MatchingSuccessAlert";
 import MatchingCancelAlert from "components/user/MatchingCancelAlert";
+import HomeTabs from "components/common/MainTabs";
+import { setMatchMakerStatus, setUserStatus } from "store/slice/memberInfo";
+import { TEMP } from "constants/memberStatus";
+import CommonForceRouting from "./CommonForceRouting";
 // ===============================================
 
 function AuthenticatedRoutes() {
 	const location = useLocation();
 	const { credentialToken } = useSelector((state) => state.auth);
-	const { memberCode, memberStatus } = useSelector((state) => state.memberInfo);
-	const { requestSend } = useSelector((state) => state.status);
+	const { userStatus, matchMakerStatus } = useSelector(
+		(state) => state.memberInfo,
+	);
 	const dispatch = useDispatch();
 	/**
 	 * WebSocket 관련 변수
@@ -54,14 +53,11 @@ function AuthenticatedRoutes() {
 		(state) => state.websocket,
 	);
 
-	/**
-	 * member type에 따른 라우팅
-	 */
 	const defaultRoutes = [
 		{
 			name: "default",
 			path: "/*",
-			element: <ForceRouting />,
+			element: <CommonForceRouting />,
 			nodeRef: createRef(),
 		},
 		{
@@ -161,57 +157,53 @@ function AuthenticatedRoutes() {
 	}, [socketConnected]);
 
 	useEffect(() => {
-		if (memberStatus === null || !requestSend.searched) {
-			if (memberCode === USER) {
-				http
-					.get("/v1/user/info/my")
-					.then((response) => {
-						dispatch(setMemberCode(response.data.data.userDto.memberCode));
-						dispatch(setMemberStatus(response.data.data.userDto.memberStatus));
-						dispatch(setRequestSend(response.data.data.matchingRequestRemainDto));
-					})
-					.catch((error) => {
-						console.log(error);
-						dispatch(
-							setAlert({
-								alert: {
-									open: true,
-									type: "error",
-									message: error.response.data.message
-										? error.response.data.message
-										: messages.error.connect_to_server,
-								},
-							}),
-						);
-					});
-			} else if (memberCode === MATCH_MAKER) {
-				http
-					.get("/v1/matchmaker/info/my")
-					.then((response) => {
-						dispatch(setMemberCode(response.data.data.matchMakerDto.memberCode));
-						dispatch(setMemberStatus(response.data.data.matchMakerDto.memberStatus));
-					})
-					.catch((error) => {
-						console.log(error);
-						dispatch(
-							setAlert({
-								alert: {
-									open: true,
-									type: "error",
-									message: error.response.data.message,
-								},
-							}),
-						);
-					});
-			}
-		}
-	}, [memberCode, memberStatus, dispatch]);
+		http
+			.get("/v1/user/info/my")
+			.then((response) => {
+				dispatch(setUserStatus(response.data.data.userDto.userStatus));
+			})
+			.catch((error) => {
+				console.log(error);
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response.data.message
+								? error.response.data.message
+								: messages.error.connect_to_server,
+						},
+					}),
+				);
+			});
+		http
+			.get("/v1/matchmaker/info/my")
+			.then((response) => {
+				dispatch(
+					setMatchMakerStatus(response.data.data.matchMakerDto.matchMakerStatus),
+				);
+			})
+			.catch((error) => {
+				console.log(error);
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response.data.message,
+						},
+					}),
+				);
+			});
+	}, [userStatus, matchMakerStatus, dispatch]);
+
+	const essentialNotAgreed = () => {
+		return userStatus === TEMP && matchMakerStatus === TEMP;
+	};
 
 	return (
 		<>
-			{memberCode === MATCH_MAKER ? <MatchMakerRoutes /> : null}
-			{memberCode === USER ? <UserRoutes /> : null}
-			{memberCode === TEMP ? <JoinRoutes /> : null}
+			{essentialNotAgreed() ? <JoinRoutes /> : <HomeTabs />}
 			<Routes location={location}>
 				{defaultRoutes.map((route) => {
 					return (

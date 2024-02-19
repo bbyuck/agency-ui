@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import http from "api";
-import { setMemberStatus } from "store/slice/memberInfo";
 import { setAlert, setRequestAccepted } from "store/slice/status";
 import messages from "messages";
 import ClientMessageAlert from "./ClientMessageAlert";
 import { REQUEST_ACCEPTED } from "constants/clientMessageCode";
+import { setUserStatus } from "store/slice/memberInfo";
 
 function RequestAcceptedAlert() {
 	const { requestAccepted } = useSelector((state) => state.status);
@@ -15,7 +15,7 @@ function RequestAcceptedAlert() {
 			.get("/v1/user/info/my")
 			.then((response) => {
 				console.log(response.data.data);
-				dispatch(setMemberStatus(response.data.data.userDto.memberStatus));
+				dispatch(setUserStatus(response.data.data.userDto.userStatus));
 				dispatch(setRequestAccepted(false));
 			})
 			.catch((error) => {

@@ -4,16 +4,16 @@ import { useDispatch, useSelector } from "react-redux";
 import http from "api";
 import { setAlert } from "store/slice/status";
 import messages from "messages";
-import { setMemberStatus } from "store/slice/memberInfo";
 import ProfileCard from "components/common/ProfileCard";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import HomeHeader from "components/common/header/HomeHeader";
 import { Box, Button, Grid } from "@mui/material";
 import Confirm from "components/common/Confirm";
+import { setUserStatus } from "store/slice/memberInfo";
 
 function MatchingPage() {
-	const { memberStatus } = useSelector((state) => state.memberInfo);
+	const { userStatus } = useSelector((state) => state.memberInfo);
 	const [profile, setProfile] = useState(null);
 	const [matchingStatus, setMatchingStatus] = useState(null);
 	const [matchingId, setMatchingId] = useState(null);
@@ -29,7 +29,7 @@ function MatchingPage() {
 				id: matchingId,
 			})
 			.then((response) => {
-				dispatch(setMemberStatus(response.data.data.memberStatus));
+				dispatch(setUserStatus(response.data.data.userStatus));
 			})
 			.catch((error) => {
 				dispatch(
@@ -52,7 +52,7 @@ function MatchingPage() {
 				id: matchingId,
 			})
 			.then((response) => {
-				dispatch(setMemberStatus(response.data.data.memberStatus));
+				dispatch(setUserStatus(response.data.data.userStatus));
 			})
 			.catch((error) => {
 				dispatch(
@@ -70,11 +70,11 @@ function MatchingPage() {
 	};
 
 	useEffect(() => {
-		if (memberStatus === MATCHING) {
+		if (userStatus === MATCHING) {
 			http
 				.post("/v1/matching/confirm")
 				.then((response) => {
-					dispatch(setMemberStatus(response.data.data.memberStatus));
+					dispatch(setUserStatus(response.data.data.userStatus));
 				})
 				.catch((error) => {
 					dispatch(
@@ -89,7 +89,7 @@ function MatchingPage() {
 						}),
 					);
 				});
-		} else if (memberStatus === MATCHING_CONFIRMED) {
+		} else if (userStatus === MATCHING_CONFIRMED) {
 			http
 				.get("/v1/matching")
 				.then((response) => {
@@ -111,11 +111,11 @@ function MatchingPage() {
 					);
 				});
 		}
-	}, [memberStatus, dispatch]);
+	}, [userStatus, dispatch]);
 
 	return (
 		<>
-			{memberStatus === MATCHING_CONFIRMED && profile ? (
+			{userStatus === MATCHING_CONFIRMED && profile ? (
 				<>
 					<HomeHeader center={"매칭중"} />
 					<div

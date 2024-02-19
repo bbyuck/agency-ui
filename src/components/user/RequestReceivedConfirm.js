@@ -1,8 +1,9 @@
+import { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import http from "api";
 import { setAlert, setRequestReceivedDialogOpen } from "store/slice/status";
 import messages from "messages";
-import { setMemberStatus } from "store/slice/memberInfo";
+import { setUserStatus } from "store/slice/memberInfo";
 import ClientMessageConfirm from "./ClientMessageConfirm";
 import { REQUEST_RECEIVED } from "constants/clientMessageCode";
 
@@ -14,7 +15,7 @@ function RequestReceivedConfirm() {
 		http
 			.post("/v1/matching/request/reject")
 			.then((response) => {
-				dispatch(setMemberStatus(response.data.data.memberStatus));
+				dispatch(setUserStatus(response.data.data.userStatus));
 				dispatch(setRequestReceivedDialogOpen(false));
 			})
 			.catch((error) => {
@@ -36,7 +37,7 @@ function RequestReceivedConfirm() {
 		http
 			.post("/v1/matching/request/confirm")
 			.then((response) => {
-				dispatch(setMemberStatus(response.data.data.memberStatus));
+				dispatch(setUserStatus(response.data.data.userStatus));
 				dispatch(setRequestReceivedDialogOpen(false));
 			})
 			.catch((error) => {

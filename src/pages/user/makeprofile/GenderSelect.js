@@ -2,8 +2,6 @@ import SelectOneLayout from "components/layout/SelectOneLayout";
 import { man, woman } from "constants/gender";
 
 function GenderSelect(props) {
-	const { next, select, data } = props;
-
 	const selectList = [
 		{
 			label: "남자",

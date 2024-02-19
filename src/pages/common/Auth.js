@@ -5,6 +5,7 @@ import { authenticate } from "store/slice/auth";
 import http from "api";
 import { saveAuthInfoOnClient } from "util";
 import { forceHome } from "util";
+import { setMatchMakerStatus, setUserStatus } from "store/slice/memberInfo";
 
 function Auth() {
 	const [searchParams] = useSearchParams();
@@ -21,8 +22,9 @@ function Auth() {
 				})
 				.then((response) => {
 					dispatch(authenticate(response.data.data));
+					dispatch(setUserStatus(response.data.data.userStatus));
+					dispatch(setMatchMakerStatus(response.data.data.matchMakerStatus));
 					window.Kakao.Auth.setAccessToken(response.data.data.getAccessToken);
-					forceHome();
 				})
 				.catch(() => {
 					forceHome();

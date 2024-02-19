@@ -7,14 +7,14 @@ import { setAlert, setRequestReceivedDialogOpen } from "store/slice/status";
 import messages from "messages";
 import HomeHeader from "components/common/header/HomeHeader";
 import { CONFIRMED } from "constants/matchingRequestStatus";
-import { setMemberStatus } from "store/slice/memberInfo";
 import Confirm from "components/common/Confirm";
 import { REQUEST_CONFIRMED, REQUEST_RECEIVED } from "constants/memberStatus";
+import { setUserStatus } from "store/slice/memberInfo";
 
 function MatchingRequestReceivedPage() {
 	const [profile, setProfile] = useState(null);
 	const dispatch = useDispatch();
-	const { memberStatus } = useSelector((state) => state.memberInfo);
+	const { userStatus } = useSelector((state) => state.memberInfo);
 
 	const [rejectConfirmOpen, setRejectConfrimOpen] = useState(false);
 	const [receviedRequestId, setReceivedRequestId] = useState(null);
@@ -24,7 +24,7 @@ function MatchingRequestReceivedPage() {
 		http
 			.post("/v1/matching/request/reject")
 			.then((response) => {
-				dispatch(setMemberStatus(response.data.data.memberStatus));
+				dispatch(setUserStatus(response.data.data.userStatus));
 			})
 			.catch((error) => {
 				dispatch(
@@ -45,7 +45,7 @@ function MatchingRequestReceivedPage() {
 		http
 			.post("/v1/matching/request/accept", { id: receviedRequestId })
 			.then((response) => {
-				dispatch(setMemberStatus(response.data.data.memberStatus));
+				dispatch(setUserStatus(response.data.data.userStatus));
 			})
 			.catch((error) => {
 				dispatch(
@@ -63,7 +63,7 @@ function MatchingRequestReceivedPage() {
 	};
 
 	useEffect(() => {
-		if (memberStatus === REQUEST_CONFIRMED) {
+		if (userStatus === REQUEST_CONFIRMED) {
 			const searchReceivedRequest = () => {
 				http
 					.get("/v1/matching/request/received")
@@ -93,10 +93,10 @@ function MatchingRequestReceivedPage() {
 			};
 
 			searchReceivedRequest();
-		} else if (memberStatus === REQUEST_RECEIVED) {
+		} else if (userStatus === REQUEST_RECEIVED) {
 			dispatch(setRequestReceivedDialogOpen(true));
 		}
-	}, [memberStatus, dispatch]);
+	}, [userStatus, dispatch]);
 
 	return (
 		<>

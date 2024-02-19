@@ -3,7 +3,7 @@ import NextButton from "components/layout/NextButton";
 import { GENERAL, NEXT } from "constants/buttonType";
 
 function LayoutButton(props) {
-	const { buttonInfo, data, next, selected } = props;
+	const { buttonInfo, data, next } = props;
 
 	return (
 		<>
@@ -18,7 +18,7 @@ function LayoutButton(props) {
 						variant='contained'
 						disabled={!data}
 						size='medium'
-						style={{ width: "90vw" }}>
+						style={{ width: "90vw", bottom: "3vh" }}>
 						{buttonInfo.label}
 					</Button>
 				</div>

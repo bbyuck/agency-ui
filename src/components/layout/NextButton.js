@@ -9,7 +9,7 @@ function NextButton(props) {
 					<Fab
 						sx={{
 							position: "absolute",
-							bottom: "5vh",
+							bottom: "15vh",
 							right: "5vw",
 						}}
 						aria-label={"next"}

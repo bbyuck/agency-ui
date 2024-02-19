@@ -1,21 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-	memberCode: localStorage.getItem("memberCode"),
-	memberStatus: sessionStorage.getItem("memberStatus"),
+	userStatus: sessionStorage.getItem("userStatus"),
+	matchMakerStatus: sessionStorage.getItem("matchMakerStatus"),
 };
 
 const memberInfoSlice = createSlice({
 	name: "memberInfo",
 	initialState,
 	reducers: {
-		setMemberCode(state = initialState, action) {
-			state.memberCode = action.payload;
-			localStorage.setItem("memberCode", state.memberCode);
+		setUserStatus(state = initialState, action) {
+			state.userStatus = action.payload;
+			sessionStorage.setItem("userStatus", state.userStatus);
 		},
-		setMemberStatus(state = initialState, action) {
-			state.memberStatus = action.payload;
-			sessionStorage.setItem("memberStatus", state.memberStatus);
+		setMatchMakerStatus(state = initialState, action) {
+			state.matchMakerStatus = action.payload;
+			sessionStorage.setItem("matchMakerStatus", state.matchMakerStatus);
 		},
 	},
 });
@@ -24,5 +24,5 @@ const memberInfoSlice = createSlice({
 // dispatch(add(1)) 이런식으로 사용 -> dispatch(counterSlice.actions.add(1)) 형태
 
 // reducer 는 configureStore에 등록을 위해 export default 합니다.
-export const { setMemberCode, setMemberStatus } = memberInfoSlice.actions;
+export const { setUserStatus, setMatchMakerStatus } = memberInfoSlice.actions;
 export default memberInfoSlice.reducer;

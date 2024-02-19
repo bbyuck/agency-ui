@@ -12,7 +12,6 @@ import messages from "messages";
 import { GENERAL, NEXT } from "constants/buttonType";
 import { authenticate, resetAuthentication } from "store/slice/auth";
 import KakaoFriendSelect from "./KakaoFriendSelect";
-import { setMemberStatus, setMemberCode } from "store/slice/memberInfo";
 import { scrollDisable } from "util";
 import { scrollAble } from "util";
 
@@ -104,8 +103,6 @@ function Join() {
 			})
 			.then((response) => {
 				dispatch(authenticate(response.data.data));
-				dispatch(setMemberCode(response.data.data.memberCode));
-				dispatch(setMemberStatus(response.data.data.memberStatus));
 				dispatch(
 					setAlert({
 						alert: {
@@ -143,8 +140,6 @@ function Join() {
 			.post("/v1/user/join", param)
 			.then((response) => {
 				dispatch(authenticate(response.data.data));
-				dispatch(setMemberCode(response.data.data.memberCode));
-				dispatch(setMemberStatus(response.data.data.memberStatus));
 				dispatch(
 					setAlert({
 						alert: {

@@ -5,7 +5,6 @@ import LayoutButton from "./LayoutButton";
 
 function SelectOneLayout(props) {
 	const { title, subtitle, list, next, select, data, buttonInfo } = props;
-
 	return (
 		<>
 			<div className='layout-container'>

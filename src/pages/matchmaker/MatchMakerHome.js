@@ -1,48 +1,27 @@
+import { Button } from "@mui/material";
 import http from "api";
-import { useDispatch, useSelector } from "react-redux";
-import { setAlert } from "store/slice/status";
+import PromptText from "components/common/PromptText";
+import MatchMakerLinkShare from "components/matchmaker/MatchMakerLinkShare";
 
 function MatchMakerHome() {
-	const auth = useSelector((state) => state.auth);
-	const dispatch = useDispatch();
-
-	const copyLink = () => {
-		const params = { credentialToken: auth.credentialToken };
-		http
-			.get("/v1/matchmaker/link", { params })
-			.then((response) => {
-				window.navigator.clipboard.writeText(response.data.data).then(() => {
-					dispatch(
-						setAlert({
-							alert: {
-								open: true,
-								type: "success",
-								message: "클립보드에 복사 되었습니다.",
-							},
-						}),
-					);
-				});
-			})
-			.catch((error) => {
-				console.log(error);
-				dispatch(
-					setAlert({
-						alert: {
-							open: true,
-							type: "error",
-							message: error.data.data.message,
-						},
-					}),
-				);
-			});
-	};
-
 	return (
 		<>
-			<div className='layout-copy-button-area'>
-				소개받을 사람에게 전달할 링크 복사
-				<button onClick={copyLink}>복사</button>
-			</div>
+			<PromptText
+				title={"초대 링크 공유"}
+				subtitle={"소개 받으시는 분에게 초대링크를 보내주세요."}
+			/>
+			<Button
+				sx={{
+					position: "absolute",
+					left: "0",
+					padding: 0,
+					top: "25vh",
+					width: "100vw",
+				}}
+				onClick={async () => {}}>
+				링크 공유
+			</Button>
+			<MatchMakerLinkShare />
 		</>
 	);
 }

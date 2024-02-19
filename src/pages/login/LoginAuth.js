@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { authenticate } from "store/slice/auth";
 import http from "api";
-import { saveAuthInfoOnClient } from "util";
 import { forceHome } from "util";
-import { setMemberCode, setMemberStatus } from "store/slice/memberInfo";
+import { setMatchMakerStatus, setUserStatus } from "store/slice/memberInfo";
 
 function LoginAuth() {
 	const [searchParams] = useSearchParams();
@@ -22,11 +21,10 @@ function LoginAuth() {
 				})
 				.then((response) => {
 					dispatch(authenticate(response.data.data));
-					dispatch(setMemberCode(response.data.data.memberCode));
-					dispatch(setMemberStatus(response.data.data.memberStatus));
+					dispatch(setUserStatus(response.data.data.userStatus));
+					dispatch(setMatchMakerStatus(response.data.data.matchMakerStatus));
 
 					window.Kakao.Auth.setAccessToken(response.data.data.getAccessToken, false);
-					forceHome();
 				})
 				.catch(() => {
 					forceHome();

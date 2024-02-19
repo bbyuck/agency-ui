@@ -4,19 +4,13 @@ import "style/common/Common.css";
 
 import AuthenticatedRoutes from "route/authenticated/AuthenticatedRoutes";
 import UnAuthenticatedRoutes from "route/unauthenticated/UnAuthenticatedRoutes";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Loading from "components/common/Loading";
 import ToastAlert from "components/common/ToastAlert";
 import { useSearchParams } from "react-router-dom";
-import { TEMP } from "constants/memberCode";
 
 function App() {
-	const dispatch = useDispatch();
-
-	const { credentialToken, oauthId, oauthCode } = useSelector(
-		(state) => state.auth,
-	);
-	const { memberCode } = useSelector((state) => state.memberInfo);
+	const { credentialToken } = useSelector((state) => state.auth);
 	const [searchParams] = useSearchParams();
 	const matchmakerCode = searchParams.get("matchmaker");
 	if (matchmakerCode) {
@@ -44,10 +38,7 @@ function App() {
 	}, []);
 
 	const isAuthenticated = () => {
-		return (
-			credentialToken || // 일반적인 로그인 상황
-			(memberCode === TEMP && oauthId && oauthCode) // 동의서 처리
-		);
+		return credentialToken && true;
 	};
 
 	return (

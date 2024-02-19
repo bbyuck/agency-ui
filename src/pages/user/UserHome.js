@@ -1,4 +1,4 @@
-import Main from "pages/user/main/Main";
+import UserMain from "pages/user/main/UserMain";
 import HomeHeader from "components/common/header/HomeHeader";
 import ProfileDetail from "pages/user/main/ProfileDetail";
 import { cloneElement, useState } from "react";
@@ -21,53 +21,13 @@ function UserHome() {
 		setProcess(process - 1);
 	};
 
-	const to = (processId) => {
-		setProcess(processId);
-	};
-
 	const select = (profile) => {
 		setSelectedProfileId(profile);
 		next();
 	};
 
-	const [receivedListOpen, setReceivedListOpen] = useState(false);
-	const [receivedRequest, setReceivedRequest] = useState(null);
-
-	const openReceivedList = () => {
-		searchReceivedRequest()
-			.then((success) => {
-				if (success) {
-					setReceivedListOpen(true);
-				}
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
-
-	const searchReceivedRequest = () => {
-		return http
-			.get("/v1/matching/request/received")
-			.then((response) => {
-				setReceivedRequest(response.data.data.senderProfileInfo);
-				return true;
-			})
-			.catch((error) => {
-				dispatch(
-					setAlert({
-						alert: {
-							open: true,
-							type: "error",
-							message: error.response.data.message,
-						},
-					}),
-				);
-				return false;
-			});
-	};
-
 	const Pages = [
-		<Main
+		<UserMain
 			key={"user-main"}
 			select={select}
 			reset={() => {
@@ -82,11 +42,7 @@ function UserHome() {
 
 	return (
 		<>
-			<HomeHeader
-				process={process}
-				leftButton={prev}
-				rightButton={openReceivedList}
-			/>
+			<HomeHeader process={process} leftButton={prev} />
 			<TransitionGroup
 				className={"transition-wrapper"}
 				childFactory={(child) => {
@@ -98,12 +54,6 @@ function UserHome() {
 					<div className='page-contents'>{Pages[process]}</div>
 				</CSSTransition>
 			</TransitionGroup>
-			<ReceivedRequest
-				open={receivedListOpen}
-				handleClose={() => {
-					setReceivedListOpen(false);
-				}}
-			/>
 		</>
 	);
 }
