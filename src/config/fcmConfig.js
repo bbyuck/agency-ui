@@ -13,59 +13,61 @@ const firebaseConfig = {
 	measurementId: process.env.REACT_APP_FCM_MEASUREMENT_ID,
 };
 
-const fcm = initializeApp(firebaseConfig);
-const messaging = getMessaging(fcm);
-
 export const requestPermission = () => {
-	if (navigator.userAgent.toLowerCase().indexOf("kakaotalk") !== -1) {
+	try {
+		const fcm = initializeApp(firebaseConfig);
+		const messaging = getMessaging(fcm);
+		const getFcmToken = () => {
+			return getToken(messaging, {
+				vapidKey: process.env.REACT_APP_FCM_VAPID_KEY,
+			})
+				.then((currentToken) => {
+					if (currentToken) {
+						// Send the token to your server and update the UI if necessary
+						// ...
+						const memberCode = localStorage.getItem("memberCode");
+
+						if (!memberCode) {
+							alert("멤버코드가 없습니다.");
+							return false;
+						}
+
+						if (memberCode === "USER") {
+							http
+								.post("/v1/user/fcm/token", {
+									value: currentToken,
+								})
+								.then((response) => {
+									localStorage.setItem("fcmToken", response.data.data.value);
+								})
+								.catch((error) => {
+									console.log(error);
+								});
+						} else if (memberCode === "MATCH_MAKER") {
+						}
+					} else {
+						// Show permission request UI
+						console.log(
+							"No registration token available. Request permission to generate one.",
+						);
+						// ...
+					}
+				})
+				.catch((err) => {
+					console.log("An error occurred while retrieving token. ", err);
+					// ...
+				});
+		};
+
 		Notification.requestPermission().then((permission) => {
 			if (permission === "granted") {
 				getFcmToken();
 			}
 		});
+	} catch (e) {
+		// inappbrowser
+		alert("인앱 브라우저에서는 PUSH 알림을 사용할 수 없습니다.");
 	}
-};
-
-const getFcmToken = () => {
-	return getToken(messaging, {
-		vapidKey: process.env.REACT_APP_FCM_VAPID_KEY,
-	})
-		.then((currentToken) => {
-			if (currentToken) {
-				// Send the token to your server and update the UI if necessary
-				// ...
-				const memberCode = localStorage.getItem("memberCode");
-
-				if (!memberCode) {
-					alert("멤버코드가 없습니다.");
-					return false;
-				}
-
-				if (memberCode === "USER") {
-					http
-						.post("/v1/user/fcm/token", {
-							value: currentToken,
-						})
-						.then((response) => {
-							localStorage.setItem("fcmToken", response.data.data.value);
-						})
-						.catch((error) => {
-							console.log(error);
-						});
-				} else if (memberCode === "MATCH_MAKER") {
-				}
-			} else {
-				// Show permission request UI
-				console.log(
-					"No registration token available. Request permission to generate one.",
-				);
-				// ...
-			}
-		})
-		.catch((err) => {
-			console.log("An error occurred while retrieving token. ", err);
-			// ...
-		});
 };
 
 /**
