@@ -7,6 +7,7 @@ import UnAuthenticatedRoutes from "route/unauthenticated/UnAuthenticatedRoutes";
 import { useSelector } from "react-redux";
 import Loading from "components/common/Loading";
 import ToastAlert from "components/common/ToastAlert";
+import { inappDeny } from "util";
 
 function App() {
 	const { credentialToken } = useSelector((state) => state.auth);
@@ -15,6 +16,8 @@ function App() {
 	 * 로그인 시 rerender
 	 */
 	useEffect(() => {
+		inappDeny();
+
 		/**
 		 * 1. Kakao SDK
 		 */
