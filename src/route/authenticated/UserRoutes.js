@@ -20,6 +20,7 @@ import { createRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import UserForceRouting from "./UserForceRouting";
+import BeAFriend from "pages/user/util/BeAFriend";
 
 function UserRoutes() {
 	const location = useLocation();
@@ -67,6 +68,12 @@ function UserRoutes() {
 			name: "user-matching-success",
 			path: "/user/matching/success",
 			element: <MatchingAcceptedPage />,
+			nodeRef: createRef(),
+		},
+		{
+			name: "be-a-friend",
+			path: "/user/friend",
+			element: <BeAFriend />,
 			nodeRef: createRef(),
 		},
 	];
