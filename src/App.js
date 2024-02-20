@@ -50,10 +50,15 @@ function App() {
 						title={"접근 불가"}
 						subtitle={"호환성 문제로 인앱브라우저에서는 접근하실 수 없습니다."}
 					/>
-				) : isAuthenticated() ? (
-					<AuthenticatedRoutes />
 				) : (
-					<UnAuthenticatedRoutes />
+					<>
+						<Loading />
+						<ToastAlert />
+						{/* <AppHeader /> */}
+						{/* TODO => 로그인 유지 기능 추가 필요 / 일단 무제한 로그인 */}
+						{isAuthenticated() ? <AuthenticatedRoutes /> : <UnAuthenticatedRoutes />}
+						<A2HS />
+					</>
 				)}
 			</>
 		);
@@ -61,12 +66,7 @@ function App() {
 
 	return (
 		<div className='App'>
-			<Loading />
-			<ToastAlert />
-			{/* <AppHeader /> */}
-			{/* TODO => 로그인 유지 기능 추가 필요 / 일단 무제한 로그인 */}
 			<AppRender />
-			<A2HS />
 		</div>
 	);
 }
