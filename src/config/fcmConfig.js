@@ -1,10 +1,9 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import http from "api";
 
 // Initialize Firebase
-export const firebaseConfig = {
+const firebaseConfig = {
 	apiKey: process.env.REACT_APP_FCM_API_KEY,
 	authDomain: process.env.REACT_APP_FCM_AUTH_DOMAIN,
 	projectId: process.env.REACT_APP_FCM_PROJECT_ID,
@@ -18,11 +17,13 @@ const fcm = initializeApp(firebaseConfig);
 const messaging = getMessaging(fcm);
 
 export const requestPermission = () => {
-	Notification.requestPermission().then((permission) => {
-		if (permission === "granted") {
-			getFcmToken();
-		}
-	});
+	if (navigator.userAgent.toLowerCase().indexOf("kakaotalk") !== -1) {
+		Notification.requestPermission().then((permission) => {
+			if (permission === "granted") {
+				getFcmToken();
+			}
+		});
+	}
 };
 
 const getFcmToken = () => {
