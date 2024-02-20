@@ -45,10 +45,18 @@ function App() {
 	const AppRender = () => {
 		return (
 			<>
-				isAuthenticated() ? (
-				<AuthenticatedRoutes />
+				{isKakaoInAppBrowser() ? (
+					<PromptText
+						title={"외부 브라우저에서 실행해주세요."}
+						subtitle={
+							"브라우저 호환성 문제로 인앱 브라우저에서는 접근하실 수 없습니다."
+						}
+					/>
+				) : isAuthenticated() ? (
+					<AuthenticatedRoutes />
 				) : (
-				<UnAuthenticatedRoutes />)
+					<UnAuthenticatedRoutes />
+				)}
 			</>
 		);
 	};
@@ -59,16 +67,7 @@ function App() {
 			<ToastAlert />
 			{/* <AppHeader /> */}
 			{/* TODO => 로그인 유지 기능 추가 필요 / 일단 무제한 로그인 */}
-			{isKakaoInAppBrowser() ? (
-				<PromptText
-					title={"외부 브라우저에서 실행해주세요."}
-					subtitle={
-						"브라우저 호환성 문제로 인앱 브라우저에서는 접근하실 수 없습니다."
-					}
-				/>
-			) : (
-				<AppRender />
-			)}
+			<AppRender />
 			<A2HS />
 		</div>
 	);
