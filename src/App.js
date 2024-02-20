@@ -47,10 +47,8 @@ function App() {
 			<>
 				{isKakaoInAppBrowser() ? (
 					<PromptText
-						title={"외부 브라우저에서 실행해주세요."}
-						subtitle={
-							"브라우저 호환성 문제로 인앱 브라우저에서는 접근하실 수 없습니다."
-						}
+						title={"접근 불가"}
+						subtitle={"호환성 문제로 인앱브라우저에서는 접근하실 수 없습니다."}
 					/>
 				) : isAuthenticated() ? (
 					<AuthenticatedRoutes />

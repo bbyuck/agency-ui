@@ -1,5 +1,17 @@
+import { useEffect } from "react";
+import { scrollAble } from "util";
+import { scrollDisable } from "util";
+
 function PromptText(props) {
 	const { title, subtitle } = props;
+
+	useEffect(() => {
+		scrollDisable();
+
+		return () => {
+			scrollAble();
+		};
+	}, []);
 
 	return (
 		<div className='layout-container'>
