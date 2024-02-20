@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 function BeAFriend() {
-	const { userStatus } = useSelector((state) => state.userStatus);
+	const { userStatus } = useSelector((state) => state.userInfo);
 	const [searchParams] = useSearchParams();
 	const matchmakerCode = searchParams.get("matchmaker");
 	const navigate = useNavigate();
