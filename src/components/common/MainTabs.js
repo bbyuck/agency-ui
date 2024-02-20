@@ -63,7 +63,7 @@ function HomeTabs() {
 					left: 0,
 					right: 0,
 					width: "100vw",
-					zIndex: 99,
+					zIndex: 0,
 				}}
 				elvation={3}>
 				<Tabs
