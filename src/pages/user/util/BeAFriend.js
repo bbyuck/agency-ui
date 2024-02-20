@@ -13,28 +13,28 @@ const inappDeny = () => {
 		}
 	};
 	inappdeny_exec_vanillajs(() => {
-		/* Do things after DOM has fully loaded */
-		function copytoclipboard(val) {
-			var t = document.createElement("textarea");
-			document.body.appendChild(t);
-			t.value = val;
-			t.select();
-			document.execCommand("copy");
-			document.body.removeChild(t);
-		}
-		function inappbrowserout() {
-			copytoclipboard(window.location.href);
-			alert(
-				'URL주소가 복사되었습니다.\n\nSafari가 열리면 주소창을 길게 터치한 뒤, "붙여놓기 및 이동"를 누르면 정상적으로 이용하실 수 있습니다.',
-			);
-			window.location.href = "x-web-search://?";
-		}
-
 		var useragt = navigator.userAgent.toLowerCase();
 		var target_url = window.location.href;
 
-		if (useragt.indexOf("kakaotalk") !== -1) {
-			if (useragt.indexOf("iphone") !== -1) {
+		if (useragt.match(/kakaotalk/i)) {
+			//카카오톡 외부브라우저로 호출
+			window.location.href =
+				"kakaotalk://web/openExternal?url=" + encodeURIComponent(target_url);
+		} else if (useragt.match(/line/i)) {
+			//라인 외부브라우저로 호출
+			if (target_url.indexOf("?") !== -1) {
+				window.location.href = target_url + "&openExternalBrowser=1";
+			} else {
+				window.location.href = target_url + "?openExternalBrowser=1";
+			}
+		} else if (
+			useragt.match(
+				/inapp|naver|snapchat|wirtschaftswoche|thunderbird|instagram|everytimeapp|whatsApp|electron|wadiz|aliapp|zumapp|iphone(.*)whale|android(.*)whale|kakaostory|band|twitter|DaumApps|DaumDevice\/mobile|FB_IAB|FB4A|FBAN|FBIOS|FBSS|trill|SamsungBrowser\/[^1]/i,
+			)
+		) {
+			//그외 다른 인앱들
+			if (useragt.match(/iphone|ipad|ipod/i)) {
+				//아이폰은 강제로 사파리를 실행할 수 없다 ㅠㅠ
 				//모바일대응뷰포트강제설정
 				var mobile = document.createElement("meta");
 				mobile.name = "viewport";
