@@ -9,9 +9,13 @@ import Loading from "components/common/Loading";
 import ToastAlert from "components/common/ToastAlert";
 import { inappDeny } from "util";
 import A2HS from "components/common/A2HS";
+import PromptText from "components/common/PromptText";
 
 function App() {
 	const { credentialToken } = useSelector((state) => state.auth);
+	const isKakaoInAppBrowser = () => {
+		return window.navigator.userAgent.toLowerCase().indexOf("kakao") !== -1;
+	};
 
 	/**
 	 * 로그인 시 rerender
@@ -38,13 +42,33 @@ function App() {
 		return credentialToken && true;
 	};
 
+	const AppRender = () => {
+		return (
+			<>
+				isAuthenticated() ? (
+				<AuthenticatedRoutes />
+				) : (
+				<UnAuthenticatedRoutes />)
+			</>
+		);
+	};
+
 	return (
 		<div className='App'>
 			<Loading />
 			<ToastAlert />
 			{/* <AppHeader /> */}
 			{/* TODO => 로그인 유지 기능 추가 필요 / 일단 무제한 로그인 */}
-			{isAuthenticated() ? <AuthenticatedRoutes /> : <UnAuthenticatedRoutes />}
+			{isKakaoInAppBrowser() ? (
+				<PromptText
+					title={"외부 브라우저에서 실행해주세요."}
+					subtitle={
+						"브라우저 호환성 문제로 인앱 브라우저에서는 접근하실 수 없습니다."
+					}
+				/>
+			) : (
+				<AppRender />
+			)}
 			<A2HS />
 		</div>
 	);
