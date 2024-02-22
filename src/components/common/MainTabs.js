@@ -45,7 +45,11 @@ function HomeTabs() {
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
-		navigate("/home", { replace: true });
+		if (newValue === 0) {
+			navigate("/user/home", { replace: true });
+		} else if (newValue === 1) {
+			navigate("/matchmaker/home", { replace: true });
+		}
 	};
 
 	return (
