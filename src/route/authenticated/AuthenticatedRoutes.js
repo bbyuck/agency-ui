@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import http from "api";
 
 import Auth from "pages/common/Auth";
-import JoinRoutes from "./JoinRoutes";
 import Error from "pages/error/Error";
 import {
 	setAlert,
