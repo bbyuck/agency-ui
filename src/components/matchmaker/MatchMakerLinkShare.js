@@ -1,9 +1,10 @@
-import { Button, Card, Dialog, Grid, IconButton } from "@mui/material";
+import { Card, Dialog, Grid, IconButton } from "@mui/material";
 import { Fragment, useState } from "react";
 import http from "api";
 import { useDispatch } from "react-redux";
 import { setAlert } from "store/slice/status";
 import messages from "messages";
+import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 
 function MatchMakerLinkShare() {
 	const [open, setOpen] = useState(false);
@@ -20,6 +21,33 @@ function MatchMakerLinkShare() {
 		return http.get("/v1/matchmaker/link");
 	};
 
+	const shareCodeThroughKakaoTalk = () => {
+		getLink()
+			.then((response) => {
+				window.Kakao.Share.sendDefault({
+					objectType: "text",
+					text: "연애조작단에서 초대가 도착했어요!",
+					link: {
+						webUrl: response.data.data,
+						mobileWebUrl: response.data.data,
+					},
+				});
+			})
+			.catch((error) => {
+				dispatch(
+					setAlert({
+						alert: {
+							open: true,
+							type: "error",
+							message: error.response
+								? error.response.data.message
+								: messages.error.connect_to_server,
+						},
+					}),
+				);
+			});
+	};
+
 	const shareIconButtons = [
 		{
 			key: "icon-DUMMY1",
@@ -30,33 +58,7 @@ function MatchMakerLinkShare() {
 			key: "icon-KAKAOTALK",
 			value: `${process.env.PUBLIC_URL}/assets/images/kakaotalk_sharing_btn_medium.png`,
 			label: "카카오톡",
-			handler: () => {
-				getLink()
-					.then((response) => {
-						debugger;
-						window.Kakao.Share.sendDefault({
-							objectType: "text",
-							text: "연애조작단에서 초대가 도착했어요!",
-							link: {
-								webUrl: response.data.data,
-								mobileWebUrl: response.data.data,
-							},
-						});
-					})
-					.catch((error) => {
-						dispatch(
-							setAlert({
-								alert: {
-									open: true,
-									type: "error",
-									message: error.response
-										? error.response.data.message
-										: messages.error.connect_to_server,
-								},
-							}),
-						);
-					});
-			},
+			handler: shareCodeThroughKakaoTalk,
 		},
 		{
 			key: "icon-COPY",
@@ -102,24 +104,16 @@ function MatchMakerLinkShare() {
 
 	return (
 		<>
-			<Button
-				sx={{
-					position: "absolute",
-					left: "0",
-					padding: 0,
-					top: "25vh",
-					width: "100vw",
-				}}
-				onClick={openDialog}>
-				링크 공유
-			</Button>
-			<Fragment>
+			<IconButton color={"primary"} onClick={shareCodeThroughKakaoTalk}>
+				<SendOutlinedIcon />
+			</IconButton>
+			{/* <Fragment>
 				<Dialog
 					open={open}
 					onClose={closeDialog}
 					aria-labelledby='responsive-dialog-title'
 					fullWidth>
-					<Card sx={{ height: "110px" }}>
+					<Card sx={{ height: "150px" }}>
 						<Grid container spacing={4}>
 							{shareIconButtons.map((shareIconButton) => {
 								return (
@@ -141,7 +135,7 @@ function MatchMakerLinkShare() {
 						</Grid>
 					</Card>
 				</Dialog>
-			</Fragment>
+			</Fragment> */}
 		</>
 	);
 }

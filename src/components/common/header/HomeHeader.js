@@ -26,7 +26,7 @@ function HomeHeader(props) {
 					style={{ position: "relative", fontWeight: 800, fontSize: "25px" }}>
 					{center}
 				</span>
-				<span className='header-right'></span>
+				<span className='header-right'>{rightButton}</span>
 			</div>
 		</div>
 	);

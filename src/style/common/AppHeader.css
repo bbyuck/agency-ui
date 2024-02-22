@@ -1,7 +1,7 @@
 .container-header {
 	height: 10vh;
 	width: 100vw;
-	position: absolute;
+	position: sticky;
 	z-index: 99;
 }
 
