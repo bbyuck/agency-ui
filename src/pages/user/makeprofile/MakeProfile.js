@@ -30,7 +30,6 @@ import { setAlert } from "store/slice/status";
 import { scrollDisable } from "util";
 import { scrollAble } from "util";
 import { setUserStatus } from "store/slice/memberInfo";
-import MakeProfileIndex from "./MakeProfileIndex";
 
 let loadedData = {
 	address: null,
@@ -123,10 +122,6 @@ function MakeProfile() {
 
 	const bindData = [
 		{
-			key: "dummy",
-			value: "",
-		},
-		{
 			key: "gender",
 			value: gender,
 		},
@@ -182,6 +177,7 @@ function MakeProfile() {
 		) {
 			await saveProfile();
 		}
+
 		setProcess(process + 1);
 		setIsNext(true);
 	};
@@ -194,6 +190,7 @@ function MakeProfile() {
 		) {
 			await saveProfile();
 		}
+
 		setProcess(process - 1);
 		setIsNext(false);
 	};
@@ -309,12 +306,6 @@ function MakeProfile() {
 	};
 
 	const Pages = [
-		<MakeProfileIndex
-			key={"make-profile-index"}
-			next={next}
-			data={"dummy"}
-			buttonInfo={{ type: NEXT }}
-		/>,
 		<GenderSelect
 			key={"gender-select"}
 			next={next}
