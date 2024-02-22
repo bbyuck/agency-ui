@@ -87,6 +87,11 @@ function UserRoutes() {
 	];
 
 	useEffect(() => {
+		const matchMakerCode = sessionStorage.getItem("mc");
+		if (matchMakerCode) {
+			navigate("/user/friend");
+		}
+
 		if (
 			userStatus === PROFILE_MAKING &&
 			location.pathname !== "/user/profile/make"

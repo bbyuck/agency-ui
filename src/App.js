@@ -10,9 +10,13 @@ import ToastAlert from "components/common/ToastAlert";
 import { inappDeny } from "util";
 import A2HS from "components/common/A2HS";
 import PromptText from "components/common/PromptText";
+import { useSearchParams } from "react-router-dom";
 
 function App() {
 	const { credentialToken } = useSelector((state) => state.auth);
+	const [searchParams] = useSearchParams();
+	const matchMakerCode = searchParams.get("matchmaker");
+
 	const isKakaoInAppBrowser = () => {
 		return window.navigator.userAgent.toLowerCase().indexOf("kakao") !== -1;
 	};
@@ -28,6 +32,10 @@ function App() {
 		if (!window.Kakao.isInitialized()) {
 			// JavaScript key를 인자로 주고 SDK 초기화
 			window.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY);
+		}
+
+		if (matchMakerCode) {
+			sessionStorage.setItem("mc", matchMakerCode);
 		}
 
 		return () => {

@@ -4,6 +4,7 @@ import ProfileDetail from "pages/user/main/ProfileDetail";
 import { cloneElement, useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useDispatch } from "react-redux";
+import { setAlert } from "store/slice/status";
 
 function UserHome() {
 	const [process, setProcess] = useState(0);

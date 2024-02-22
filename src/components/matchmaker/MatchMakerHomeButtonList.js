@@ -6,6 +6,7 @@ import http from "api";
 import { useDispatch } from "react-redux";
 import { setAlert } from "store/slice/status";
 import messages from "messages";
+import { useNavigate } from "react-router-dom";
 
 const Item = styled(Paper)(({ theme }) => ({
 	...theme.typography.body2,
@@ -21,6 +22,7 @@ function MatchMakerHomeButtonList() {
 	const [elevation, setElevation] = useState(6);
 
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const getLink = () => {
 		return http.get("/v1/matchmaker/link");
@@ -53,11 +55,19 @@ function MatchMakerHomeButtonList() {
 	};
 
 	const findUserList = () => {
-		alert("유저 목록 조회 페이지로 이동");
+		navigate("/matchmaker/user");
 	};
 
 	const findUserMatchingList = () => {
-		alert("유저 매칭 목록 조회 페이지로 이동");
+		dispatch(
+			setAlert({
+				alert: {
+					open: true,
+					type: "warning",
+					message: "서비스 준비중입니다.",
+				},
+			}),
+		);
 	};
 
 	const buttons = [
@@ -86,7 +96,7 @@ function MatchMakerHomeButtonList() {
 	];
 
 	return (
-		<>
+		<div style={{ position: "relative", top: "15vh" }}>
 			<Grid container spacing={4}>
 				<Grid item xs={12}>
 					<ThemeProvider theme={theme}>
@@ -126,7 +136,7 @@ function MatchMakerHomeButtonList() {
 					</ThemeProvider>
 				</Grid>
 			</Grid>
-		</>
+		</div>
 	);
 }
 
