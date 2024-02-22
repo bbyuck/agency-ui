@@ -36,6 +36,7 @@ import HomeTabs from "components/common/MainTabs";
 import { setMatchMakerStatus, setUserStatus } from "store/slice/memberInfo";
 import { TEMP } from "constants/memberStatus";
 import CommonForceRouting from "./CommonForceRouting";
+import Agreement from "pages/agreement/Agreement";
 // ===============================================
 
 function AuthenticatedRoutes() {
@@ -70,6 +71,12 @@ function AuthenticatedRoutes() {
 			name: "error",
 			path: "/error",
 			element: <Error />,
+			nodeRef: createRef(),
+		},
+		{
+			name: "agreement",
+			path: "/agreement",
+			element: <Agreement />,
 			nodeRef: createRef(),
 		},
 	];
@@ -203,7 +210,7 @@ function AuthenticatedRoutes() {
 
 	return (
 		<>
-			{essentialNotAgreed() ? <JoinRoutes /> : <HomeTabs />}
+			{essentialNotAgreed() ? null : <HomeTabs />}
 			<Routes location={location}>
 				{defaultRoutes.map((route) => {
 					return (
