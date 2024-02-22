@@ -3,10 +3,7 @@ import HomeHeader from "components/common/header/HomeHeader";
 import ProfileDetail from "pages/user/main/ProfileDetail";
 import { cloneElement, useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import ReceivedRequest from "components/common/ReceivedRequest";
-import http from "api";
 import { useDispatch } from "react-redux";
-import { setAlert } from "store/slice/status";
 
 function UserHome() {
 	const [process, setProcess] = useState(0);

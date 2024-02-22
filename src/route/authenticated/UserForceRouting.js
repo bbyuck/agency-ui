@@ -36,6 +36,8 @@ function UserForceRouting() {
 			navigate("/user/matching", { replace: true });
 		} else if (userStatus === MATCHING_ACCEPTED) {
 			navigate("/user/matching/success", { replace: true });
+		} else if (userStatus === NEW) {
+			navigate("/user/new", { replace: true });
 		} else if (userStatus === ACTIVE) {
 			navigate("/user/home", { replace: true });
 		}

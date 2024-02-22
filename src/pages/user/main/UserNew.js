@@ -1,20 +1,19 @@
 import { Button } from "@mui/material";
 import PromptText from "components/common/PromptText";
 import http from "api";
-import messages from "messages";
-import { setAlert } from "store/slice/status";
 import { useDispatch } from "react-redux";
-import { setMatchMakerStatus } from "store/slice/memberInfo";
+import { setUserStatus } from "store/slice/memberInfo";
+import { setAlert } from "store/slice/status";
+import messages from "messages";
 
-function MatchMakerJoin(props) {
-	const { approver } = props;
-	const title = `소개시켜주실 분이 있나요?`;
-	const subtitle = `주선자는 첫 등록시 ${approver}의 승인이 필요해요.`;
+function UserNew() {
 	const dispatch = useDispatch();
-
 	return (
 		<>
-			<PromptText title={title} subtitle={subtitle} />
+			<PromptText
+				title={"만나서 반가워요!"}
+				subtitle={"소개를 받기 위해서는 프로필을 작성해야 합니다."}
+			/>
 			<Button
 				sx={{
 					position: "absolute",
@@ -25,9 +24,9 @@ function MatchMakerJoin(props) {
 				}}
 				onClick={async () => {
 					http
-						.post("/v1/matchmaker")
+						.post("/v1/user")
 						.then((response) => {
-							dispatch(setMatchMakerStatus(response.data.data.matchMakerStatus));
+							dispatch(setUserStatus(response.data.data.userStatus));
 						})
 						.catch((error) => {
 							dispatch(
@@ -43,10 +42,10 @@ function MatchMakerJoin(props) {
 							);
 						});
 				}}>
-				승인 요청
+				프로필 작성
 			</Button>
 		</>
 	);
 }
 
-export default MatchMakerJoin;
+export default UserNew;

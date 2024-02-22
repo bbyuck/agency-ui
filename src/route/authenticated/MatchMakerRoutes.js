@@ -5,7 +5,7 @@ import { createRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import MatchMakerForceRouting from "./MatchMakerForceRouting";
-import MatchMakerJoin from "pages/matchmaker/MatchMakerJoin";
+import MatchMakerNew from "pages/matchmaker/MatchMakerNew";
 import { MATCH_MAKER } from "constants/memberCode";
 
 function MatchMakerRoutes() {
@@ -23,7 +23,7 @@ function MatchMakerRoutes() {
 		{
 			name: "match-maker-join",
 			path: "/matchmaker/join",
-			element: <MatchMakerJoin approver={"관리자"} />,
+			element: <MatchMakerNew approver={"관리자"} />,
 			nodeRef: createRef(),
 		},
 		{

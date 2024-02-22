@@ -8,6 +8,7 @@ import {
 	PROFILE_MAKING,
 	REQUEST_CONFIRMED,
 	REQUEST_RECEIVED,
+	WAIT,
 } from "constants/memberStatus";
 import WaitPage from "pages/common/WaitPage";
 import UserHome from "pages/user/UserHome";
@@ -21,6 +22,7 @@ import { useSelector } from "react-redux";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import UserForceRouting from "./UserForceRouting";
 import BeAFriend from "pages/user/util/BeAFriend";
+import UserNew from "pages/user/main/UserNew";
 
 function UserRoutes() {
 	const location = useLocation();
@@ -76,16 +78,22 @@ function UserRoutes() {
 			element: <BeAFriend />,
 			nodeRef: createRef(),
 		},
+		{
+			name: "user-new",
+			path: "/user/new",
+			element: <UserNew />,
+			nodeRef: createRef(),
+		},
 	];
 
 	useEffect(() => {
-		if (userStatus === NEW && location.pathname !== "/user/wait") {
-			navigate("/user/wait", { replace: true });
-		} else if (
+		if (
 			userStatus === PROFILE_MAKING &&
 			location.pathname !== "/user/profile/make"
 		) {
 			navigate("/user/profile/make", { replace: true });
+		} else if (userStatus === WAIT && location.pathname !== "/user/wait") {
+			navigate("/user/wait", { replace: true });
 		} else if (
 			userStatus === MATCHING_WAIT &&
 			location.pathname !== "/user/matching/wait"
@@ -96,10 +104,15 @@ function UserRoutes() {
 			location.pathname !== "/user/matching/request/received"
 		) {
 			navigate("/user/matching/request/received", { replace: true });
-		} else if (userStatus === MATCHING || userStatus === MATCHING_CONFIRMED) {
+		} else if (
+			(userStatus === MATCHING || userStatus === MATCHING_CONFIRMED) &&
+			location.pathname !== "/user/matching"
+		) {
 			navigate("/user/matching", { replace: true });
 		} else if (userStatus === MATCHING_ACCEPTED) {
 			navigate("/user/matching/success", { replace: true });
+		} else if (userStatus === NEW && location.pathname !== "/user/new") {
+			navigate("/user/new", { replace: true });
 		}
 
 		// else {
