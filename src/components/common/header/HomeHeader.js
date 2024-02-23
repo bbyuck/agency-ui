@@ -1,22 +1,22 @@
 import { IconButton } from "@mui/material";
 import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { subLev } from "store/slice/page";
 
 function HomeHeader(props) {
-	const { center, leftButton, process, rightButton } = props;
-	const [received, setReceived] = useState(false);
-	useEffect(() => {
-		setTimeout(() => {
-			setReceived(true);
-		}, 3000);
-	});
+	const { center, rightButton } = props;
+	const dispatch = useDispatch();
+	const { lev } = useSelector((state) => state.page);
 
 	return (
 		<div className='container-header'>
 			<div className='header'>
 				<span className='header-left'>
-					{process > 0 ? (
-						<IconButton onClick={leftButton}>
+					{lev > 0 ? (
+						<IconButton
+							onClick={() => {
+								dispatch(subLev());
+							}}>
 							<ArrowBackIosOutlinedIcon aria-label='back button' size='large' />
 						</IconButton>
 					) : null}

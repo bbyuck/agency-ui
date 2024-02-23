@@ -24,12 +24,13 @@ import MBTISelect from "./MBTISelect";
 import { getBirthYearDistance } from "util";
 import { getHeightDistance } from "util";
 import http from "api";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setAlert } from "store/slice/status";
 import { scrollDisable } from "util";
 import { scrollAble } from "util";
 import { setUserStatus } from "store/slice/memberInfo";
+import { addLev, initLev, subLev } from "store/slice/page";
 
 let loadedData = {
 	address: null,
@@ -48,7 +49,7 @@ let loadedData = {
 function MakeProfile() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
+	const { lev, isNext } = useSelector((state) => state.page);
 	const [gender, setGender] = useState(null);
 	const [age, setAge] = useState(null);
 	const [height, setHeight] = useState(null);
@@ -59,7 +60,6 @@ function MakeProfile() {
 	const [mbti, setMbti] = useState(null);
 	const [selfDescription, setSelfDescription] = useState(null);
 	const [smoking, setSmoking] = useState(null);
-	const [isNext, setIsNext] = useState(true);
 	const selectInitData = [{ label: "선택", value: "none" }];
 	const [photoUploadInit, setPhotoUploadInit] = useState(true);
 	const [birthYears, setBirthYears] = useState(selectInitData);
@@ -117,6 +117,7 @@ function MakeProfile() {
 		return () => {
 			scrollAble();
 			sessionStorage.removeItem("photoData");
+			dispatch(initLev());
 		};
 	}, []);
 
@@ -166,35 +167,6 @@ function MakeProfile() {
 			value: smoking,
 		},
 	];
-
-	const [process, setProcess] = useState(0);
-	const next = async () => {
-		if (
-			bindData[process].key !== "photoInfo" &&
-			String(bindData[process].value) !==
-				String(loadedData[bindData[process].key]) &&
-			process > 0
-		) {
-			await saveProfile();
-		}
-
-		setProcess(process + 1);
-		setIsNext(true);
-	};
-	const prev = async () => {
-		if (
-			bindData[process].key !== "photoInfo" &&
-			String(bindData[process].value) !==
-				String(loadedData[bindData[process].key]) &&
-			process > 0
-		) {
-			await saveProfile();
-		}
-
-		setProcess(process - 1);
-		setIsNext(false);
-	};
-
 	const saveProfile = () => {
 		const param = {
 			gender: gender,
@@ -217,6 +189,21 @@ function MakeProfile() {
 			.catch((error) => {
 				console.log(error);
 			});
+	};
+
+	useEffect(() => {
+		const idx = isNext ? lev - 1 : lev + 1;
+		if (
+			idx > -1 &&
+			bindData[idx].key !== "photoInfo" &&
+			String(bindData[idx].value) !== String(loadedData[bindData[idx].key])
+		) {
+			saveProfile();
+		}
+	}, [lev]);
+
+	const next = () => {
+		dispatch(addLev());
 	};
 
 	/**
@@ -409,7 +396,6 @@ function MakeProfile() {
 
 	return (
 		<>
-			<LinearHeader prev={prev} process={process} />
 			<TransitionGroup
 				className={"transition-wrapper"}
 				childFactory={(child) => {
@@ -419,10 +405,10 @@ function MakeProfile() {
 					});
 				}}>
 				<CSSTransition
-					key={Pages[process].key}
+					key={Pages[lev].key}
 					classNames={"right-to-left"}
 					timeout={1000}>
-					{Pages[process]}
+					{Pages[lev]}
 				</CSSTransition>
 			</TransitionGroup>
 		</>

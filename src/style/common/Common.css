@@ -66,11 +66,13 @@
 	width: 100vw;
 	height: calc(var(--vh, 1vh) * 100);
 	text-align: left;
-	position: relative;
+	position: absolute;
+	top: 0;
 }
 
 .layout-container > div {
 	margin-left: 5vw;
+	z-index: 99;
 }
 
 .layout-contents {

@@ -1,80 +1,52 @@
 import { ACTIVE, NEW, WAIT } from "constants/memberStatus";
 import WaitPage from "pages/common/WaitPage";
 import MatchMakerHome from "pages/matchmaker/MatchMakerHome";
-import { cloneElement, createRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { cloneElement, useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import MatchMakerForceRouting from "./MatchMakerForceRouting";
 import MatchMakerNew from "pages/matchmaker/MatchMakerNew";
 import { MATCH_MAKER } from "constants/memberCode";
 import HomeHeader from "components/common/header/HomeHeader";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import MatchMakerUserList from "pages/matchmaker/MatchMakerUserList";
 import "style/common/Common.css";
+import memberInfo from "store/slice/memberInfo";
+import { useSelector } from "react-redux";
 
 function MatchMakerRoutes() {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { matchMakerStatus } = useSelector((state) => state.memberInfo);
 
-	const routes = [
-		{
-			name: "match-maker-home",
-			path: "/matchmaker/home",
-			element: <MatchMakerHome />,
-			nodeRef: createRef(),
-		},
-		{
-			name: "match-maker-join",
-			path: "/matchmaker/join",
-			element: <MatchMakerNew className='page' approver={"관리자"} />,
-			nodeRef: createRef(),
-		},
-		{
-			name: "match-maker-wait",
-			path: "/matchmaker/wait",
-			element: (
-				<WaitPage className='page' approver={"관리자"} memberCode={MATCH_MAKER} />
-			),
-			nodeRef: createRef(),
-		},
-		{
-			name: "match-maker-user-list",
-			path: "/matchmaker/user",
-			element: <MatchMakerUserList />,
-		},
-	];
-
-	const activeUrlList = ["/matchmaker/home", "/matchmaker/user"];
-
-	useEffect(() => {
-		if (matchMakerStatus === NEW && location.pathname !== "/matchmaker/join") {
-			navigate("/matchmaker/join", { replace: true });
-		}
-		if (matchMakerStatus === WAIT && location.pathname !== "/matchmaker/wait") {
-			navigate("/matchmaker/wait", { replace: true });
-		}
-		if (
-			matchMakerStatus === ACTIVE &&
-			!activeUrlList.includes(location.pathname)
-		) {
-			navigate("/matchmaker/home");
-		}
-	}, [matchMakerStatus, navigate, location.pathname]);
-
 	const headerInfo = {
 		"/matchmaker/home": 0,
 		"/matchmaker/user": 1,
 	};
 
+	useEffect(() => {
+		const activePages = ["/matchmaker/home", "/matchmaker/user"];
+		switch (matchMakerStatus) {
+			case NEW:
+				if (location.pathname !== "/matchmaker/join") {
+					navigate("/matchmaker/join", { replace: true });
+				}
+				break;
+			case WAIT:
+				if (location.pathname !== "/matchmaker/wait") {
+					navigate("/matchmaker/wait", { replace: true });
+				}
+				break;
+			case ACTIVE:
+				if (!activePages.includes(location.pathname)) {
+					navigate("/matchmaker/home", { replace: true });
+				}
+				break;
+			default:
+				break;
+		}
+	}, [matchMakerStatus, navigate, location.pathname]);
+
 	return (
 		<>
-			<HomeHeader
-				leftButton={() => {
-					navigate(-1);
-				}}
-				process={headerInfo[location.pathname]}
-			/>
 			<TransitionGroup
 				className='transition-wrapper'
 				childFactory={(child) => {
@@ -85,19 +57,36 @@ function MatchMakerRoutes() {
 				}}>
 				<CSSTransition key={location.pathname} classNames={"item"} timeout={300}>
 					<Routes location={location}>
-						{routes.map((route) => {
-							return (
-								<Route
-									key={location.pathname}
-									path={route.path}
-									name={route.name}
-									element={route.element}
+						<Route
+							key={location.pathname}
+							element={<MatchMakerHome />}
+							index
+							path='/matchmaker/home'
+						/>
+						<Route
+							key={location.pathname}
+							element={<MatchMakerNew className='page' approver={"관리자"} />}
+							path='/matchmaker/join'
+						/>
+						<Route
+							key={location.pathname}
+							element={
+								<WaitPage
+									className='page'
+									approver={"관리자"}
+									memberCode={MATCH_MAKER}
 								/>
-							);
-						})}
+							}
+							path='/matchmaker/wait'
+						/>
+						<Route
+							key={location.pathname}
+							element={<MatchMakerUserList />}
+							path='/matchmaker/user'
+						/>
 					</Routes>
 				</CSSTransition>
-				<MatchMakerForceRouting />
+				{/* <MatchMakerForceRouting /> */}
 			</TransitionGroup>
 		</>
 	);

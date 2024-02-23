@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { setAlert } from "store/slice/status";
 import messages from "messages";
 import { useNavigate } from "react-router-dom";
+import { addLev } from "store/slice/page";
 
 const Item = styled(Paper)(({ theme }) => ({
 	...theme.typography.body2,
@@ -55,6 +56,7 @@ function MatchMakerHomeButtonList() {
 	};
 
 	const findUserList = () => {
+		dispatch(addLev());
 		navigate("/matchmaker/user");
 	};
 
@@ -96,7 +98,7 @@ function MatchMakerHomeButtonList() {
 	];
 
 	return (
-		<div style={{ position: "relative", top: "15vh" }}>
+		<div style={{ position: "relative", top: "10vh" }}>
 			<Grid container spacing={4}>
 				<Grid item xs={12}>
 					<ThemeProvider theme={theme}>

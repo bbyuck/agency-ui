@@ -1,6 +1,6 @@
 import "style/common/Common.css";
 
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
 import { createRef, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,8 +34,8 @@ import MatchingCancelAlert from "components/user/MatchingCancelAlert";
 import HomeTabs from "components/common/MainTabs";
 import { setMatchMakerStatus, setUserStatus } from "store/slice/memberInfo";
 import { TEMP } from "constants/memberStatus";
-import CommonForceRouting from "./CommonForceRouting";
 import Agreement from "pages/agreement/Agreement";
+import HomeHeader from "components/common/header/HomeHeader";
 // ===============================================
 
 function AuthenticatedRoutes() {
@@ -45,6 +45,8 @@ function AuthenticatedRoutes() {
 		(state) => state.memberInfo,
 	);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
 	/**
 	 * WebSocket 관련 변수
 	 */
@@ -52,33 +54,6 @@ function AuthenticatedRoutes() {
 	const { socketConnected, sendMessage } = useSelector(
 		(state) => state.websocket,
 	);
-
-	const defaultRoutes = [
-		{
-			name: "default",
-			path: "/*",
-			element: <CommonForceRouting />,
-			nodeRef: createRef(),
-		},
-		{
-			name: "auth",
-			path: "/auth",
-			element: <Auth />,
-			nodeRef: createRef(),
-		},
-		{
-			name: "error",
-			path: "/error",
-			element: <Error />,
-			nodeRef: createRef(),
-		},
-		{
-			name: "agreement",
-			path: "/agreement",
-			element: <Agreement />,
-			nodeRef: createRef(),
-		},
-	];
 
 	const alertDialogs = [
 		{
@@ -104,11 +79,18 @@ function AuthenticatedRoutes() {
 	];
 
 	useEffect(() => {
-		// websocket 연결
 		if (!ws.current) {
+			// websocket 연결
 			ws.current = new WebSocket(process.env.REACT_APP_WEBSOCKET);
 			ws.current.onopen = () => {
 				console.log(`connected to ${process.env.REACT_APP_WEBSOCKET}`);
+				ws.current.send(
+					JSON.stringify({
+						credentialToken: credentialToken,
+						type: "CONNECT",
+					}),
+				);
+				dispatch(setSendMessage(true));
 				dispatch(setSocketConnected(true));
 			};
 			ws.current.onclose = () => {
@@ -150,19 +132,6 @@ function AuthenticatedRoutes() {
 	}, []);
 
 	useEffect(() => {
-		if (socketConnected) {
-			ws.current.send(
-				JSON.stringify({
-					credentialToken: credentialToken,
-					type: "CONNECT",
-				}),
-			);
-
-			dispatch(setSendMessage(true));
-		}
-	}, [socketConnected]);
-
-	useEffect(() => {
 		http
 			.get("/v1/user/info/my")
 			.then((response) => {
@@ -201,26 +170,25 @@ function AuthenticatedRoutes() {
 					}),
 				);
 			});
-	}, [userStatus, matchMakerStatus, dispatch]);
+	}, []);
 
-	const essentialNotAgreed = () => {
-		return userStatus === TEMP && matchMakerStatus === TEMP;
-	};
+	useEffect(() => {
+		if (
+			userStatus === TEMP &&
+			matchMakerStatus === TEMP &&
+			location.pathname !== "/agreement"
+		) {
+			navigate("/agreement", { replace: true });
+		}
+	}, [userStatus, matchMakerStatus, dispatch]);
 
 	return (
 		<>
-			{essentialNotAgreed() ? null : <HomeTabs />}
+			<HomeHeader />
+			<HomeTabs />
 			<Routes location={location}>
-				{defaultRoutes.map((route) => {
-					return (
-						<Route
-							key={location.pathname}
-							path={route.path}
-							name={route.name}
-							element={route.element}
-						/>
-					);
-				})}
+				<Route key={location.pathname} element={<Auth />} path='/auth' />
+				<Route key={location.pathname} element={<Agreement />} path='/agreement' />
 			</Routes>
 			{alertDialogs.map((alertDialog) => {
 				return <div key={alertDialog.name}>{alertDialog.element}</div>;

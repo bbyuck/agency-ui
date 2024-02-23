@@ -26,24 +26,10 @@ function Agreement() {
 
 	useEffect(() => {
 		scrollDisable();
-		if (userStatus !== TEMP || matchMakerStatus !== TEMP) {
-			navigate("/", { replace: true });
-			return;
-		}
-
-		// http
-		// 	.get("/v1/agreement/check")
-		// 	.then((response) => {
-		// 		console.log(response);
-		// 	})
-		// 	.catch((error) => {
-		// 		console.log(error);
-		// 	});
-
 		return () => {
 			scrollAble();
 		};
-	}, [navigate, userStatus, matchMakerStatus, dispatch]);
+	}, [navigate, dispatch]);
 
 	const [personalInformationUseAgree, setPersonalInformationUseAgree] =
 		useState(false);

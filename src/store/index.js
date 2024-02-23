@@ -5,6 +5,7 @@ import header from "store/slice/header";
 import memberInfoSlice from "store/slice/memberInfo";
 import websocket from "./slice/websocket";
 import userInfo from "./slice/userInfo";
+import pageSlice from "./slice/page";
 
 const store = configureStore({
 	reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
 		header: header,
 		userInfo: userInfo,
 		websocket: websocket,
+		page: pageSlice,
 	},
 });
 
