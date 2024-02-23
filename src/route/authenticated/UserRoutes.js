@@ -30,6 +30,12 @@ function UserRoutes() {
 	const { userStatus } = useSelector((state) => state.memberInfo);
 
 	useEffect(() => {
+		const matchMakerCode = sessionStorage.getItem("mc");
+		if (matchMakerCode) {
+			sessionStorage.setItem("callbackPath", location.pathname);
+			navigate("/user/friend");
+		}
+
 		switch (userStatus) {
 			case TEMP:
 				if (location.pathname !== "/agreement") {

@@ -3,6 +3,7 @@ import messages from "messages";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { resetCallbackPath } from "store/slice/page";
 import { setAlert } from "store/slice/status";
 
 function BeAFriend() {
@@ -12,8 +13,9 @@ function BeAFriend() {
 
 	useEffect(() => {
 		const matchMakerCode = sessionStorage.getItem("mc");
+		const callbackPath = sessionStorage.getItem("callbackPath");
 		if (!matchMakerCode) {
-			navigate("/user/home");
+			navigate(callbackPath);
 		}
 
 		http
@@ -46,11 +48,12 @@ function BeAFriend() {
 				);
 			})
 			.finally(() => {
-				navigate("/user/home", { replace: true });
+				navigate(callbackPath, { replace: true });
 			});
 
 		return () => {
 			sessionStorage.removeItem("mc");
+			sessionStorage.removeItem("callbackPath");
 		};
 	}, [navigate, userStatus]);
 

@@ -21,7 +21,7 @@ const pageSlice = createSlice({
 			state.lev = state.lev - 1;
 			state.isNext = false;
 		},
-		initLev(state = initialState) {
+		resetLev(state = initialState) {
 			state.lev = 0;
 			state.isNext = true;
 		},
@@ -32,5 +32,5 @@ const pageSlice = createSlice({
 // dispatch(add(1)) 이런식으로 사용 -> dispatch(counterSlice.actions.add(1)) 형태
 
 // reducer 는 configureStore에 등록을 위해 export default 합니다.
-export const { setTab, addLev, subLev, initLev } = pageSlice.actions;
+export const { setTab, addLev, subLev, resetLev } = pageSlice.actions;
 export default pageSlice.reducer;

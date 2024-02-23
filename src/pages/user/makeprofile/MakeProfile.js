@@ -30,7 +30,7 @@ import { setAlert } from "store/slice/status";
 import { scrollDisable } from "util";
 import { scrollAble } from "util";
 import { setUserStatus } from "store/slice/memberInfo";
-import { addLev, initLev, subLev } from "store/slice/page";
+import { addLev, resetLev, subLev } from "store/slice/page";
 
 let loadedData = {
 	address: null,
@@ -117,7 +117,7 @@ function MakeProfile() {
 		return () => {
 			scrollAble();
 			sessionStorage.removeItem("photoData");
-			dispatch(initLev());
+			dispatch(resetLev());
 		};
 	}, []);
 
